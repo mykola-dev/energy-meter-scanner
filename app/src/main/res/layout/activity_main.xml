@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data class="MainBinding">
+
+        <variable
+            name="viewModel"
+            type="ds.meterscanner.databinding.viewmodel.MainViewModel"
+            />
+
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity"
+        >
+
+        <include
+            layout="@layout/toolbar"
+            bind:viewModel="@{viewModel.toolbar}"
+            />
+
+        <ds.meterscanner.ui.widget.RefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            bind:refreshing="@{viewModel.showProgress}"
+            >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{viewModel.lastUpdated}"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/secondary_text_color"
+                    tools:text="Last updated: 12:00 December 23"
+                    />
+
+                <android.support.v7.widget.GridLayout
+                    android:id="@+id/grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="8dp"
+                    app:columnCount="@{@integer/columns}"
+                    app:useDefaultMargins="false"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/button1"
+                        style="@style/dashboard_button"
+                        android:enabled="@{viewModel.buttonsEnabled &amp;&amp; viewModel.apiKeyReady}"
+                        android:onClick="@{v -> viewModel.onCameraButton()}"
+                        app:srcCompat="@drawable/ic_photo_camera"
+                        />
+
+                    <ImageView
+                        android:id="@+id/button2"
+                        style="@style/dashboard_button"
+                        android:enabled="@{viewModel.buttonsEnabled}"
+                        android:onClick="@{v -> viewModel.onChartsButton()}"
+                        app:srcCompat="@drawable/ic_timeline"
+                        />
+
+
+                    <ImageView
+                        android:id="@+id/button3"
+                        style="@style/dashboard_button"
+                        android:enabled="@{viewModel.buttonsEnabled}"
+                        android:onClick="@{v -> viewModel.onListsButton()}"
+                        app:srcCompat="@drawable/ic_view_list"
+                        />
+
+                    <ImageView
+                        android:id="@+id/button4"
+                        style="@style/dashboard_button"
+                        android:enabled="@{viewModel.buttonsEnabled}"
+                        android:onClick="@{v -> viewModel.onSettingsButton()}"
+                        app:srcCompat="@drawable/ic_settings"
+                        />
+
+                </android.support.v7.widget.GridLayout>
+            </FrameLayout>
+
+
+        </ds.meterscanner.ui.widget.RefreshLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
+

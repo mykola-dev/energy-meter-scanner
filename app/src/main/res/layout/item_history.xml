@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ds.meterscanner.databinding.viewmodel.HistoryItemViewModel"
+            />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:onClick="@{viewModel.onClick}"
+        android:onLongClick="@{viewModel.onLongClick}"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        >
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            tools:src="@drawable/test_snapshot"
+            android:adjustViewBounds="true"
+            android:layout_alignParentEnd="true"
+            bind:imageUrl="@{viewModel.imageUrl}"
+            />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.value}"
+            android:textColor="?android:textColorPrimary"
+            tools:text="65536.0"
+            android:textAppearance="?android:textAppearanceLarge"
+            />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.date}"
+            android:textColor="?android:textColorSecondary"
+            tools:text="12 hours ago"
+            android:layout_below="@id/title"
+            />
+
+        <CheckBox
+            android:id="@+id/selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            bind:visible="@{viewModel.selectMode}"
+            android:layout_centerVertical="true"
+            android:checked="@{viewModel.checked}"
+            android:clickable="false"
+            />
+
+
+    </RelativeLayout>
+</layout>

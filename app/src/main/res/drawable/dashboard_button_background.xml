@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/colorAccent" />
+
+    <item>
+        <selector android:exitFadeDuration="@android:integer/config_shortAnimTime">
+            <item
+                android:drawable="@color/white_alpha"
+                android:state_pressed="true"
+                />
+            <item
+                android:drawable="@color/md_grey_400"
+                android:state_enabled="false"
+                />
+            <item android:drawable="@android:color/transparent" />
+        </selector>
+    </item>
+
+</layer-list>

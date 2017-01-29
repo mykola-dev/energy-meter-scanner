@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7cb342</color>
+    <color name="colorPrimaryDark">#558b2f</color>
+    <color name="colorAccent">@color/md_deep_orange_700</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_alpha">#6fff</color>
+
+    <color name="disabled">@color/md_grey_400</color>
+    <color name="primaryText">@color/md_grey_900</color>
+    <color name="secondaryText">@color/md_grey_600</color>
+
+    <color name="temperature_warm">@color/md_deep_orange_700</color>
+    <color name="temperature_norm">@color/md_orange_700</color>
+    <color name="temperature_cold">@color/md_blue_grey_400</color>
+    <color name="temperature_frost">@color/md_light_blue_500</color>
+    <color name="temperature_extreme">@color/md_blue_900</color>
+</resources>

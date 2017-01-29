@@ -1,0 +1,52 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ds.meterscanner.databinding.viewmodel.ScannerViewModel"
+            />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ScanAnalogMeterActivity"
+        >
+
+        <ds.meterscanner.ui.widget.BetterEnergyScanView
+            android:id="@+id/energy_scan_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:beep_on_result="true"
+            app:blink_animation_on_result="false"
+            app:cancel_on_result="true"
+            app:cutout_alignment="top"
+            app:cutout_max_width_percent="100"
+            app:cutout_offset_x="0"
+            app:cutout_offset_y="120"
+            app:cutout_outside_color="#55000000"
+            app:cutout_rect_corner_radius_in_dp="0"
+            app:cutout_stroke_color="@color/white"
+            app:cutout_stroke_width_in_dp="2"
+            app:cutout_style="rect"
+            app:flash_alignment="bottom_right"
+            app:flash_mode="manual"
+            app:preferred_picture_width="640"
+            app:preferred_preview_width="640"
+            app:vibrate_on_result="false"
+            app:visual_feedback_animation_duration="0"
+            app:visual_feedback_stroke_color="@color/colorPrimary"
+            app:visual_feedback_style="rect"
+            bind:positionCallback="@{viewModel.positionCallback}"
+            bind:scaleCallback="@{viewModel.scaleCallback}"
+            />
+
+
+    </RelativeLayout>
+</layout>
+

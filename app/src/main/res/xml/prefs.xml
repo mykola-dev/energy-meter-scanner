@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <PreferenceCategory app:title="@string/basic_setup">
+
+        <ds.meterscanner.ui.preference.IntEditTextPreference
+            android:inputType="number"
+            android:key="scanTries"
+            app:title="@string/scan_tries"
+            />
+
+        <ds.meterscanner.ui.preference.IntEditTextPreference
+            android:inputType="number"
+            android:key="shotTimeout"
+            app:title="@string/shot_timeout"
+            />
+
+        <CheckBoxPreference
+            android:key="saveImages"
+            app:title="@string/save_images"
+            />
+        <ds.meterscanner.ui.preference.IntEditTextPreference
+            android:dependency="saveImages"
+            android:inputType="number"
+            android:key="jpegQuality"
+            app:title="@string/image_compression_level"
+            />
+        <ds.meterscanner.ui.preference.IntEditTextPreference
+            android:inputType="numberSigned"
+            android:key="boilerTemp"
+            app:title="@string/current_boiler_temp"
+            />
+
+        <ds.meterscanner.ui.preference.IntEditTextPreference
+            android:inputType="number"
+            android:key="correctionThreshold"
+            app:title="@string/correction_threshold"
+            />
+
+        <CheckBoxPreference
+            android:key="autostart"
+            app:title="@string/run_on_startup"
+            />
+
+        <CheckBoxPreference
+            android:key="fixFirstFive"
+            app:summary="For advanced users"
+            app:title="@string/fixFirstFive"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/weather_prefs">
+
+        <CheckBoxPreference
+            android:key="saveTemperature"
+            app:title="@string/track_outside_temp"
+            />
+
+        <EditTextPreference
+            android:dependency="saveTemperature"
+            android:key="city"
+            app:title="@string/location"
+
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/jobs">
+        <Preference
+            android:key="alarms"
+            app:title="@string/alarms"
+            />
+    </PreferenceCategory>
+
+</PreferenceScreen>

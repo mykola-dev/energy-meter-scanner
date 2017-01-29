@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ds.meterscanner.databinding.viewmodel.HistoryViewModel"
+            />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <include
+            layout="@layout/toolbar"
+            bind:viewModel="@{viewModel.toolbar}"
+            />
+
+        <ds.meterscanner.ui.widget.RefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            bind:refreshing="@{viewModel.showProgress}"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                bind:adapter="@{viewModel.adapter}"
+                bind:dividers="@{true}"
+                tools:listitem="@layout/item_history"
+                />
+
+        </ds.meterscanner.ui.widget.RefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:onClick="@{v->viewModel.onNewSnapshot()}"
+            app:srcCompat="@drawable/ic_action_add"
+            />
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

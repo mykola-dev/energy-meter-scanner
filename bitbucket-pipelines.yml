@@ -1,0 +1,8 @@
+image: mingc/android-build-box:latest
+
+pipelines:
+  default:
+    - step:
+        script:
+          - chmod +x gradlew
+          - ./gradlew assemble

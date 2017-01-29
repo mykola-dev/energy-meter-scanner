@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="ds.meterscanner"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        >
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name=".activity.ChartsActivity"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name=".activity.HistoryActivity"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name=".activity.AlarmsActivity"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name=".activity.ScanAnalogMeterActivity"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".activity.AuthActivity"
+            android:windowSoftInputMode="adjustResize"
+            />
+        <activity
+            android:name=".activity.DetailsActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
+
+        <receiver
+            android:name=".StartupReceiver"
+            android:enabled="true"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

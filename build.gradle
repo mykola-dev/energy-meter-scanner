@@ -1,0 +1,30 @@
+buildscript {
+    ext.kotlin_version = '1.1.0-beta-17'
+    ext.gradle_plugin_version = '2.2.3'
+
+    repositories {
+        jcenter()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://anylinesdk.blob.core.windows.net/maven/'}
+        maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

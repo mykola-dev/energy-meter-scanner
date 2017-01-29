@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/action_correction"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/positive_correction"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/action_show_temp"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/show_temperature"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:title="@string/period"
+        app:showAsAction="always"
+        >
+        <menu>
+            <group
+                android:id="@+id/periods"
+                android:checkableBehavior="single"
+                >
+                <item
+                    android:id="@+id/action_period_all"
+                    android:title="@string/all"
+                    />
+                <item
+                    android:id="@+id/action_period_season"
+                    android:title="@string/last_season"
+                    />
+                <item
+                    android:id="@+id/action_period_year"
+                    android:title="@string/last_year"
+                    />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_export_csv"
+        android:title="@string/export_to_csv"
+        />
+
+
+</menu>
