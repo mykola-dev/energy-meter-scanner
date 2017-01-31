@@ -91,7 +91,7 @@ kapt {
 }
 
 dependencies {
-    def supportVersion = '25.1.0'
+    def supportVersion = '25.1.1'
     def firebaseVersion = '10.0.1'
     def retrofitVersion = '2.1.0'
     def rxLifecycleVersion = '2.0.1'

@@ -20,7 +20,7 @@ import ds.meterscanner.util.formatTimeDate
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.greenrobot.eventbus.EventBus
-import java.util.Calendar.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -40,10 +40,14 @@ class SnapshotJob : Job(), KodeinInjected {
 
         if (params.failureCount == 0) {
             if (params.scheduledAt != 0L) {
-                (1..Int.MAX_VALUE)
-                    .map { params.scheduledAt + TimeUnit.DAYS.toMillis(it.toLong()) - System.currentTimeMillis() }
-                    .first { it > 0 }
-                    .let(::scheduleSnapshotJob)
+                val cal: Calendar by instance()
+                cal.timeInMillis = params.scheduledAt + params.startMs
+                val curr: Calendar by instance()
+                while (cal.before(curr)) {
+                    cal.add(Calendar.DAY_OF_YEAR, 1)
+                }
+                scheduleSnapshotJob(cal.timeInMillis - curr.timeInMillis)
+
             } else {
                 scheduleSnapshotJob()
             }
@@ -104,12 +108,12 @@ class SnapshotJob : Job(), KodeinInjected {
 }
 
 fun scheduleSnapshotJob(hours: Int, minutes: Int) {
-    val cal = getInstance()
-    cal.set(HOUR_OF_DAY, hours)
-    cal.set(MINUTE, minutes)
-    val curr = getInstance()
+    val cal = Calendar.getInstance()
+    cal.set(Calendar.HOUR_OF_DAY, hours)
+    cal.set(Calendar.MINUTE, minutes)
+    val curr = Calendar.getInstance()
     if (cal.before(curr))
-        cal.add(DAY_OF_MONTH, 1)
+        cal.add(Calendar.DAY_OF_MONTH, 1)
     val diff = cal.timeInMillis - curr.timeInMillis
     scheduleSnapshotJob(diff)
 
