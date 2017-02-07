@@ -3,7 +3,9 @@ package ds.meterscanner.util
 import L
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.ColorRes
 import android.text.format.DateFormat
+import ds.meterscanner.R
 
 val timeDateFormat = "HH:mm dd.MM.yyyy"
 val timeFormat = "HH:mm"
@@ -32,4 +34,13 @@ fun <T> profile(f: () -> T, name: String = ""): T {
     } finally {
         L.i("profile method [$name] ===> ${System.currentTimeMillis() - start}ms")
     }
+}
+
+@ColorRes
+fun getColorTemp(temp: Int): Int {
+    return if (temp > 10) R.color.temperature_warm
+    else if (temp > 0) R.color.temperature_norm
+    else if (temp > -10) R.color.temperature_cold
+    else if (temp > -20) R.color.temperature_frost
+    else R.color.temperature_extreme
 }

@@ -2,15 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.HistoryItemViewModel"
-            />
+            type="ds.meterscanner.databinding.viewmodel.HistoryItemViewModel" />
     </data>
 
     <RelativeLayout
@@ -23,48 +21,54 @@
         android:paddingBottom="8dp"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        >
+        android:paddingTop="8dp">
 
         <ImageView
-            android:layout_width="180dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            tools:src="@drawable/test_snapshot"
-            android:adjustViewBounds="true"
             android:layout_alignParentEnd="true"
+            android:adjustViewBounds="true"
             bind:imageUrl="@{viewModel.imageUrl}"
-            />
+            tools:src="@drawable/test_snapshot" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.value}"
-            android:textColor="?android:textColorPrimary"
-            tools:text="65536.0"
             android:textAppearance="?android:textAppearanceLarge"
-            />
+            android:textColor="?android:textColorPrimary"
+            tools:text="65536.0" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/title"
+            android:layout_marginStart="8dp"
+            android:text="@{viewModel.temp}"
+            android:textColor="@{viewModel.tempColor}"
+            android:fontFamily="sans-serif-medium"
+            tools:text="12*" />
 
         <TextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/title"
             android:text="@{viewModel.date}"
             android:textColor="?android:textColorSecondary"
-            tools:text="12 hours ago"
-            android:layout_below="@id/title"
-            />
+            tools:text="12 hours ago" />
 
         <CheckBox
             android:id="@+id/selected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            bind:visible="@{viewModel.selectMode}"
             android:layout_centerVertical="true"
             android:checked="@{viewModel.checked}"
             android:clickable="false"
-            />
+            bind:visible="@{viewModel.selectMode}" />
 
 
     </RelativeLayout>

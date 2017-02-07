@@ -1,7 +1,7 @@
 package ds.meterscanner.adapter
 
 import android.databinding.ViewDataBinding
-import android.text.format.DateUtils
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.github.salomonbrys.kodein.LazyKodein
 import com.github.salomonbrys.kodein.LazyKodeinAware
@@ -14,6 +14,8 @@ import ds.meterscanner.databinding.BindingHolder
 import ds.meterscanner.databinding.ViewModelAdapter
 import ds.meterscanner.databinding.viewmodel.HistoryItemViewModel
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.util.formatTimeDate
+import ds.meterscanner.util.getColorTemp
 import org.greenrobot.eventbus.EventBus
 
 class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), LazyKodeinAware {
@@ -32,7 +34,9 @@ class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), LazyK
 
     override fun onFillViewModel(holder: BindingHolder<ViewDataBinding, HistoryItemViewModel>, viewModel: HistoryItemViewModel, item: Snapshot, position: Int) {
         viewModel.value = item.value.toString()
-        viewModel.date = DateUtils.getRelativeTimeSpanString(item.timestamp).toString()
+        viewModel.date = formatTimeDate(item.timestamp)
+        viewModel.temp = item.outsideTemp?.toString() ?: ""
+        viewModel.tempColor = ContextCompat.getColor(context,getColorTemp(item.outsideTemp ?: 0))
         viewModel.onClick = View.OnClickListener {
             if (!isSelectionMode)
                 bus.post(HistoryClickEvent(getItem(holder.adapterPosition)))

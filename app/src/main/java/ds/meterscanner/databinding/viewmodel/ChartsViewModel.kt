@@ -19,6 +19,7 @@ import ds.meterscanner.rx.toggleProgress
 import ds.meterscanner.util.FileTools
 import ds.meterscanner.util.MathTools
 import ds.meterscanner.util.formatMillis
+import ds.meterscanner.util.getColorTemp
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers.io
 import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
@@ -326,15 +327,6 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
             StackMode.MONTH -> DateFormat.format("M/yy", timestamp).toString()
             StackMode.YEAR -> DateFormat.format("yyyy", timestamp).toString()
         }
-    }
-
-    @ColorRes
-    private fun getColorTemp(temp: Int): Int {
-        return if (temp > 10) R.color.temperature_warm
-        else if (temp > 0) R.color.temperature_norm
-        else if (temp > -10) R.color.temperature_cold
-        else if (temp > -20) R.color.temperature_frost
-        else R.color.temperature_extreme
     }
 
 }

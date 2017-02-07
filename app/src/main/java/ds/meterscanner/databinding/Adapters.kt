@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ds.meterscanner.activity.ViewportListener
 import ds.meterscanner.ui.recyclerview.DividerItemDecoration
 import lecho.lib.hellocharts.gesture.ZoomType
@@ -33,6 +34,7 @@ fun dividers(recyclerView: RecyclerView, showDividers: Boolean) {
 fun loadImage(imageView: ImageView, url: String?) {
     Glide.with(imageView.context)
         .load(url)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         //.override(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL)
         .into(imageView)
 }
@@ -43,7 +45,6 @@ fun setColumnData(view: ColumnChartView, data: ColumnChartData?) {
         return
 
     view.visibility = VISIBLE
-
     view.columnChartData = data
 }
 

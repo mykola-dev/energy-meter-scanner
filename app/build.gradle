@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 //apply plugin: "kotlin-allopen"
-//apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
@@ -80,14 +80,10 @@ dexcount {
     runOnEachAssemble = false
 }
 
-/*apt {
-    arguments {
-        eventBusIndex "....EventBusIndex"  // todo
-    }
-}*/
-
 kapt {
-    generateStubs = true
+    arguments {
+        arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
+    }
 }
 
 dependencies {
@@ -115,14 +111,13 @@ dependencies {
     compile "com.google.firebase:firebase-config:$firebaseVersion"
 
     // reactive stuff
-    compile 'io.reactivex.rxjava2:rxjava:2.0.4'                         // https://github.com/ReactiveX/RxJava
+    compile 'io.reactivex.rxjava2:rxjava:2.0.5'                         // https://github.com/ReactiveX/RxJava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'                      // https://github.com/ReactiveX/RxAndroid
-    compile "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"
+    compile "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"   // https://github.com/trello/RxLifecycle
     compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
     compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxLifecycleVersion"
     compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
-    //compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'      // https://github.com/tbruyelle/RxPermissions
-    //compile 'com.kelvinapps:rxfirebase:0.0.15'
+    //compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'    // https://github.com/tbruyelle/RxPermissions
 
     // networking
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"          // https://github.com/square/retrofit
