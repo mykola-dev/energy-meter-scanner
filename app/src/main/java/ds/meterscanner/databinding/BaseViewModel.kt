@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.Subscribe
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-abstract class BaseViewModel<V:BaseView>(final override val view: BaseView) : LifeCycleViewModel(), Progressable {
+abstract class BaseViewModel<out V:BaseView>(final override val view: V) : LifeCycleViewModel(), Progressable {
 
     @Inject lateinit var restService: NetLayer
     @Inject lateinit var prefs: Prefs
@@ -34,7 +34,7 @@ abstract class BaseViewModel<V:BaseView>(final override val view: BaseView) : Li
 
     override fun onCreate() {
         super.onCreate()
-        mainComponent.inject(this as BaseViewModel<*>)
+        mainComponent.inject(this)
     }
 
     override fun onAttach() {

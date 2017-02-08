@@ -1,3 +1,4 @@
+/*
 package ds.meterscanner.di
 
 import dagger.Component
@@ -5,6 +6,7 @@ import ds.meterscanner.App
 import ds.meterscanner.StartupReceiver
 import ds.meterscanner.activity.SettingsActivity
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.databinding.BaseView
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.scheduler.SnapshotJob
 import ds.meterscanner.ui.DebugDrawerController
@@ -31,5 +33,5 @@ interface MainComponent {
     fun inject(settingsFragment: SettingsActivity.SettingsFragment)
     fun inject(obj: SnapshotJob)
     fun inject(debugDrawerController: DebugDrawerController)
-    fun inject(baseViewModel: BaseViewModel<*>)
-}
+    fun inject(baseViewModel: BaseViewModel<BaseView>)
+}*/
