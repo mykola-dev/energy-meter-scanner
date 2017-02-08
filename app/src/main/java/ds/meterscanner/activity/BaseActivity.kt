@@ -11,9 +11,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR
@@ -23,16 +20,17 @@ import ds.meterscanner.data.RefreshEvent
 import ds.meterscanner.databinding.BaseView
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.ViewModel
+import ds.meterscanner.di.mainComponent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import javax.inject.Inject
 
-abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppCompatActivity(), BaseView {
+abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppCompatActivity(), BaseView {
 
-    final override val kodein: Kodein by lazy { appKodein() }
     override lateinit var viewModel: VM
     val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
-    val bus: EventBus by lazy<EventBus> { instance() }
-    val prefs by lazy<Prefs> { instance() }
+    @Inject lateinit var  bus: EventBus
+    @Inject lateinit var prefs:Prefs
 
     protected open val bindImmediately = false
 
@@ -47,6 +45,7 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Rx
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainComponent.inject(this)
         viewModel = instantiateViewModel(savedInstanceState)
         bind()
         viewModel.onCreate()
@@ -59,8 +58,6 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Rx
         viewModel.onAttach()
         bus.register(this)
     }
-
-    //override fun getColor(id: Int): Int = ContextCompat.getColor(this.id)
 
     override fun onStop() {
         super.onStop()
@@ -88,7 +85,6 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Rx
         if (bindImmediately)
             binding.executePendingBindings()
     }
-
 
     private fun setupToolbar() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?

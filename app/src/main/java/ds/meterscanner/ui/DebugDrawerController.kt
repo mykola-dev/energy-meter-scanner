@@ -3,15 +3,12 @@ package ds.meterscanner.ui
 import L
 import android.content.Intent
 import com.evernote.android.job.scheduledTo
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.activity.BaseActivity
 import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.rx.applySchedulers
 import ds.meterscanner.scheduler.Scheduler
@@ -24,15 +21,19 @@ import io.palaima.debugdrawer.actions.SpinnerAction
 import io.palaima.debugdrawer.actions.SwitchAction
 import io.reactivex.Completable
 import java.util.*
+import javax.inject.Inject
 
 
-class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
-    override val kodein: Kodein = activity.appKodein()
+class DebugDrawerController(val activity: BaseActivity<*, *>) {
 
     lateinit var debugDrawer: DebugDrawer
-    val db: FirebaseDb = instance()
-    val netLayer: NetLayer = instance()
-    val scheduler: Scheduler = instance()
+    @Inject lateinit var db: FirebaseDb
+    @Inject lateinit var netLayer: NetLayer
+    @Inject lateinit var scheduler: Scheduler
+
+    init {
+        mainComponent.inject(this)
+    }
 
     fun init() {
         val keepSyncedAction = SwitchAction("Keep synced", {

@@ -3,9 +3,6 @@ package ds.meterscanner.databinding
 import L
 import android.databinding.ObservableBoolean
 import android.view.Menu
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
@@ -19,16 +16,15 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.greenrobot.eventbus.Subscribe
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : LifeCycleViewModel(), KodeinAware, Progressable {
+abstract class BaseViewModel<out V : BaseView>(final override val view: V) : LifeCycleViewModel(), Progressable {
 
-    override val kodein: Kodein = view.kodein
-
-    val restService: NetLayer = instance()
-    val prefs: Prefs = instance()
-    val authenticator: Authenticator = instance()
-    val db: FirebaseDb = instance()
-    val scheduler: Scheduler = instance()
+    @Inject lateinit var  restService: NetLayer
+    @Inject lateinit var  prefs: Prefs
+    @Inject lateinit var  authenticator: Authenticator
+    @Inject lateinit var  db: FirebaseDb
+    @Inject lateinit var  scheduler: Scheduler
 
     val toolbar = ToolbarViewModel()
     val showProgress = ObservableBoolean()

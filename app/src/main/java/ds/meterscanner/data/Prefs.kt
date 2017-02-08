@@ -13,8 +13,9 @@ import ds.bindingtools.PrefsAware
 import ds.bindingtools.pref
 import ds.meterscanner.rx.applySchedulers
 import io.reactivex.Single
+import javax.inject.Inject
 
-class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : PrefsAware {
+class Prefs @Inject constructor(private val ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : PrefsAware {
 
     override val forcePersistDefaults = true
     override val sharedPreferences: SharedPreferences = ctx.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)

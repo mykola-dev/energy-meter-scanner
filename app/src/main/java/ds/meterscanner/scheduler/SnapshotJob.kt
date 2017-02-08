@@ -5,15 +5,12 @@ import android.content.Context
 import android.content.Intent
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest
-import com.github.salomonbrys.kodein.KodeinInjected
-import com.github.salomonbrys.kodein.KodeinInjector
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.data.InterruptEvent
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.db.FirebaseDb
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.util.ThreadTools
 import ds.meterscanner.util.formatTimeDate
@@ -22,27 +19,30 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class SnapshotJob : Job(), KodeinInjected {
-    override val injector: KodeinInjector = KodeinInjector()
+class SnapshotJob : Job() {
 
     val JOB_RETRIES = 3
 
-    val prefs: Prefs by instance()
-    val bus: EventBus by instance()
-    val restService: NetLayer by instance()
-    val db: FirebaseDb by instance()
+    @Inject lateinit var  prefs: Prefs
+    @Inject lateinit var  bus: EventBus
+    @Inject lateinit var  restService: NetLayer
+    @Inject lateinit var  db: FirebaseDb
+
+    init {
+        mainComponent.inject(this)
+    }
 
     override fun onRunJob(params: Job.Params): Job.Result {
-        injector.inject(context.appKodein())
         val success = doJob(context, params.id)
 
         if (params.failureCount == 0) {
             if (params.scheduledAt != 0L) {
-                val cal: Calendar by instance()
+                val cal: Calendar = mainComponent.getCalendar()
                 cal.timeInMillis = params.scheduledAt + params.startMs
-                val curr: Calendar by instance()
+                val curr: Calendar = mainComponent.getCalendar()
                 while (cal.before(curr)) {
                     cal.add(Calendar.DAY_OF_YEAR, 1)
                 }

@@ -5,9 +5,13 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Completable
+import javax.inject.Inject
 
 
-class Authenticator(val auth: FirebaseAuth, private val firebaseAnalytics: FirebaseAnalytics) {
+class Authenticator @Inject constructor(
+    @Inject val auth: FirebaseAuth,
+    @Inject val firebaseAnalytics: FirebaseAnalytics
+) {
 
     private val authListeners = mutableMapOf<String, FirebaseAuth.AuthStateListener>()
 

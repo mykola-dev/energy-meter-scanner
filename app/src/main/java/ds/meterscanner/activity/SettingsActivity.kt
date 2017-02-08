@@ -9,17 +9,15 @@ import android.support.v4.app.Fragment
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
 import com.evernote.android.job.rescheduled
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.runActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.databinding.SettingsView
 import ds.meterscanner.databinding.viewmodel.SettingsViewModel
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.scheduler.Scheduler
+import javax.inject.Inject
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -41,12 +39,10 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
     }
 
 
-    class SettingsFragment : PreferenceFragmentCompat(), LazyKodeinAware, SharedPreferences.OnSharedPreferenceChangeListener {
+    class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-        override val kodein: LazyKodein = LazyKodein { activity.appKodein() }
-
-        val prefs: Prefs by instance()
-        val scheduler: Scheduler by instance()
+        @Inject lateinit var prefs: Prefs
+        @Inject lateinit var  scheduler: Scheduler
 
         val scanTries: EditTextPreference by PreferenceDelegate()
         val city: EditTextPreference by PreferenceDelegate()
@@ -57,6 +53,7 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
         val shotTimeout: EditTextPreference by PreferenceDelegate()
 
         override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+            mainComponent.inject(this)
             preferenceManager.sharedPreferencesName = "main_prefs"
             addPreferencesFromResource(R.xml.prefs)
 

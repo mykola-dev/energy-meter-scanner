@@ -2,14 +2,12 @@ package ds.meterscanner.scheduler
 
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.instance
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class Scheduler(override val kodein: Kodein) : KodeinAware {
+class Scheduler @Inject constructor() {
 
-    private val jobManager: JobManager = instance()
+    @Inject lateinit var jobManager: JobManager
 
     fun addDefaultTasks() = scheduleSnapshotJob(TimeUnit.MINUTES.toMillis(2))   // 2 minutes
 

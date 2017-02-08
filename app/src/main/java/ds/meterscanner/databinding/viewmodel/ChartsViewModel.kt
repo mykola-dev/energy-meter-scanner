@@ -8,7 +8,6 @@ import android.net.Uri
 import android.support.annotation.ColorRes
 import android.text.format.DateFormat
 import com.evernote.android.state.State
-import com.github.salomonbrys.kodein.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
 import ds.meterscanner.databinding.BaseViewModel
@@ -27,6 +26,7 @@ import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import java.io.Serializable
 import java.util.*
+import javax.inject.Inject
 
 class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
 
@@ -44,7 +44,7 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
             update()
         }
 
-    private val calendar: Calendar = instance()
+    @Inject lateinit var calendar: Calendar
     private var data: List<SnapshotData> = listOf()
 
     override fun onCreate() {

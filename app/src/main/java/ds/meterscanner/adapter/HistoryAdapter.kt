@@ -3,10 +3,6 @@ package ds.meterscanner.adapter
 import android.databinding.ViewDataBinding
 import android.support.v4.content.ContextCompat
 import android.view.View
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
@@ -17,10 +13,11 @@ import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
 import org.greenrobot.eventbus.EventBus
+import javax.inject.Inject
 
-class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), LazyKodeinAware {
-    override val kodein: LazyKodein = LazyKodein { context.appKodein() }
-    val bus: EventBus by instance()
+class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>() {
+
+    @Inject lateinit var  bus: EventBus
 
     var isSelectionMode = false
         set(value) {

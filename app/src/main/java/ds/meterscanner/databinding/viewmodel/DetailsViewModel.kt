@@ -2,7 +2,6 @@ package ds.meterscanner.databinding.viewmodel
 
 import L
 import android.databinding.ObservableField
-import com.github.salomonbrys.kodein.instance
 import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.DetailsView
@@ -10,6 +9,7 @@ import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
 import io.reactivex.Single.just
 import java.util.*
+import javax.inject.Inject
 
 class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewModel<DetailsView>(view) {
 
@@ -21,7 +21,7 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
     val boilerTemp = ObservableField<String>()
 
     private lateinit var snapshot: Snapshot
-    private val calendar:Calendar = instance()
+    @Inject lateinit var  calendar:Calendar
 
     override fun onCreate() {
         super.onCreate()

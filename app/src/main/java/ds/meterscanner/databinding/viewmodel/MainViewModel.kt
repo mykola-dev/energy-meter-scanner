@@ -6,7 +6,6 @@ import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.text.format.DateUtils
 import android.view.Menu
-import com.github.salomonbrys.kodein.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel
@@ -14,6 +13,8 @@ import ds.meterscanner.databinding.MainView
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.post
 import io.reactivex.Single
+import javax.inject.Inject
+import javax.inject.Named
 
 class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
 
@@ -24,7 +25,7 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
     var jobsChecked = false
     var apiKey: String? = null
 
-    private val appVersion: String = instance("version")
+    @Inject @Named("version") lateinit var appVersion: String
 
     override fun onCreate() {
         super.onCreate()
