@@ -19,7 +19,7 @@ class MiscModule {
 
     @Provides @Singleton fun glide(ctx: Context): RequestManager = Glide.with(ctx)
 
-    @Provides @Singleton fun calendar(): Calendar {
+    @Provides fun calendar(): Calendar {
         val cal = Calendar.getInstance()
         cal.firstDayOfWeek = Calendar.MONDAY
         return cal

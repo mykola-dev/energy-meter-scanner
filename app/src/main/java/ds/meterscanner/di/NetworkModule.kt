@@ -33,7 +33,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun okHttpClient(@Named("APPID") weatherApi: String) {
+    fun okHttpClient(@Named("APPID") weatherApi: String): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(StethoInterceptor())
@@ -51,7 +51,7 @@ class NetworkModule {
             return@addInterceptor chain.proceed(request)
         }
 
-        builder.build()
+        return builder.build()
     }
 
     @Provides

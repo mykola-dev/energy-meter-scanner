@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 
 class Authenticator @Inject constructor(
-    @Inject val auth: FirebaseAuth,
-    @Inject val firebaseAnalytics: FirebaseAnalytics
+    @set:Inject var auth: FirebaseAuth,
+    @set:Inject var firebaseAnalytics: FirebaseAnalytics
 ) {
 
     private val authListeners = mutableMapOf<String, FirebaseAuth.AuthStateListener>()

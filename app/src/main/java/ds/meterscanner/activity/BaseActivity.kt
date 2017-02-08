@@ -25,12 +25,12 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
-abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppCompatActivity(), BaseView {
+abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppCompatActivity(), BaseView {
 
     override lateinit var viewModel: VM
     val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
-    @Inject lateinit var  bus: EventBus
-    @Inject lateinit var prefs:Prefs
+    protected val bus: EventBus by lazy { mainComponent.eventBus() }
+    protected val prefs:Prefs by lazy { mainComponent.prefs() }
 
     protected open val bindImmediately = false
 
@@ -45,7 +45,6 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppC
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainComponent.inject(this)
         viewModel = instantiateViewModel(savedInstanceState)
         bind()
         viewModel.onCreate()

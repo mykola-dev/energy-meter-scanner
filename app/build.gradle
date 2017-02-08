@@ -81,6 +81,7 @@ dexcount {
 }
 
 kapt {
+    generateStubs = true
     arguments {
         arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
     }
@@ -104,6 +105,7 @@ dependencies {
     compile "com.android.support:preference-v14:$supportVersion"
     compile 'com.takisoft.fix:preference-v7:25.0.1.0'
     compile "com.android.support:multidex:1.0.1"
+    kapt "com.android.databinding:compiler:$gradle_plugin_version"
 
     compile "com.google.firebase:firebase-auth:$firebaseVersion"
     compile "com.google.firebase:firebase-database:$firebaseVersion"
@@ -147,7 +149,6 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.4.0'                       // https://github.com/JakeWharton/timber
 
     // development
-    kapt "com.android.databinding:compiler:$gradle_plugin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     debugCompile 'com.facebook.stetho:stetho:1.4.2'                     // https://github.com/facebook/stetho
     debugCompile 'com.facebook.stetho:stetho-okhttp3:1.4.2'

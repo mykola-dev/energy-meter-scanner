@@ -40,9 +40,9 @@ class SnapshotJob : Job() {
 
         if (params.failureCount == 0) {
             if (params.scheduledAt != 0L) {
-                val cal: Calendar = mainComponent.getCalendar()
+                val cal: Calendar = mainComponent.calendar()
                 cal.timeInMillis = params.scheduledAt + params.startMs
-                val curr: Calendar = mainComponent.getCalendar()
+                val curr: Calendar = mainComponent.calendar()
                 while (cal.before(curr)) {
                     cal.add(Calendar.DAY_OF_YEAR, 1)
                 }

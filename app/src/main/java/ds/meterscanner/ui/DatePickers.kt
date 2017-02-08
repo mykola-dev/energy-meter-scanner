@@ -2,19 +2,18 @@ package ds.meterscanner.ui
 
 import L
 import android.app.Activity
-import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import ds.meterscanner.R
+import ds.meterscanner.di.mainComponent
 import java.util.*
 
 object DatePickers {
     fun pickDateTime(activity: Activity, initialDate: Date = Date(), callback: (Date) -> Unit) {
-        val currCalendar : Calendar = activity.appKodein().instance()
+        val currCalendar : Calendar = mainComponent.calendar()
         currCalendar.time = initialDate
 
-        val cal : Calendar = activity.appKodein().instance()
+        val cal : Calendar = mainComponent.calendar()
 
         val dpd = DatePickerDialog.newInstance({ view, year, monthOfYear, dayOfMonth ->
             L.v("year=$year month=$monthOfYear day=$dayOfMonth")
@@ -43,7 +42,7 @@ object DatePickers {
     }
 
     fun pickTime(activity: Activity, initialDate: Date = Date(), callback: (hour: Int, minute: Int) -> Unit) {
-        val currCalendar : Calendar = activity.appKodein().instance()
+        val currCalendar : Calendar = mainComponent.calendar()
         currCalendar.time = initialDate
 
         val tpd = TimePickerDialog.newInstance({ view, hourOfDay, minute, second ->

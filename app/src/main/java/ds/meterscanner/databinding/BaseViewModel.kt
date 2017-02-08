@@ -9,6 +9,7 @@ import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
 import ds.meterscanner.databinding.viewmodel.ToolbarViewModel
 import ds.meterscanner.db.FirebaseDb
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.ui.Progressable
@@ -18,18 +19,23 @@ import org.greenrobot.eventbus.Subscribe
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : LifeCycleViewModel(), Progressable {
+abstract class BaseViewModel<V:BaseView>(final override val view: BaseView) : LifeCycleViewModel(), Progressable {
 
-    @Inject lateinit var  restService: NetLayer
-    @Inject lateinit var  prefs: Prefs
-    @Inject lateinit var  authenticator: Authenticator
-    @Inject lateinit var  db: FirebaseDb
-    @Inject lateinit var  scheduler: Scheduler
+    @Inject lateinit var restService: NetLayer
+    @Inject lateinit var prefs: Prefs
+    @Inject lateinit var authenticator: Authenticator
+    @Inject lateinit var db: FirebaseDb
+    @Inject lateinit var scheduler: Scheduler
 
     val toolbar = ToolbarViewModel()
     val showProgress = ObservableBoolean()
 
     private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
+
+    override fun onCreate() {
+        super.onCreate()
+        mainComponent.inject(this as BaseViewModel<*>)
+    }
 
     override fun onAttach() {
         super.onAttach()
@@ -66,7 +72,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Lif
                 .subscribe {
                     showProgress.set(it)
                 }
-        }else {
+        } else {
             progressStopSignal.onNext(true)
             showProgress.set(false)
         }
