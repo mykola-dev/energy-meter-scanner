@@ -14,6 +14,7 @@ import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.ChartsView
 import ds.meterscanner.databinding.viewmodel.StackMode.*
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.rx.toggleProgress
 import ds.meterscanner.util.FileTools
 import ds.meterscanner.util.MathTools
@@ -30,6 +31,8 @@ import javax.inject.Inject
 
 class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
 
+    @Inject lateinit var calendar: Calendar
+
     val checkedButton = ObservableInt()
     val columnsData = ObservableField<ColumnChartData>()
     val previewData = ObservableField<ColumnChartData>()
@@ -44,11 +47,11 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
             update()
         }
 
-    @Inject lateinit var calendar: Calendar
     private var data: List<SnapshotData> = listOf()
 
     override fun onCreate() {
         super.onCreate()
+        mainComponent.inject(this)
         toolbar.title.set(view.getString(R.string.charts))
 
         checkedButton.set(when (currMode) {

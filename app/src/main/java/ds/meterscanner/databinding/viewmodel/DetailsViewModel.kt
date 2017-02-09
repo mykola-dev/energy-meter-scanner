@@ -6,6 +6,7 @@ import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.DetailsView
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.util.formatTimeDate
 import io.reactivex.Single.just
 import java.util.*
@@ -25,6 +26,7 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
 
     override fun onCreate() {
         super.onCreate()
+        mainComponent.inject(this)
         if (snapshotId != null) {
             toolbar.title.set(view.getString(R.string.edit_snapshot))
         } else {

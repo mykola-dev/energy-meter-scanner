@@ -11,10 +11,11 @@ import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.MainView
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.di.Version
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.util.post
 import io.reactivex.Single
 import javax.inject.Inject
-import javax.inject.Named
 
 class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
 
@@ -25,10 +26,14 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
     var jobsChecked = false
     var apiKey: String? = null
 
-    @Inject @Named("version") lateinit var appVersion: String
+    @field:Inject
+    @field:Version
+    @JvmField
+    var appVersion: String=""
 
     override fun onCreate() {
         super.onCreate()
+        mainComponent.inject(this)
         toggleProgress(true)
     }
 

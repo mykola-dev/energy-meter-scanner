@@ -10,6 +10,7 @@ import ds.meterscanner.databinding.BindingHolder
 import ds.meterscanner.databinding.ViewModelAdapter
 import ds.meterscanner.databinding.viewmodel.HistoryItemViewModel
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.di.mainComponent
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
 import org.greenrobot.eventbus.EventBus
@@ -17,7 +18,11 @@ import javax.inject.Inject
 
 class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>() {
 
-    @Inject lateinit var  bus: EventBus
+    @Inject lateinit var bus: EventBus
+
+    init {
+        mainComponent.inject(this)
+    }
 
     var isSelectionMode = false
         set(value) {
@@ -33,7 +38,7 @@ class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>() {
         viewModel.value = item.value.toString()
         viewModel.date = formatTimeDate(item.timestamp)
         viewModel.temp = item.outsideTemp?.toString() ?: ""
-        viewModel.tempColor = ContextCompat.getColor(context,getColorTemp(item.outsideTemp ?: 0))
+        viewModel.tempColor = ContextCompat.getColor(context, getColorTemp(item.outsideTemp ?: 0))
         viewModel.onClick = View.OnClickListener {
             if (!isSelectionMode)
                 bus.post(HistoryClickEvent(getItem(holder.adapterPosition)))

@@ -7,7 +7,6 @@ import dagger.Module
 import dagger.Provides
 import org.greenrobot.eventbus.EventBus
 import java.util.*
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -25,7 +24,7 @@ class MiscModule {
         return cal
     }
 
-    @Provides @Singleton @Named("version") fun version(ctx: Context): String {
+    @Provides @Singleton @Version fun version(ctx: Context): String {
         val pInfo = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
         return pInfo.versionName
     }
