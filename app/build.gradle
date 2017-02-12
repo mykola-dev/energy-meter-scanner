@@ -81,7 +81,8 @@ dexcount {
 }
 
 kapt {
-    generateStubs = true
+    //generateStubs = true
+    //correctErrorTypes = true
     arguments {
         arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
     }
