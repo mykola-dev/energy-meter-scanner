@@ -1,10 +1,12 @@
 buildscript {
-    ext.kotlin_version = '1.1.0-beta-38'
+    ext.kotlin_version = '1.1.0-rc-91'
     ext.gradle_plugin_version = '2.2.3'
 
     repositories {
         jcenter()
+        mavenCentral()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_plugin_version"
@@ -12,12 +14,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
+        classpath 'com.github.Archinamon:GradleAspectJ-Android:2.3.0'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'https://anylinesdk.blob.core.windows.net/maven/'}
@@ -27,4 +31,9 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+    distributionType = 'bin'
 }
