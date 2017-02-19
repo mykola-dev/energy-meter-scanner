@@ -75,6 +75,7 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
         authenticator.signOut()
         toggleProgress(true)
         scheduler.clearAllJobs()
+        prefs.clearAll()
     }
 
     override fun toggleProgress(enabled: Boolean) {

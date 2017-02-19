@@ -4,7 +4,6 @@
 
 package ds.meterscanner.data
 
-import L
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.android.gms.tasks.Tasks
@@ -18,10 +17,6 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
 
     override val forcePersistDefaults = true
     override val sharedPreferences: SharedPreferences = ctx.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
-
-    init {
-        L.i("::: Prefs initialized")
-    }
 
     var city by pref("Kharkiv")
     var currentTemperature by pref(0.0f)
@@ -39,6 +34,8 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
     var viewportY by pref(-1)
     var viewportWidth by pref(-1)
     var viewportHeight by pref(-1)
+
+    var alarms by pref<Set<String>>(setOf())
 
     fun fetchRemote(): Single<Boolean> = Single.fromCallable {
         Tasks.await(remoteConfig.fetch())
@@ -59,6 +56,10 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
                 else
                     error("$key key is empty")
             }
+    }
+
+    fun clearAll() {
+        sharedPreferences.edit().clear().apply()
     }
 
 

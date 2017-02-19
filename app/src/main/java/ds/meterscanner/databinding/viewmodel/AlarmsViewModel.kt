@@ -31,13 +31,15 @@ class AlarmsViewModel(view: AlarmsView) : BaseViewModel<AlarmsView>(view) {
 
     fun onNewAlarm() {
         view.pickTime(Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)), { hours, minutes ->
-            scheduler.addJob(hours, minutes)
+            scheduler.scheduleSnapshotJob(hours, minutes)
+            scheduler.saveToPrefs()
             fillAdapter()
         })
     }
 
     fun deleteItem(id: Int) {
         scheduler.clearJob(id)
+        scheduler.saveToPrefs()
         fillAdapter()
     }
 
@@ -45,7 +47,8 @@ class AlarmsViewModel(view: AlarmsView) : BaseViewModel<AlarmsView>(view) {
         val date = Date(scheduler.getJob(id)?.scheduledTo() ?: System.currentTimeMillis())
         view.pickTime(date, { hours, minutes ->
             scheduler.clearJob(id)
-            scheduler.addJob(hours, minutes)
+            scheduler.scheduleSnapshotJob(hours, minutes)
+            scheduler.saveToPrefs()
             fillAdapter()
         })
     }

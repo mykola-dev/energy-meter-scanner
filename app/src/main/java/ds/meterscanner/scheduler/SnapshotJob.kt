@@ -4,7 +4,6 @@ import L
 import android.content.Context
 import android.content.Intent
 import com.evernote.android.job.Job
-import com.evernote.android.job.JobRequest
 import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
@@ -33,6 +32,7 @@ class SnapshotJob : Job(), KodeinInjected {
     val bus: EventBus by instance()
     val restService: NetLayer by instance()
     val db: FirebaseDb by instance()
+    val scheduler: Scheduler by instance()
 
     override fun onRunJob(params: Job.Params): Job.Result {
         injector.inject(context.appKodein())
@@ -46,10 +46,10 @@ class SnapshotJob : Job(), KodeinInjected {
                 while (cal.before(curr)) {
                     cal.add(Calendar.DAY_OF_YEAR, 1)
                 }
-                scheduleSnapshotJob(cal.timeInMillis - curr.timeInMillis)
+                scheduler.scheduleSnapshotJob(cal.timeInMillis - curr.timeInMillis)
 
             } else {
-                scheduleSnapshotJob()
+                scheduler.reschedule()
             }
         }
 
@@ -105,31 +105,4 @@ class SnapshotJob : Job(), KodeinInjected {
         return true
     }
 
-}
-
-fun scheduleSnapshotJob(hours: Int, minutes: Int) {
-    val cal = Calendar.getInstance()
-    cal.set(Calendar.HOUR_OF_DAY, hours)
-    cal.set(Calendar.MINUTE, minutes)
-    val curr = Calendar.getInstance()
-    if (cal.before(curr))
-        cal.add(Calendar.DAY_OF_MONTH, 1)
-    val diff = cal.timeInMillis - curr.timeInMillis
-    scheduleSnapshotJob(diff)
-
-}
-
-fun scheduleSnapshotJob(delay: Long) {
-    L.v("scheduler: schedule next task ${formatTimeDate(System.currentTimeMillis() + delay)}")
-    JobRequest.Builder(SnapshotJob::class.java.name)
-        .setPersisted(true)
-        .setExact(delay)
-        .setBackoffCriteria(TimeUnit.MINUTES.toMillis(2), JobRequest.BackoffPolicy.LINEAR)
-        .build()
-        .schedule()
-}
-
-// reschedule in one day
-fun scheduleSnapshotJob() {
-    scheduleSnapshotJob(TimeUnit.DAYS.toMillis(1))
 }
