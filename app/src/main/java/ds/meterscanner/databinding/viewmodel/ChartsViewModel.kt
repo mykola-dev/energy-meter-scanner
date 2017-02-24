@@ -16,11 +16,13 @@ import ds.meterscanner.databinding.ChartsView
 import ds.meterscanner.databinding.viewmodel.StackMode.*
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.rx.toggleProgress
-import ds.meterscanner.util.FileTools
-import ds.meterscanner.util.MathTools
-import ds.meterscanner.util.formatMillis
-import ds.meterscanner.util.getColorTemp
+import ds.meterscanner.util.*
+import io.reactivex.Flowable
+import io.reactivex.Flowable.zip
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.computation
 import io.reactivex.schedulers.Schedulers.io
 import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
 import lecho.lib.hellocharts.model.*
@@ -100,17 +102,17 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         L.i("chart: set mode $currMode")
 
         db.getAllSnapshots(calculatePeriodStart(period))
-            .observeOn(io())
-            .map { prepareSnapshotData(it) }
+            .observeOn(computation())
+            .map { profile({ prepareSnapshotData(it) }, "prepare data") }
             .map { snapshotData ->
                 if (currMode == AS_IS) {
                     snapshotData
                 } else {
-                    stackData(snapshotData)
+                    profile({ stackData(snapshotData) }, "stack data")
                 }
             }
             .doOnSuccess { data = it }
-            .map { prepareChartData(it) }
+            .map { profile({ prepareChartData(it) }, "prepare charts") }
             .toggleProgress(this)
             .bindTo(ViewModelEvent.DETACH)
             .observeOn(mainThread())
@@ -195,7 +197,7 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
 
         var cursor = 0
         for ((i, time) in periods.withIndex()) {
-            L.d("period $i: ${time.formatMillis()}")
+            //L.d("period $i: ${time.formatMillis()}")
             val stackedItem = SnapshotData(timestamp = time, colorId = R.color.colorAccent)
             val closingTime = getNextStackStart(time)
             val temps = mutableListOf<Int>()
