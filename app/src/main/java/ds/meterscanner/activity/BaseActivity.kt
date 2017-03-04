@@ -13,7 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR

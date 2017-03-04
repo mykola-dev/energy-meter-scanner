@@ -6,7 +6,7 @@ import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.text.format.DateUtils
 import android.view.Menu
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel

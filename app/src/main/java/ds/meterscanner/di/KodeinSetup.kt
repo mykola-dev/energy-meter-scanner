@@ -6,17 +6,20 @@ package ds.meterscanner.di
 
 import android.content.Context
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.evernote.android.job.JobManager
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.github.salomonbrys.kodein.*
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.bind
+import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.erased.provider
+import com.github.salomonbrys.kodein.erased.singleton
+import com.github.salomonbrys.kodein.erased.with
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import ds.meterscanner.App
 import ds.meterscanner.BuildConfig
@@ -36,7 +39,7 @@ import java.util.*
 
 
 fun mainComponent(app: App) = Kodein {
-    bind<Context>() with instance(app)
+    bind() from singleton { app.applicationContext }
     import(networkModule)
     import(firebaseModule)
     import(eventBusModule)
@@ -48,10 +51,10 @@ fun mainComponent(app: App) = Kodein {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 val networkModule = Kodein.Module {
-    bind<NetLayer>() with singleton { NetLayer(kodein) }
-    bind<Gson>() with singleton { GsonBuilder().create() }
-    bind<String>("APPID") with instance("3a2aae4aa5a564852f108fa99754e5f1")
-    bind<OkHttpClient>("weather") with singleton {
+    bind() from singleton { NetLayer(kodein) }
+    bind() from singleton { GsonBuilder().create() }
+    bind("APPID") from instance("3a2aae4aa5a564852f108fa99754e5f1")
+    bind("weather") from singleton {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(StethoInterceptor())
@@ -72,7 +75,7 @@ val networkModule = Kodein.Module {
         builder.build()
     }
 
-    bind<Retrofit>() with singleton {
+    bind() from singleton {
         Retrofit.Builder()
             .baseUrl(instance<String>("host"))
             .client(instance("weather"))
@@ -80,43 +83,43 @@ val networkModule = Kodein.Module {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
-    bind<WeatherRestApi>() with singleton { instance<Retrofit>().create(WeatherRestApi::class.java) }
+    bind() from singleton { instance<Retrofit>().create(WeatherRestApi::class.java) }
     constant("host") with "http://api.openweathermap.org/data/2.5/"
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 val schedulerModule = Kodein.Module {
-    bind<JobManager>() with singleton { JobManager.create(instance()) }
-    bind<Scheduler>() with singleton { Scheduler(kodein) }
+    bind() from singleton { JobManager.create(instance()) }
+    bind() from singleton { Scheduler(kodein) }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 val firebaseModule = Kodein.Module {
 
-    bind<FirebaseDatabase>() with singleton {
+    bind() from singleton {
         // init Firebase
         FirebaseApp.initializeApp(instance())
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         return@singleton FirebaseDatabase.getInstance()
     }
-    bind<FirebaseAuth>() with singleton { FirebaseAuth.getInstance() }
-    bind<FirebaseDb>() with singleton { FirebaseDb(kodein) }
-    bind<FirebaseAnalytics>() with singleton { FirebaseAnalytics.getInstance(instance()) }
-    bind<FirebaseStorage>() with singleton { FirebaseStorage.getInstance() }
-    bind<FirebaseRemoteConfig>() with singleton { FirebaseRemoteConfig.getInstance() }
+    bind() from singleton { FirebaseAuth.getInstance() }
+    bind() from singleton { FirebaseDb(kodein) }
+    bind() from singleton { FirebaseAnalytics.getInstance(instance()) }
+    bind() from singleton { FirebaseStorage.getInstance() }
+    bind() from singleton { FirebaseRemoteConfig.getInstance() }
 }
 
 val authModule = Kodein.Module {
-    bind<Authenticator>() with singleton { Authenticator(instance(), instance()) }
+    bind() from singleton { Authenticator(instance(), instance()) }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 val eventBusModule = Kodein.Module {
-    bind<EventBus>() with singleton {
+    bind() from singleton {
         EventBus
             .builder()
             //.addIndex(EventBusIndex::class.java)
@@ -127,14 +130,14 @@ val eventBusModule = Kodein.Module {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 val miscModule = Kodein.Module {
-    bind<RequestManager>() with singleton { Glide.with(instance<Context>()) }
-    bind<Prefs>() with singleton { Prefs(instance(), instance()) }
-    bind<Calendar>() with provider {
+    bind() from singleton { Glide.with(instance<Context>()) }
+    bind() from singleton { Prefs(instance(), instance()) }
+    bind() from provider {
         val cal = Calendar.getInstance()
         cal.firstDayOfWeek = Calendar.MONDAY
         cal
     }
-    bind<String>("version") with singleton {
+    bind("version") from singleton {
         val context: Context = instance()
         val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         pInfo.versionName

@@ -5,7 +5,7 @@ import android.databinding.ObservableBoolean
 import android.view.Menu
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs

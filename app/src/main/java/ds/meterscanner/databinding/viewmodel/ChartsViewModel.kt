@@ -8,7 +8,7 @@ import android.net.Uri
 import android.support.annotation.ColorRes
 import android.text.format.DateFormat
 import com.evernote.android.state.State
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
 import ds.meterscanner.databinding.BaseViewModel

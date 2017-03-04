@@ -133,7 +133,7 @@ dependencies {
     compile 'com.evernote:android-job:1.1.5'                            // https://github.com/evernote/android-job
 
     // injectors
-    compile 'com.github.salomonbrys.kodein:kodein:3.2.0'                // https://salomonbrys.github.io/Kodein/
+    compile 'com.github.salomonbrys.kodein:kodein-erased:3.2.0'                // https://salomonbrys.github.io/Kodein/
     compile 'com.github.salomonbrys.kodein:kodein-android:3.2.0-beta2'
     compile 'com.evernote:android-state:1.0.1'                          // https://github.com/evernote/android-state
     kapt 'com.evernote:android-state-processor:1.0.1'

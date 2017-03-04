@@ -2,7 +2,7 @@ package ds.meterscanner.databinding.viewmodel
 
 import L
 import android.databinding.ObservableField
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.DetailsView

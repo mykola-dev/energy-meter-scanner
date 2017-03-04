@@ -6,7 +6,7 @@ import com.evernote.android.job.scheduledTo
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.activity.BaseActivity
 import ds.meterscanner.activity.MainActivity

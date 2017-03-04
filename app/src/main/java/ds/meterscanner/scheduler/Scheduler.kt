@@ -7,7 +7,7 @@ import com.evernote.android.job.rescheduled
 import com.evernote.android.job.scheduledTo
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.util.formatTimeDate
 import java.util.*

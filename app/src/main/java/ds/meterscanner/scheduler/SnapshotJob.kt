@@ -7,7 +7,7 @@ import com.evernote.android.job.Job
 import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.data.InterruptEvent

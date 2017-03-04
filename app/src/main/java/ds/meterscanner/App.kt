@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatDelegate
 import com.evernote.android.job.JobManager
 import com.facebook.stetho.Stetho
 import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import com.github.salomonbrys.kodein.lazy
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.di.mainComponent

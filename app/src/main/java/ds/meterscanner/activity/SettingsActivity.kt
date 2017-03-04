@@ -12,7 +12,7 @@ import com.evernote.android.job.rescheduled
 import com.github.salomonbrys.kodein.LazyKodein
 import com.github.salomonbrys.kodein.LazyKodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.erased.instance
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.runActivity
 import ds.meterscanner.R
