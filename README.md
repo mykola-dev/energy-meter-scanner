@@ -21,7 +21,7 @@ That's it!
 ### Technologies used in this project:
 - Kotlin 1.1
 - Anyline OCR engine
-- RxJava 2
+- RxJava 2 (abandoned in favor of Kotlin coroutines)
 - Firebase
 - MVVM (sort of)
 - Kodein DI
