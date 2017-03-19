@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import ds.meterscanner.activity.Requests
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.run
 
 
 object FileTools {
@@ -21,7 +21,7 @@ object FileTools {
         activity.startActivityForResult(intent, Requests.SAVE_FILE)
     }
 
-    suspend fun saveFile(cr: ContentResolver, uri: Uri, data: List<String>) = launch(CommonPool) {
+    suspend fun saveFile(cr: ContentResolver, uri: Uri, data: List<String>) = run(CommonPool) {
         cr.openOutputStream(uri).bufferedWriter().use { writer ->
             data.forEach {
                 writer.write(it)
