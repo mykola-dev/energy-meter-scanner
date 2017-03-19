@@ -54,6 +54,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
     override fun onDetach() {
         authenticator.stopListen(this)
         job.cancel()
+        progressStopSignal.cancel()
     }
 
     override fun onDestroy() {
@@ -65,7 +66,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
      * Delayed progress
      */
     override fun toggleProgress(enabled: Boolean) {
-        launch(UI + job + progressStopSignal) {
+        launch(UI + progressStopSignal) {
             L.i("toggle progress: $enabled")
             if (enabled) {
                 delay(200)
