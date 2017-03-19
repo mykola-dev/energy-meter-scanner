@@ -5,8 +5,8 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import ds.meterscanner.activity.Requests
-import ds.meterscanner.rx.applySchedulers
-import io.reactivex.Completable
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 
 
 object FileTools {
@@ -21,15 +21,13 @@ object FileTools {
         activity.startActivityForResult(intent, Requests.SAVE_FILE)
     }
 
-    fun saveFile(cr: ContentResolver, uri: Uri, data: List<String>): Completable {
-        return Completable.fromAction {
-            cr.openOutputStream(uri).bufferedWriter().use { writer ->
-                data.forEach {
-                    writer.write(it)
-                    writer.newLine()
-                }
+    suspend fun saveFile(cr: ContentResolver, uri: Uri, data: List<String>) = launch(CommonPool) {
+        cr.openOutputStream(uri).bufferedWriter().use { writer ->
+            data.forEach {
+                writer.write(it)
+                writer.newLine()
             }
-        }.applySchedulers()
+        }
     }
 
 }

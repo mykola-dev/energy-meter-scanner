@@ -10,18 +10,17 @@ import com.github.salomonbrys.kodein.erased.instance
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import ds.meterscanner.auth.Authenticator
+import ds.meterscanner.coroutines.getChildValue
+import ds.meterscanner.coroutines.getValue
+import ds.meterscanner.coroutines.getValues
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.rx.applySchedulers
-import ds.meterscanner.rx.getValue
-import ds.meterscanner.rx.getValues
-import ds.meterscanner.rx.listenValues
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.run
 import java.io.ByteArrayOutputStream
 
 
@@ -44,19 +43,26 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
     val snapshotsReference: DatabaseReference
         get() = database.getReference(USERS).child(auth.getUser()!!.uid).child(SNAPSHOTS)
 
-    fun getAllSnapshots(startDate: Long): Single<List<Snapshot>> {
+   /* fun getAllSnapshotsRx(startDate: Long): Single<List<Snapshot>> {
+        return snapshotsReference
+            .orderByChild(Snapshot::timestamp.name)
+            .startAt(startDate.toDouble())
+            .getValues()
+    }*/
+
+    suspend fun getAllSnapshots(startDate: Long): List<Snapshot> {
         return snapshotsReference
             .orderByChild(Snapshot::timestamp.name)
             .startAt(startDate.toDouble())
             .getValues()
     }
 
-    fun getSnapshotById(snapshotId: String): Single<Snapshot> {
+    suspend fun getSnapshotById(snapshotId: String): Snapshot {
         return snapshotsReference.child(snapshotId).getValue()
     }
 
-    fun listenSnapshots(): Observable<List<Snapshot>> {
-        return snapshotsReference.orderByChild(Snapshot::timestamp.name).listenValues()
+    fun getSnapshots(): Query {
+        return snapshotsReference.orderByChild(Snapshot::timestamp.name)
     }
 
     fun saveSnapshot(s: Snapshot) {
@@ -79,36 +85,30 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
         snapshotsReference.keepSynced(keep)
     }
 
-    fun uploadImage(bitmap: Bitmap, name: String): String {
-        val scaleDown = 2
-        val outStream = ByteArrayOutputStream()
-        val small = Bitmap.createScaledBitmap(bitmap, bitmap.width / scaleDown, bitmap.height / scaleDown, true)
-        small.compress(Bitmap.CompressFormat.JPEG, prefs.jpegQuality, outStream)
-        val task = storageRef.child(name).putBytes(outStream.toByteArray())
-        Tasks.await(task)
-        val url = task.snapshot.downloadUrl!!.toString()
-        L.v("image url: $url")
-        outStream.close()
-        return url
-    }
-
-    fun uploadImageRx(bitmap: Bitmap, name: String): Single<String> {
-        return Single.create<String> {
-            try {
-                it.onSuccess(uploadImage(bitmap, name))
-            } catch (e: Exception) {
-                L.e("image upload failed!")
-                it.onError(e)
-            }
-        }.applySchedulers()
+    suspend fun uploadImage(bitmap: Bitmap, name: String): String = run(CommonPool) {
+        try {
+            val scaleDown = 2
+            val outStream = ByteArrayOutputStream()
+            val small = Bitmap.createScaledBitmap(bitmap, bitmap.width / scaleDown, bitmap.height / scaleDown, true)
+            small.compress(Bitmap.CompressFormat.JPEG, prefs.jpegQuality, outStream)
+            val task = storageRef.child(name).putBytes(outStream.toByteArray())
+            Tasks.await(task)
+            val url = task.snapshot.downloadUrl!!.toString()
+            L.v("image url: $url")
+            outStream.close()
+            url
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
     }
 
     fun removeImage(name: String) {
         storageRef.child(name).delete()
     }
 
-    fun getLatestSnapshot(): Maybe<Snapshot> {
-        return snapshotsReference.orderByChild(Snapshot::timestamp.name).limitToLast(1).getValue()
+    suspend fun getLatestSnapshot(): Snapshot {
+        return snapshotsReference.orderByChild(Snapshot::timestamp.name).limitToLast(1).getChildValue()
     }
 
     fun log(message: String) {

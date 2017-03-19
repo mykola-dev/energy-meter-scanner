@@ -16,11 +16,12 @@ import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.util.ThreadTools
 import ds.meterscanner.util.formatTimeDate
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.withTimeout
 import org.greenrobot.eventbus.EventBus
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class SnapshotJob : Job(), KodeinInjected {
@@ -67,15 +68,15 @@ class SnapshotJob : Job(), KodeinInjected {
         return result
     }
 
-    fun doJob(context: Context, jobId: Int): Boolean {
+    fun doJob(context: Context, jobId: Int): Boolean = runBlocking {
         if (ThreadTools.isUiThread)
             error("Main Thread detected")
 
         L.v("scheduler: start the job")
-        (
+        /*(
             if (prefs.saveTemperature)
                 restService
-                    .getWeather()
+                    .getWeatherRx()
                     .map { it.main.temp }
                     .timeout(10, TimeUnit.SECONDS)
             else
@@ -90,19 +91,35 @@ class SnapshotJob : Job(), KodeinInjected {
                     MainActivity::jobId..jobId
                 }
 
+            }*/
+
+        val weather: Double = if (prefs.saveTemperature) {
+            try {
+                withTimeout(10_000) { restService.getWeather().main.temp }
+            } catch (e: Exception) {
+                prefs.currentTemperature.toDouble()
             }
+
+        } else 0.0
+        prefs.currentTemperature = weather.toFloat()
+        L.v("fetched weather, t=$weather")
+        launch(UI) {
+            context.applicationContext.runActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK) {
+                MainActivity::jobId..jobId
+            }
+        }
 
         try {
             if (!ThreadTools.lock(jobId, prefs.shotTimeout.toLong())) {
                 L.w("threads: interrupted by timeout")
                 bus.post(InterruptEvent())
-                return false
+                return@runBlocking false
             }
         } catch (ignored: InterruptedException) {
         }
 
         L.v("scheduler: task was successful")
-        return true
+        return@runBlocking true
     }
 
 }

@@ -27,7 +27,7 @@ fun postDelayed(delay: Long, runnable: () -> Unit) {
     h.postDelayed(runnable, delay)
 }
 
-fun <T> profile(f: () -> T, name: String = ""): T {
+fun <T> profile(name: String = "", f: () -> T): T {
     val start = System.currentTimeMillis()
     return try {
         f()

@@ -10,8 +10,8 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import ds.bindingtools.PrefsAware
 import ds.bindingtools.pref
-import ds.meterscanner.rx.applySchedulers
-import io.reactivex.Single
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.run
 
 class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : PrefsAware {
 
@@ -37,25 +37,25 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
 
     var alarms by pref<Set<String>>(setOf())
 
-    fun fetchRemote(): Single<Boolean> = Single.fromCallable {
+    suspend fun fetchRemote(): Boolean = run(CommonPool) {
         Tasks.await(remoteConfig.fetch())
         remoteConfig.activateFetched()
-    }.applySchedulers()
+    }
 
-    fun apiKey(): Single<String> = fetchRemoteKey("anyline_api_key")
+    suspend fun apiKey(): String = fetchRemoteKey("anyline_api_key")
 
-    private fun fetchRemoteKey(key: String): Single<String> {
+    suspend private fun fetchRemoteKey(key: String): String {
         var value = remoteConfig.getString(key)
         if (!value.isEmpty())
-            return Single.just(value)
-        else
-            return fetchRemote().map {
-                value = remoteConfig.getString(key)
-                if (!value.isEmpty())
-                    value
-                else
-                    error("$key key is empty")
-            }
+            return value
+        else {
+            fetchRemote()
+            value = remoteConfig.getString(key)
+            return if (!value.isEmpty())
+                value
+            else
+                error("$key key is empty")
+        }
     }
 
     fun clearAll() {

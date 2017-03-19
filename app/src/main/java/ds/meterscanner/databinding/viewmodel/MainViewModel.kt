@@ -13,7 +13,6 @@ import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.MainView
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.post
-import io.reactivex.Single
 
 class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
 
@@ -39,13 +38,7 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
         }
         db.keepSynced(true)
 
-        prefs.apiKey().subscribe({
-            apiKeyReady.set(true)
-            apiKey = it
-            L.v("anyline key=$it")
-        }, {
-            view.showSnackbar(view.getString(R.string.api_key_not_found))
-        })
+        prepareApiKey()
 
         updateLastSnapshot()
 
@@ -55,10 +48,20 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
         view.onLoggedIn()
     }
 
-    private fun updateLastSnapshot() {
-        db.getLatestSnapshot().subscribe({
-            lastUpdated.set("${view.getString(R.string.latest_shot)} ${DateUtils.getRelativeTimeSpanString(it.timestamp)}")
-        })
+    fun prepareApiKey() = async {
+        try {
+            apiKey = prefs.apiKey()
+            apiKeyReady.set(true)
+            L.v("anyline key=$apiKey")
+        } catch(e: Exception) {
+            view.showSnackbar(view.getString(R.string.api_key_not_found))
+
+        }
+    }
+
+    private fun updateLastSnapshot() = async {
+        val snapshot: Snapshot = db.getLatestSnapshot()
+        lastUpdated.set("${view.getString(R.string.latest_shot)} ${DateUtils.getRelativeTimeSpanString(snapshot.timestamp)}")
     }
 
     private fun checkTasks() {
@@ -92,21 +95,19 @@ class MainViewModel(v: MainView, var jobId: Int) : BaseViewModel<MainView>(v) {
         view.runCamera(prefs.scanTries, jobId)
     }
 
-    fun onNewData(value: Double, bitmap: Bitmap, corrected: Boolean) {
+    fun onNewData(value: Double, bitmap: Bitmap, corrected: Boolean) = async {
         val s = Snapshot(value, prefs.currentTemperature.toInt())
-        (if (prefs.saveImages) db.uploadImageRx(bitmap, s.timestamp.toString()) else Single.just(""))
-            .onErrorReturn { "" }
-            .bindTo(ViewModelEvent.DESTROY)
-            .subscribe({
-                s.image = it
-                db.saveSnapshot(s)
-                val message = "$value " + if (corrected) "(corrected)" else ""
-                view.showSnackbar(message, actionText = R.string.discard, actionCallback = {
-                    db.deleteSnapshots(listOf(s))
-                })
-                updateLastSnapshot()
-            }, Throwable::printStackTrace
-            )
+        val url = if (prefs.saveImages)
+            db.uploadImage(bitmap, s.timestamp.toString())
+        else
+            ""
+        s.image = url
+        db.saveSnapshot(s)
+        val message = "$value " + if (corrected) "(corrected)" else ""
+        view.showSnackbar(message, actionText = R.string.discard, actionCallback = {
+            db.deleteSnapshots(listOf(s))
+        })
+        updateLastSnapshot()
     }
 
     override fun onPrepareMenu(menu: Menu) {

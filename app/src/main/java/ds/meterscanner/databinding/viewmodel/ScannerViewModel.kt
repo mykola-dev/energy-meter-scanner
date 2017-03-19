@@ -5,7 +5,6 @@ import android.databinding.ObservableField
 import android.graphics.Bitmap
 import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.ScannerView
-import ds.meterscanner.rx.applySchedulers
 import ds.meterscanner.ui.widget.DimensionsCallback
 import ds.meterscanner.util.ThreadTools
 
@@ -31,14 +30,17 @@ class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseVie
         }
 
         if (jobId < 0 && prefs.saveTemperature) {
-            restService.getWeather()
-                .map { it.main.temp }
-                .applySchedulers()
-                .bindTo(ViewModelEvent.DETACH)
-                .subscribe({
-                    prefs.currentTemperature = it.toFloat()
-                    view.showSnackbar("Weather has been updated")
-                }, Throwable::printStackTrace)
+            updateWeather()
+        }
+    }
+
+    private fun updateWeather() = async {
+        try {
+            val weather = restService.getWeather().main.temp.toFloat()
+            prefs.currentTemperature = weather
+            view.showSnackbar("Weather has been updated")
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

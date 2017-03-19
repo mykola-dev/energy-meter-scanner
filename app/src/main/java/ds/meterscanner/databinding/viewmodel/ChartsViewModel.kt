@@ -5,7 +5,6 @@ import android.content.ContentResolver
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.net.Uri
-import android.support.annotation.ColorRes
 import android.text.format.DateFormat
 import com.evernote.android.state.State
 import com.github.salomonbrys.kodein.erased.instance
@@ -15,15 +14,12 @@ import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.ChartsView
 import ds.meterscanner.databinding.viewmodel.StackMode.*
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.rx.toggleProgress
-import ds.meterscanner.util.*
-import io.reactivex.Flowable
-import io.reactivex.Flowable.zip
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.Schedulers.computation
-import io.reactivex.schedulers.Schedulers.io
+import ds.meterscanner.util.FileTools
+import ds.meterscanner.util.MathTools
+import ds.meterscanner.util.getColorTemp
+import ds.meterscanner.util.profile
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.run
 import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
@@ -87,46 +83,44 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         update()
     }
 
-    fun onDirectoryChoosen(cr: ContentResolver, uri: Uri) {
+    fun onDirectoryChoosen(cr: ContentResolver, uri: Uri) = async {
         val csvData = CsvCreator().createCsvData(data)
-        FileTools.saveFile(cr, uri, csvData)
-            .subscribe({
-                view.showSnackbar(view.getString(R.string.file_saved))
-            }, {
-                it.printStackTrace()
-                view.showSnackbar(view.getString(R.string.io_error))
-            })
+        try {
+            FileTools.saveFile(cr, uri, csvData)
+            view.showSnackbar(view.getString(R.string.file_saved))
+        } catch(e: Exception) {
+            e.printStackTrace()
+            view.showSnackbar(view.getString(R.string.io_error))
+        }
     }
 
-    private fun update() {
+    private fun update() = async {
         L.i("chart: set mode $currMode")
+        toggleProgress(true)
 
-        db.getAllSnapshots(calculatePeriodStart(period))
-            .observeOn(computation())
-            .map { profile({ prepareSnapshotData(it) }, "prepare data") }
-            .map { snapshotData ->
-                if (currMode == AS_IS) {
-                    snapshotData
-                } else {
-                    profile({ stackData(snapshotData) }, "stack data")
-                }
-            }
-            .doOnSuccess { data = it }
-            .map { profile({ prepareChartData(it) }, "prepare charts") }
-            .toggleProgress(this)
-            .bindTo(ViewModelEvent.DETACH)
-            .observeOn(mainThread())
-            .subscribe({ (columnChartData, lineChartData) ->
-                if (columnChartData.columns.isEmpty()) {
-                    view.showSnackbar(view.getString(R.string.empty_data))
-                    return@subscribe
-                }
+        val snapshots = db.getAllSnapshots(calculatePeriodStart(period))
+        val snapshotData = run(CommonPool + job) {
+            val snapshotData = profile("prepareSnapshotData") { prepareSnapshotData(snapshots) }
+            if (currMode == AS_IS)
+                snapshotData
+            else
+                profile("stackData") { stackData(snapshotData) }
+        }
+        data = snapshotData
+        val (cols, lines) = run(CommonPool + job) { profile("prepareChartData") { prepareChartData(snapshotData) } }
 
-                columnsData.set(columnChartData)
-                linesData.set(lineChartData)
-                previewData.set(columnChartData)
+        toggleProgress(false)
 
-            }, { it.printStackTrace() })
+        if (cols.columns.isEmpty()) {
+            view.showSnackbar(view.getString(R.string.empty_data))
+            return@async
+        }
+
+        columnsData.set(cols)
+        linesData.set(lines)
+        previewData.set(cols)
+
+        //view.showSnackbar("ready")
     }
 
     private fun prepareChartData(data: List<SnapshotData>): Pair<ColumnChartData, LineChartData> {
@@ -134,16 +128,18 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         val lines = mutableListOf<Line>()
         val axisValues = mutableListOf<AxisValue>()
 
-        for ((i, d) in data.withIndex()) {
+        val formatter = SimpleColumnChartValueFormatter(1)
+        data.forEachIndexed { i, d ->
             val value = SubcolumnValue(d.delta.toFloat())
             value.color = view.getColour(d.colorId)
             val column = Column(listOf(value))
             column.setHasLabelsOnlyForSelected(true)
-            column.formatter = SimpleColumnChartValueFormatter(1)
+            column.formatter = formatter
             columns += column
 
             val axisValue = AxisValue(i.toFloat())
             axisValue.setLabel(formatDate(d.timestamp))
+            //axisValue.setLabel("1")
             axisValues += axisValue
 
             if (tempVisible) {
@@ -343,7 +339,7 @@ data class SnapshotData(
     var offset: Double = 0.0,
     var timestamp: Long = 0,
     var temperature: Int? = null,
-    @ColorRes var colorId: Int = 0
+    /*@ColorRes */var colorId: Int = 0
 ) {
     fun getValueWithOffset() = value + offset
 }

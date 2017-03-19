@@ -4,7 +4,6 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.archinamon.aspectj'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-//apply plugin: "kotlin-allopen"
 //apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
@@ -85,6 +84,12 @@ android {
     runOnEachAssemble = false
 }*/
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
 kapt {
     arguments {
         arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
@@ -92,7 +97,7 @@ kapt {
 }
 
 dependencies {
-    def supportVersion = '25.2.0'
+    def supportVersion = '25.3.0'
     def firebaseVersion = '10.0.1'
     def retrofitVersion = '2.1.0'
     def rxLifecycleVersion = '2.0.1'
@@ -116,18 +121,18 @@ dependencies {
     compile "com.google.firebase:firebase-config:$firebaseVersion"
 
     // reactive stuff
-    compile 'io.reactivex.rxjava2:rxjava:2.0.6'                         // https://github.com/ReactiveX/RxJava
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'                      // https://github.com/ReactiveX/RxAndroid
-    compile "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"   // https://github.com/trello/RxLifecycle
-    compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
-    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxLifecycleVersion"
-    compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
+    //compile 'io.reactivex.rxjava2:rxjava:2.0.6'                         // https://github.com/ReactiveX/RxJava
+    //compile 'io.reactivex.rxjava2:rxandroid:2.0.1'                      // https://github.com/ReactiveX/RxAndroid
+    //compile "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"   // https://github.com/trello/RxLifecycle
+    //compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
+    //compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxLifecycleVersion"
+    //compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
     //compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'    // https://github.com/tbruyelle/RxPermissions
 
     // networking
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"          // https://github.com/square/retrofit
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:2.2.0"              // https://github.com/square/retrofit/tree/master/retrofit-adapters/rxjava2
+    //compile "com.squareup.retrofit2:adapter-rxjava2:2.2.0"              // https://github.com/square/retrofit/tree/master/retrofit-adapters/rxjava2
     compile "com.squareup.okhttp3:logging-interceptor:3.5.0"
     compile 'com.github.bumptech.glide:glide:3.7.0'                     // https://github.com/bumptech/glide
     compile 'com.evernote:android-job:1.1.5'                            // https://github.com/evernote/android-job
@@ -144,26 +149,27 @@ dependencies {
 
     // etc
     compile 'io.anyline:anylinesdk:3.8.0@aar'
-    compile 'org.greenrobot:eventbus:3.0.0'                             // https://github.com/greenrobot/EventBus
-    //kapt 'org.greenrobot:eventbus-annotation-processor:3.0.1'         // see apt params
-    compile 'com.jakewharton.timber:timber:4.4.0'                       // https://github.com/JakeWharton/timber
+    compile "org.greenrobot:eventbus:3.0.0"                             // https://github.com/greenrobot/EventBus
+    //kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"         // see apt params
+    compile "com.jakewharton.timber:timber:4.4.0"                       // https://github.com/JakeWharton/timber
 
     // development
     kapt "com.android.databinding:compiler:$gradle_plugin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.12'
-    debugCompile 'com.facebook.stetho:stetho:1.4.2'                     // https://github.com/facebook/stetho
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
-    //provided 'com.facebook.stetho:stetho:1.4.2'
-    //provided 'com.facebook.stetho:stetho-okhttp3:1.4.2'
-    //compile 'com.github.simonpercic:oklog3:1.0.1'                       // https://github.com/simonpercic/OkLog
-    debugCompile 'io.palaima.debugdrawer:debugdrawer:0.7.0'
-    releaseCompile 'io.palaima.debugdrawer:debugdrawer-no-op:0.7.0'
-    compile 'io.palaima.debugdrawer:debugdrawer-actions:0.7.0'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    debugCompile "com.facebook.stetho:stetho:1.4.2"                     // https://github.com/facebook/stetho
+    debugCompile "com.facebook.stetho:stetho-okhttp3:1.4.2"
+    //provided "com.facebook.stetho:stetho:1.4.2"
+    //provided "com.facebook.stetho:stetho-okhttp3:1.4.2"
+    //compile "com.github.simonpercic:oklog3:1.0.1"                       // https://github.com/simonpercic/OkLog
+    debugCompile "io.palaima.debugdrawer:debugdrawer:0.7.0"
+    releaseCompile "io.palaima.debugdrawer:debugdrawer-no-op:0.7.0"
+    compile "io.palaima.debugdrawer:debugdrawer-actions:0.7.0"
 
     // tests
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    testCompile "junit:junit:4.12"
 }
 
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.google.gms.google-services"

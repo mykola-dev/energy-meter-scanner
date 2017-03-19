@@ -4,7 +4,7 @@ import L
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import io.reactivex.Completable
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 
 
 class Authenticator(val auth: FirebaseAuth, private val firebaseAnalytics: FirebaseAnalytics) {
@@ -31,17 +31,17 @@ class Authenticator(val auth: FirebaseAuth, private val firebaseAnalytics: Fireb
         authListeners.remove(obj.toString())
     }
 
-    fun signInRx(login: String, pass: String): Completable = Completable.create({ s ->
+    suspend fun signIn(login: String, pass: String) = suspendCancellableCoroutine<Unit> { suspendable ->
         auth.signInWithEmailAndPassword(login, pass)
-            .addOnSuccessListener { s.onComplete() }
-            .addOnFailureListener { s.onError(it) }
-    })
+            .addOnSuccessListener { suspendable.resume(Unit) }
+            .addOnFailureListener { suspendable.resumeWithException(it) }
+    }
 
-    fun signUpRx(login: String, pass: String): Completable = Completable.create({ s ->
+    suspend fun signUp(login: String, pass: String) = suspendCancellableCoroutine<Unit> { suspendable ->
         auth.createUserWithEmailAndPassword(login, pass)
-            .addOnSuccessListener { s.onComplete() }
-            .addOnFailureListener { s.onError(it) }
-    })
+            .addOnSuccessListener { suspendable.resume(Unit) }
+            .addOnFailureListener { suspendable.resumeWithException(it) }
+    }
 
     fun signOut() {
         auth.signOut()

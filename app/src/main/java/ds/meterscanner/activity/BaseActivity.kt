@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -14,7 +15,6 @@ import android.view.View
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
@@ -26,7 +26,7 @@ import ds.meterscanner.databinding.ViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : RxAppCompatActivity(), BaseView {
+abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : AppCompatActivity(), BaseView {
 
     final override val kodein: Kodein by lazy { appKodein() }
     override lateinit var viewModel: VM

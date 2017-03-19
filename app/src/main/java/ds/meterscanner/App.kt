@@ -10,6 +10,8 @@ import com.github.salomonbrys.kodein.lazy
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.di.mainComponent
 import ds.meterscanner.scheduler.SnapshotJobCreator
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
 class App : MultiDexApplication(), KodeinAware {
@@ -29,7 +31,9 @@ class App : MultiDexApplication(), KodeinAware {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         // refresh remote prefs
-        prefs.fetchRemote().subscribe()
+        launch(UI) {
+            prefs.fetchRemote()
+        }
     }
 
     private fun initJobManager() {

@@ -15,12 +15,14 @@ import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.ui.Progressable
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
-import java.util.concurrent.TimeUnit
 
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : LifeCycleViewModel(), KodeinAware, Progressable {
+abstract class BaseViewModel<out V : BaseView>(final override val view: V) : ViewModel, KodeinAware, Progressable {
 
     override val kodein: Kodein = view.kodein
 
@@ -33,11 +35,14 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Lif
     val toolbar = ToolbarViewModel()
     val showProgress = ObservableBoolean()
 
-    private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
+    //private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
+    private var progressStopSignal = Job()
+    var job = Job() // create a job object to manage lifecycle
+
+    override fun onCreate() {
+    }
 
     override fun onAttach() {
-        super.onAttach()
-
         authenticator.startListen(this, { logged ->
             if (logged)
                 onLoggedIn(authenticator.getUser()!!)
@@ -47,12 +52,11 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Lif
     }
 
     override fun onDetach() {
-        super.onDetach()
         authenticator.stopListen(this)
+        job.cancel()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
     }
 
     protected open fun onLoggedIn(user: FirebaseUser) {}
@@ -61,18 +65,15 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Lif
      * Delayed progress
      */
     override fun toggleProgress(enabled: Boolean) {
-        L.i("toggle progress: $enabled")
-        if (enabled) {
-            Observable.just(enabled)
-                .delay(200, TimeUnit.MILLISECONDS)
-                .takeUntil<Boolean>(progressStopSignal)
-                .bindTo(ViewModelEvent.DETACH)
-                .subscribe {
-                    showProgress.set(it)
-                }
-        }else {
-            progressStopSignal.onNext(true)
-            showProgress.set(false)
+        launch(UI + job + progressStopSignal) {
+            L.i("toggle progress: $enabled")
+            if (enabled) {
+                delay(200)
+            } else {
+                progressStopSignal.cancel()
+                progressStopSignal = Job()
+            }
+            showProgress.set(enabled)
         }
     }
 
@@ -81,6 +82,16 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Lif
     }
 
     open fun onPrepareMenu(menu: Menu) {}
+
+    fun async(block: suspend CoroutineScope.() -> Unit) {
+        if (job.isCompleted)
+            job = Job()
+        launch(UI + job, true, block)
+    }
+
+    fun onErrorSnack(t: Throwable) {
+        view.showSnackbar(t.message ?: "Unknown Error")
+    }
 
 }
 

@@ -33,7 +33,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
@@ -67,8 +66,15 @@ val networkModule = Kodein.Module {
 
         builder.addInterceptor { chain ->
             var request = chain.request()
-            val url = request.url().newBuilder().addQueryParameter("APPID", instance("APPID")).build()
-            request = request.newBuilder().url(url).build()
+            val url = request
+                .url()
+                .newBuilder()
+                .addQueryParameter("APPID", instance("APPID"))
+                .build()
+            request = request
+                .newBuilder()
+                .url(url)
+                .build()
             return@addInterceptor chain.proceed(request)
         }
 
@@ -80,7 +86,7 @@ val networkModule = Kodein.Module {
             .baseUrl(instance<String>("host"))
             .client(instance("weather"))
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
     bind() from singleton { instance<Retrofit>().create(WeatherRestApi::class.java) }
@@ -122,7 +128,7 @@ val eventBusModule = Kodein.Module {
     bind() from singleton {
         EventBus
             .builder()
-            //.addIndex(EventBusIndex::class.java)
+            //.addIndex(EventBusIndex::class.java)  // todo
             .build()
     }
 }

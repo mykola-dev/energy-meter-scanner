@@ -6,7 +6,7 @@ import com.github.salomonbrys.kodein.erased.instance
 import com.google.gson.Gson
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.net.model.CurrWeatherData
-import io.reactivex.Observable
+import ru.gildor.coroutines.retrofit.await
 
 class NetLayer(override val kodein: Kodein) : KodeinAware {
 
@@ -14,9 +14,7 @@ class NetLayer(override val kodein: Kodein) : KodeinAware {
     private val gson: Gson = instance()
     private val prefs: Prefs = instance()
 
-    fun getWeather(): Observable<CurrWeatherData> {
-        return api.getWeather(prefs.city)
-    }
+    suspend fun getWeather(): CurrWeatherData = api.getWeather(prefs.city).await()
 
 }
 

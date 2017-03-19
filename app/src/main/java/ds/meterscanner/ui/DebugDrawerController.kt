@@ -2,6 +2,7 @@ package ds.meterscanner.ui
 
 import L
 import android.content.Intent
+import android.widget.Toast
 import com.evernote.android.job.scheduledTo
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
@@ -13,16 +14,15 @@ import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.net.NetLayer
-import ds.meterscanner.rx.applySchedulers
 import ds.meterscanner.scheduler.Scheduler
-import ds.meterscanner.scheduler.SnapshotJob
 import ds.meterscanner.util.*
 import io.palaima.debugdrawer.DebugDrawer
 import io.palaima.debugdrawer.actions.ActionsModule
 import io.palaima.debugdrawer.actions.ButtonAction
 import io.palaima.debugdrawer.actions.SpinnerAction
 import io.palaima.debugdrawer.actions.SwitchAction
-import io.reactivex.Completable
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import java.util.*
 
 
@@ -58,22 +58,17 @@ class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
         })
 
         val getWeatherAction = ButtonAction("Get Weather", {
-            netLayer.getWeather()
-                .applySchedulers()
-                .subscribe({
-                    L.v("temp=${it.main.temp}°С")
-                }, Throwable::printStackTrace)
+            launch(UI) {
+                val weather = netLayer.getWeather().main.temp
+                L.v("temp=$weather°С")
+                Toast.makeText(activity, "temp=$weather", 0).show()
+            }
         })
 
         val activeTasks = TextAction(getTasksInfo())
 
         val simulateTaskAction = ButtonAction("Run Job", {
-            Completable.create {
-                SnapshotJob().doJob(activity.applicationContext, 0)
-                it.onComplete()
-            }
-                .applySchedulers()
-                .subscribe()
+           activity.toast("todo")
         })
 
         val clearJobsListAction = ButtonAction("Clear Jobs List", {

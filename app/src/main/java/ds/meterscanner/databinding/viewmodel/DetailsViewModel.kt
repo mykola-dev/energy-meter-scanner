@@ -8,7 +8,6 @@ import ds.meterscanner.databinding.BaseViewModel
 import ds.meterscanner.databinding.DetailsView
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
-import io.reactivex.Single.just
 import java.util.*
 
 class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewModel<DetailsView>(view) {
@@ -21,7 +20,7 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
     val boilerTemp = ObservableField<String>()
 
     private lateinit var snapshot: Snapshot
-    private val calendar:Calendar = instance()
+    private val calendar: Calendar = instance()
 
     override fun onCreate() {
         super.onCreate()
@@ -35,20 +34,23 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
 
     override fun onAttach() {
         super.onAttach()
-        (if (snapshotId != null)
+        fetchSnapshot()
+
+
+    }
+
+    private fun fetchSnapshot() = async {
+        snapshot = if (snapshotId != null)
             db.getSnapshotById(snapshotId!!)
         else
-            just(Snapshot(boilerTemp = prefs.boilerTemp, outsideTemp = prefs.currentTemperature.toInt())))
-            .subscribe { it ->
-                if (it.value != 0.0)
-                    valueField.set(it.value.toString())
-                imageUrl.set(it.image)
-                dateField.set(formatTimeDate(it.timestamp))
-                outsideTemp.set(if (it.outsideTemp != null) it.outsideTemp.toString() else "")
-                boilerTemp.set(it.boilerTemp.toString())
-                snapshot = it
-            }
+            Snapshot(boilerTemp = prefs.boilerTemp, outsideTemp = prefs.currentTemperature.toInt())
 
+        if (snapshot.value != 0.0)
+            valueField.set(snapshot.value.toString())
+        imageUrl.set(snapshot.image)
+        dateField.set(formatTimeDate(snapshot.timestamp))
+        outsideTemp.set(if (snapshot.outsideTemp != null) snapshot.outsideTemp.toString() else "")
+        boilerTemp.set(snapshot.boilerTemp.toString())
     }
 
     fun onValueChanged(text: CharSequence) {

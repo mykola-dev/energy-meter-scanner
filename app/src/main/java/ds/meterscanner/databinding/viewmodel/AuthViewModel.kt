@@ -4,7 +4,6 @@ import android.databinding.ObservableField
 import ds.meterscanner.R
 import ds.meterscanner.databinding.AuthView
 import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.rx.toggleProgress
 
 // todo validation
 class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
@@ -21,30 +20,33 @@ class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
         super.onAttach()
     }
 
-    fun onSignIn() {
-        authenticator.signInRx(login.get(),password.get())
-            .toggleProgress(this)
-            .bindTo(ViewModelEvent.DETACH)
-            .subscribe({
-                view.finish()
-            }, {
-                view.showSnackbar(view.getString(R.string.sign_in_error))
-                it.printStackTrace()
-            })
+    fun onSignIn() = async {
+        toggleProgress(true)
+        try {
+            authenticator.signIn(login.get(), password.get())
+            view.finish()
+        } catch (e: Exception) {
+            view.showSnackbar(view.getString(R.string.sign_in_error))
+            e.printStackTrace()
+        } finally {
+            toggleProgress(false)
+        }
 
     }
 
-    fun onSignUp() {
-        authenticator.signUpRx(login.get(),password.get())
-            .toggleProgress(this)
-            .bindTo(ViewModelEvent.DETACH)
-            .subscribe({
-                view.showSnackbar(view.getString(R.string.user_created))
-                onSignIn()
-            }, {
-                view.showSnackbar(view.getString(R.string.sign_up_error))
-                it.printStackTrace()
-            })
+    fun onSignUp() = async {
+        toggleProgress(true)
+        try {
+            authenticator.signUp(login.get(), password.get())
+            view.showSnackbar(view.getString(R.string.user_created))
+            onSignIn()
+        } catch (e: Exception) {
+            view.showSnackbar(view.getString(R.string.sign_up_error))
+            e.printStackTrace()
+        } finally {
+            toggleProgress(false)
+        }
+
     }
 
 
