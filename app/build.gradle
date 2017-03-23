@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.archinamon.aspectj'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion 25
@@ -71,7 +71,7 @@ android {
 /*aspectj {
     debugInfo true
 }*/
-
+/*
 dexcount {
     format = "tree"
     includeClasses = false
@@ -82,7 +82,7 @@ dexcount {
     maxTreeDepth = 3
     enableForInstantRun = false
     runOnEachAssemble = false
-}
+}*/
 
 kotlin {
     experimental {
