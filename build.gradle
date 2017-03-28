@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.1.0-beta-38'
-    ext.gradle_plugin_version = '2.2.3'
+    ext.kotlin_version = '1.1.1'
+    ext.gradle_plugin_version = '2.3.0'
 
     repositories {
         jcenter()
@@ -12,6 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
+        classpath "net.rdrei.android.buildtimetracker:gradle-plugin:0.9.0"
     }
 }
 
