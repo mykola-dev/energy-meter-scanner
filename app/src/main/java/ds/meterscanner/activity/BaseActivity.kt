@@ -52,7 +52,7 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
         viewModel.onCreate()
     }
 
-    override fun getColour(id: Int): Int = ContextCompat.getColor(this,id)
+    override fun getColour(id: Int): Int = ContextCompat.getColor(this, id)
 
     override fun onStart() {
         super.onStart()
@@ -99,7 +99,13 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
         }
     }
 
-    override fun showSnackbar(text: String, callback: (() -> Unit)?, duration: Int, @StringRes actionText: Int, actionCallback: (() -> Unit)?) {
+    override fun showSnackbar(
+        text: String,
+        callback: (() -> Unit)?,
+        duration: Int,
+        @StringRes actionText: Int,
+        actionCallback: (() -> Unit)?
+    ) {
         val content = findViewById(R.id.coordinator) ?: findViewById(android.R.id.content)
         val s = Snackbar.make(content, text, duration)
         if (callback != null) {

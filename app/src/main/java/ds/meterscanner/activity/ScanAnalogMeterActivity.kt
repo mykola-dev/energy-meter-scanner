@@ -77,9 +77,9 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         energyScanView.setReportingEnabled(false)
 
         // initialize Anyline with the license key and a Listener that is called if a result is found
-        energyScanView.initAnyline(apiKey) { scanMode, result, resultImage, fullImage ->
-            viewModel.onScanResult(result, resultImage.bitmap)
-        }
+        energyScanView.initAnyline(apiKey, { result ->
+            viewModel.onScanResult(result.result, result.cutoutImage!!.bitmap)
+        })
 
 
         updateViewport()

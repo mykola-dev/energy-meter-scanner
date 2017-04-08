@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.archinamon.aspectj'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "build-time-tracker"
 //apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
@@ -15,7 +16,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 2
-        versionName "1.2 build" + new SimpleDateFormat("MMdd").format(new Date())
+        versionName "1.3 build" + new SimpleDateFormat("MMdd").format(new Date())
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -96,6 +97,19 @@ kapt {
     }
 }
 
+buildtimetracker {
+    reporters {
+
+        summary {
+            ordered false
+            threshold 50
+            barstyle "none"
+            shortenTaskNames false
+        }
+
+    }
+}
+
 def skipKapt = findProperty("skipKapt")=="true"
 
 afterEvaluate {
@@ -108,7 +122,6 @@ dependencies {
     def supportVersion = '25.3.1'
     def firebaseVersion = '10.0.1'
     def retrofitVersion = '2.2.0'
-    def rxLifecycleVersion = '2.0.1'
 
     // supportlib stuff
     compile "com.android.support:appcompat-v7:$supportVersion"
@@ -128,19 +141,9 @@ dependencies {
     compile "com.google.firebase:firebase-storage:$firebaseVersion"
     compile "com.google.firebase:firebase-config:$firebaseVersion"
 
-    // reactive stuff
-    //compile 'io.reactivex.rxjava2:rxjava:2.0.8'                         // https://github.com/ReactiveX/RxJava
-    //compile 'io.reactivex.rxjava2:rxandroid:2.0.1'                      // https://github.com/ReactiveX/RxAndroid
-    //compile "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"   // https://github.com/trello/RxLifecycle
-    //compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
-    //compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxLifecycleVersion"
-    //compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
-    //compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'    // https://github.com/tbruyelle/RxPermissions
-
     // networking
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"          // https://github.com/square/retrofit
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    //compile "com.squareup.retrofit2:adapter-rxjava2:2.2.0"              // https://github.com/square/retrofit/tree/master/retrofit-adapters/rxjava2
     compile "com.squareup.okhttp3:logging-interceptor:3.6.0"
     compile 'com.github.bumptech.glide:glide:3.7.0'                     // https://github.com/bumptech/glide
     compile 'com.evernote:android-job:1.1.8'                            // https://github.com/evernote/android-job
@@ -156,7 +159,7 @@ dependencies {
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'            // https://github.com/lecho/hellocharts-android
 
     // etc
-    compile 'io.anyline:anylinesdk:3.8.0@aar'
+    compile 'io.anyline:anylinesdk:3.10.0@aar'
     compile "org.greenrobot:eventbus:3.0.0"                             // https://github.com/greenrobot/EventBus
     kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"         // see apt params
     compile "com.jakewharton.timber:timber:4.5.1"                       // https://github.com/JakeWharton/timber
