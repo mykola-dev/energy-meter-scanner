@@ -29,12 +29,12 @@ import java.util.*
 class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
     override val kodein: Kodein = activity.appKodein()
 
-    lateinit var debugDrawer: DebugDrawer
+    val debugDrawer: DebugDrawer
     val db: FirebaseDb = instance()
     val netLayer: NetLayer = instance()
     val scheduler: Scheduler = instance()
 
-    fun init() {
+    init {
         val keepSyncedAction = SwitchAction("Keep synced", {
             db.keepSynced(it)
         })
@@ -68,7 +68,7 @@ class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
         val activeTasks = TextAction(getTasksInfo())
 
         val simulateTaskAction = ButtonAction("Run Job", {
-           activity.toast("todo")
+            activity.toast("todo")
         })
 
         val clearJobsListAction = ButtonAction("Clear Jobs List", {
@@ -98,4 +98,12 @@ class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
         return sb.toString()
     }
 
+   /*
+
+    fun init() {
+
+    }
+
+
+*/
 }

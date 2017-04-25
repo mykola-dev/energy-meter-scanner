@@ -68,7 +68,7 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
     fun saveSnapshot(s: Snapshot) {
         if (s.id == null) {
             s.boilerTemp = prefs.boilerTemp
-            snapshotsReference.push()
+            //snapshotsReference.push()
             s.id = snapshotsReference.push().key
         }
         snapshotsReference.child(s.id).setValue(s)

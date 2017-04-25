@@ -1,9 +1,8 @@
 buildscript {
-    //ext.kotlin_version = '1.1.1'
-    ext.kotlin_version = '1.1.2-eap-44'
+    ext.kotlin_version = '1.1.2'
     ext.coroutines_version = '0.14'
     ext.gradle_plugin_version = '2.3.0'
-    //ext.gradle_plugin_version = '2.4.0-alpha5'
+    //ext.gradle_plugin_version = '2.4.0-alpha6'
 
     repositories {
         jcenter()      
@@ -36,6 +35,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5-rc-3'
-    distributionType = 'bin'
+    gradleVersion = '3.5'
 }

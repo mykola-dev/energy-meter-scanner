@@ -27,7 +27,7 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DebugDrawerController(this).init()
+        DebugDrawerController(this)
         L.v("current job id=$jobId")
     }
 

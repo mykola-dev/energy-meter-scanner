@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="ds.meterscanner"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ds.meterscanner"
     >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".App"
@@ -66,7 +67,6 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
