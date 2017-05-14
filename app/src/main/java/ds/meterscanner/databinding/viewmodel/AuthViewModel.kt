@@ -1,15 +1,16 @@
 package ds.meterscanner.databinding.viewmodel
 
-import android.databinding.ObservableField
+import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.databinding.AuthView
 import ds.meterscanner.databinding.BaseViewModel
+import kotlinx.coroutines.experimental.delay
 
 // todo validation
 class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
 
-    val login = ObservableField<String>()
-    val password = ObservableField<String>()
+    var login: CharSequence by binding("")
+    val password: CharSequence by binding("")
 
     override fun onCreate() {
         super.onCreate()
@@ -23,7 +24,8 @@ class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
     fun onSignIn() = async {
         toggleProgress(true)
         try {
-            authenticator.signIn(login.get(), password.get())
+            delay(500)
+            authenticator.signIn(login.toString(), password.toString())
             view.finish()
         } catch (e: Exception) {
             view.showSnackbar(view.getString(R.string.sign_in_error))
@@ -37,7 +39,7 @@ class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
     fun onSignUp() = async {
         toggleProgress(true)
         try {
-            authenticator.signUp(login.get(), password.get())
+            authenticator.signUp(login.toString(), password.toString())
             view.showSnackbar(view.getString(R.string.user_created))
             onSignIn()
         } catch (e: Exception) {

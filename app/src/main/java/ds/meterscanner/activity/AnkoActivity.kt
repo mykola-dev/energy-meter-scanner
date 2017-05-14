@@ -1,8 +1,6 @@
 package ds.meterscanner.activity
 
 import L
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
@@ -11,33 +9,24 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.LazyKodein
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
-import com.github.salomonbrys.kodein.lazy
 import ds.bindingtools.runActivity
-import ds.meterscanner.BR
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
 import ds.meterscanner.databinding.BaseView
 import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.ViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : AppCompatActivity(), BaseView {
+abstract class AnkoActivity<VM : BaseViewModel<*>> : AppCompatActivity(), BaseView {
     final override val kodein: LazyKodein = LazyKodein { appKodein() }
 
     override lateinit var viewModel: VM
-    val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
     val bus: EventBus by instance()
-    val prefs : Prefs by instance()
-
-    protected open val bindImmediately = false
-
+    val prefs:Prefs by instance()
 
     init {
         L.v("::: ${javaClass.simpleName} initialized")
@@ -45,12 +34,10 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
 
     abstract fun instantiateViewModel(state: Bundle?): VM
 
-    abstract fun getLayoutId(): Int
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = instantiateViewModel(savedInstanceState)
-        bind()
+        createLayout()
         viewModel.onCreate()
     }
 
@@ -62,7 +49,6 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
         bus.register(this)
     }
 
-    //override fun getColor(id: Int): Int = ContextCompat.getColor(this.id)
 
     override fun onStop() {
         super.onStop()
@@ -85,12 +71,7 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
         return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun bind(varId: Int = BR.viewModel) {
-        binding.setVariable(varId, viewModel)
-        if (bindImmediately)
-            binding.executePendingBindings()
-    }
-
+    abstract protected fun createLayout()
 
     private fun setupToolbar() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
@@ -99,6 +80,11 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
             supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton())
             onToolbarCreated(toolbar)
         }
+    }
+
+    protected fun isDisplayUpButton() = true
+
+    protected fun onToolbarCreated(toolbar: Toolbar) {
     }
 
     override fun showSnackbar(
@@ -119,7 +105,7 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
             s.addCallback(snackCallback)
         }
         if (actionCallback != null)
-            s.setAction(actionText, View.OnClickListener {
+            s.setAction(actionText, {
                 actionCallback()
             })
         s.show()
@@ -130,12 +116,6 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    protected fun isDisplayUpButton() = true
-
-    protected fun onToolbarCreated(toolbar: Toolbar) {
-
     }
 
     override fun runAuthScreen() {

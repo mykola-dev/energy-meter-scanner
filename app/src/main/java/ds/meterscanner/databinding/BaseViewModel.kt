@@ -7,6 +7,7 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
+import ds.bindingtools.binding
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
@@ -22,9 +23,10 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
 
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : ViewModel, KodeinAware, Progressable {
+abstract class BaseViewModel<out V : BaseView>(final override val view: V)
+    : ViewModel, ds.bindingtools.ViewModel, KodeinAware, Progressable {
 
-    override val kodein: Kodein = view.kodein
+    override val kodein: Kodein = view.kodein.value
 
     val restService: NetLayer = instance()
     val prefs: Prefs = instance()
@@ -33,7 +35,9 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
     val scheduler: Scheduler = instance()
 
     val toolbar = ToolbarViewModel()
+    @Deprecated("use isRefreshing")
     val showProgress = ObservableBoolean()
+    var isRefreshing: Boolean by binding(false)
 
     //private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
     private var progressStopSignal = Job()
@@ -52,6 +56,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
     }
 
     override fun onDetach() {
+        L.i("${javaClass.simpleName} onDetach")
         authenticator.stopListen(this)
         job.cancel()
         progressStopSignal.cancel()
@@ -66,8 +71,9 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
      * Delayed progress
      */
     override fun toggleProgress(enabled: Boolean) {
+        L.i("${javaClass.simpleName} | toggle progress: $enabled")
+
         launch(UI + progressStopSignal) {
-            L.i("toggle progress: $enabled")
             if (enabled) {
                 delay(200)
             } else {
@@ -75,6 +81,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
                 progressStopSignal = Job()
             }
             showProgress.set(enabled)
+            isRefreshing = enabled
         }
     }
 
@@ -87,7 +94,7 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Vie
     fun async(block: suspend CoroutineScope.() -> Unit) {
         if (job.isCompleted)
             job = Job()
-        launch(UI + job, true, block)
+        launch(UI + job, block = block)
     }
 
     fun onErrorSnack(t: Throwable) {

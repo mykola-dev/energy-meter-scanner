@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
-import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.LazyKodeinAware
 import java.util.*
 
 interface ViewModel {
@@ -20,7 +20,7 @@ interface View {
     val viewModel: ViewModel
 }
 
-interface BaseView : View, KodeinAware {
+interface BaseView : View, LazyKodeinAware {
     fun runAuthScreen()
     fun getString(@StringRes id: Int): String
     fun getColour(@ColorRes id: Int): Int
@@ -59,6 +59,7 @@ interface AlarmsView : BaseView {
 }
 
 interface AuthView : BaseView
+
 interface ScannerView : BaseView {
     fun finishWithResult(value: Double, bitmap: Bitmap? = null, corrected: Boolean = false)
     fun startScanning()
