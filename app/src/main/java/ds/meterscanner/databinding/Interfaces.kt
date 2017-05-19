@@ -40,7 +40,7 @@ interface MainView : BaseView {
     fun runCharts()
     fun runSettings()
     fun runHistory()
-    fun requestSetupJobs(cb: () -> Unit)
+    fun showSetupJobsDialog(cb: () -> Unit)
     fun onLoggedIn()
     fun runAlarms()
 }

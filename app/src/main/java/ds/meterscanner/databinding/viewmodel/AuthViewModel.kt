@@ -14,7 +14,7 @@ class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
 
     override fun onCreate() {
         super.onCreate()
-        toolbar.title.set(view.getString(R.string.log_in))
+        toolbar.title_ = view.getString(R.string.log_in)
     }
 
     override fun onAttach() {

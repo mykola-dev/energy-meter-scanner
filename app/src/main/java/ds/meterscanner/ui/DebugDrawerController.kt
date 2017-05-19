@@ -9,7 +9,7 @@ import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
-import ds.meterscanner.activity.BaseActivity
+import ds.meterscanner.activity.AnkoActivity
 import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
@@ -26,7 +26,7 @@ import kotlinx.coroutines.experimental.launch
 import java.util.*
 
 
-class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
+class DebugDrawerController(val activity: AnkoActivity<*>) : KodeinAware {
     override val kodein: Kodein = activity.appKodein()
 
     val debugDrawer: DebugDrawer

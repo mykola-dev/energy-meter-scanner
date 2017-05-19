@@ -4,13 +4,13 @@ import L
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.text.InputType
-import android.view.View
 import android.widget.LinearLayout
 import ds.bindingtools.bind
-import ds.bindingtools.debug
+import ds.bindingtools.debugBindings
 import ds.bindingtools.invoke
 import ds.meterscanner.R
 import ds.meterscanner.databinding.AuthView
+import ds.meterscanner.databinding.layout.ToolbarLayout
 import ds.meterscanner.databinding.viewmodel.AuthViewModel
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.coordinatorLayout
@@ -25,7 +25,8 @@ class AuthActivity : AnkoActivity<AuthViewModel>(), AuthView {
 
         coordinatorLayout {
 
-            include<View>(R.layout.toolbar)
+            //include<View>(R.layout.toolbar)
+            addView(ToolbarLayout(viewModel.toolbar).createView(AnkoContext.create(ctx)).lparams(width = matchParent))
 
             swipeRefreshLayout {
                 setColorSchemeResources(R.color.colorAccent)
@@ -57,13 +58,13 @@ class AuthActivity : AnkoActivity<AuthViewModel>(), AuthView {
                         button(R.string.sign_in) {
                             onClick {
                                 L.e(viewModel.toString())
-                                viewModel.debug()
+                                viewModel.debugBindings()
                                 viewModel.onSignIn()
                             }
                             bind(viewModel { it::isRefreshing }, { isEnabled = !it })
                         }.lparams(lp)
 
-                        button(R.string.sign_up) {
+                        themedButton(R.string.sign_up,R.style.PrimaryButton) {
                             onClick { viewModel.onSignUp() }
                             bind(viewModel { it::isRefreshing }, { isEnabled = !it })
                         }.lparams(lp)

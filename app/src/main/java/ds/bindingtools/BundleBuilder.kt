@@ -44,9 +44,9 @@ class BundleBuilder {
 		}
 	}
 
-	internal operator fun KProperty<*>.rangeTo(arg: Any?) {
-		this.name.rangeTo(arg)
-	}
+	internal operator fun KProperty<*>.rangeTo(arg: Any?) = this.name.rangeTo(arg)
+
+	internal infix fun KProperty<*>.to(arg: Any?) = this.name.rangeTo(arg)
 
 }
 

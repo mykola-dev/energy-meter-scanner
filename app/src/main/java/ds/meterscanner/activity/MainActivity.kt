@@ -11,19 +11,23 @@ import ds.bindingtools.arg
 import ds.bindingtools.runActivity
 import ds.bindingtools.runActivityForResult
 import ds.meterscanner.R
-import ds.meterscanner.databinding.MainBinding
 import ds.meterscanner.databinding.MainView
+import ds.meterscanner.databinding.layout.MainLayout
 import ds.meterscanner.databinding.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
+import org.jetbrains.anko.setContentView
 
-class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
+class MainActivity : AnkoActivity<MainViewModel>(), MainView {
 
     val jobId by arg(-1)
 
     private var isIntentConsumed = false
 
+    override fun createLayout() {
+       MainLayout(viewModel).setContentView(this)
+    }
+
     override fun instantiateViewModel(state: Bundle?) = MainViewModel(this, jobId ?: -1)
-    override fun getLayoutId() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +37,9 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
 
     override fun runCamera(tries: Int, jobId: Int) {
         runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
-            ScanAnalogMeterActivity::tries..tries
-            ScanAnalogMeterActivity::jobId..jobId
-            ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+            ScanAnalogMeterActivity::tries to tries
+            ScanAnalogMeterActivity::jobId to jobId
+            ScanAnalogMeterActivity::apiKey to viewModel.apiKey
         }
     }
 
@@ -55,7 +59,7 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         runActivity<AlarmsActivity>()
     }
 
-    override fun requestSetupJobs(cb: () -> Unit) {
+    override fun showSetupJobsDialog(cb: () -> Unit) {
         AlertDialog.Builder(this)
             .setTitle(R.string.attention)
             .setMessage(R.string.empty_jobs_message)
