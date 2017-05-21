@@ -1,6 +1,7 @@
 package ds.meterscanner.ui
 
 import L
+import android.annotation.SuppressLint
 import android.app.Activity
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
@@ -9,12 +10,13 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import ds.meterscanner.R
 import java.util.*
 
+@SuppressLint("WrongConstant")
 object DatePickers {
     fun pickDateTime(activity: Activity, initialDate: Date = Date(), callback: (Date) -> Unit) {
-        val currCalendar : Calendar = activity.appKodein().instance()
+        val currCalendar: Calendar = activity.appKodein().instance()
         currCalendar.time = initialDate
 
-        val cal : Calendar = activity.appKodein().instance()
+        val cal: Calendar = activity.appKodein().instance()
 
         val dpd = DatePickerDialog.newInstance({ view, year, monthOfYear, dayOfMonth ->
             L.v("year=$year month=$monthOfYear day=$dayOfMonth")
@@ -43,7 +45,7 @@ object DatePickers {
     }
 
     fun pickTime(activity: Activity, initialDate: Date = Date(), callback: (hour: Int, minute: Int) -> Unit) {
-        val currCalendar : Calendar = activity.appKodein().instance()
+        val currCalendar: Calendar = activity.appKodein().instance()
         currCalendar.time = initialDate
 
         val tpd = TimePickerDialog.newInstance({ view, hourOfDay, minute, second ->

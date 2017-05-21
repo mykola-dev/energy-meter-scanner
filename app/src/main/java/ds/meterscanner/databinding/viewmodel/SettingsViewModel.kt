@@ -8,7 +8,7 @@ class SettingsViewModel(v: SettingsView) : BaseViewModel<SettingsView>(v) {
 
     override fun onCreate() {
         super.onCreate()
-        toolbar.title.set(view.getString(R.string.settings))
+        toolbar.title = view.getString(R.string.settings)
 
     }
 }

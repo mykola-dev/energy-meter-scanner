@@ -169,6 +169,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    compile 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.5.0'
     debugCompile "com.facebook.stetho:stetho:1.5.0"                     // https://github.com/facebook/stetho
     debugCompile "com.facebook.stetho:stetho-okhttp3:1.5.0"
     //provided "com.facebook.stetho:stetho:1.4.2"

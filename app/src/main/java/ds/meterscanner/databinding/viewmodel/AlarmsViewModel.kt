@@ -15,7 +15,7 @@ class AlarmsViewModel(view: AlarmsView) : BaseViewModel<AlarmsView>(view) {
 
     override fun onCreate() {
         super.onCreate()
-        toolbar.title.set(view.getString(R.string.alarms))
+        toolbar.title = view.getString(R.string.alarms)
         adapter.set(AlarmsAdapter())
     }
 
@@ -25,7 +25,7 @@ class AlarmsViewModel(view: AlarmsView) : BaseViewModel<AlarmsView>(view) {
     }
 
     private fun fillAdapter() {
-        val data=scheduler.getScheduledJobs().toList().sortedBy { it.scheduledTo() }
+        val data = scheduler.getScheduledJobs().toList().sortedBy { it.scheduledTo() }
         adapter.get().setData(data)
     }
 

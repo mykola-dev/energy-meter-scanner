@@ -25,9 +25,9 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
     override fun onCreate() {
         super.onCreate()
         if (snapshotId != null) {
-            toolbar.title.set(view.getString(R.string.edit_snapshot))
+            toolbar.title = view.getString(R.string.edit_snapshot)
         } else {
-            toolbar.title.set(view.getString(R.string.new_snapshot))
+            toolbar.title = view.getString(R.string.new_snapshot)
         }
     }
 

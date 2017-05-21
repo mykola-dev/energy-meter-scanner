@@ -1,6 +1,7 @@
 package ds.meterscanner.databinding
 
 import L
+import android.databinding.BaseObservable
 import android.databinding.ObservableBoolean
 import android.view.Menu
 import com.github.salomonbrys.kodein.Kodein
@@ -22,7 +23,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
 
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : ViewModel, KodeinAware, Progressable {
+abstract class BaseViewModel<out V : BaseView>(final override val view: V) : BaseObservable(), ViewModel, KodeinAware, Progressable {
 
     override val kodein: Kodein = view.kodein
 

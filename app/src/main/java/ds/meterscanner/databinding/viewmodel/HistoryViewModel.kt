@@ -1,7 +1,8 @@
 package ds.meterscanner.databinding.viewmodel
 
 import L
-import android.databinding.ObservableField
+import android.databinding.Bindable
+import ds.bindingtools.observableField
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.coroutines.listenValues
@@ -11,12 +12,12 @@ import ds.meterscanner.db.model.Snapshot
 
 class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
 
-    val adapter = ObservableField<HistoryAdapter>()
+    @get:Bindable var adapter by observableField<HistoryAdapter>()
 
     override fun onCreate() {
         super.onCreate()
-        toolbar.title.set(view.getString(R.string.history))
-        adapter.set(HistoryAdapter())
+        toolbar.title = view.getString(R.string.history)
+        adapter = HistoryAdapter()
     }
 
     override fun onAttach() {
@@ -31,7 +32,7 @@ class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
             for (data in channel) {
                 L.d("list updated! size=${data.size}")
                 toggleProgress(false)
-                adapter.get().setData(data)
+                adapter?.setData(data)
                 view.scrollToPosition(data.size - 1)
             }
         } catch (e: Exception) {
@@ -46,11 +47,11 @@ class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
     }
 
     fun toggleSelectionMode(enable: Boolean) {
-        adapter.get().isSelectionMode = enable
+        adapter?.isSelectionMode = enable
     }
 
     fun deleteSelectedItems() {
-        db.deleteSnapshots(adapter.get().getData().filter { it.selected })
+        db.deleteSnapshots(adapter!!.getData().filter { it.selected })
     }
 
 }

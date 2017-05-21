@@ -1,9 +1,10 @@
 package ds.meterscanner.databinding.viewmodel
 
 import android.databinding.BaseObservable
-import android.databinding.ObservableField
+import android.databinding.Bindable
+import ds.bindingtools.observableField
 
 class ToolbarViewModel : BaseObservable() {
-    val title = ObservableField<String>()
-    val subtitle = ObservableField<String>()
+    @get:Bindable var title by observableField<String>()
+    @get:Bindable var subtitle by observableField<String>()
 }
