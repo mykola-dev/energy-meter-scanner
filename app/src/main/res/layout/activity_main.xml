@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.MainViewModel"
+            type="ds.meterscanner.mvvm.viewmodel.MainViewModel"
             />
 
     </data>
@@ -18,7 +18,7 @@
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity"
+        tools:context=".mvvm.activity.MainActivity"
         >
 
         <include

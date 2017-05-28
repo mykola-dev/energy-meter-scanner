@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.content.ContentResolver
@@ -10,9 +10,9 @@ import com.evernote.android.state.State
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.ChartsView
-import ds.meterscanner.databinding.viewmodel.StackMode.*
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.ChartsView
+import ds.meterscanner.mvvm.viewmodel.StackMode.*
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.FileTools
 import ds.meterscanner.util.MathTools

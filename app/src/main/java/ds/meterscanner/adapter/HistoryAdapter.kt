@@ -10,9 +10,9 @@ import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
-import ds.meterscanner.databinding.BindingHolder
-import ds.meterscanner.databinding.ViewModelAdapter
-import ds.meterscanner.databinding.viewmodel.HistoryItemViewModel
+import ds.meterscanner.mvvm.BindingHolder
+import ds.meterscanner.mvvm.ViewModelAdapter
+import ds.meterscanner.mvvm.viewmodel.HistoryItemViewModel
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp

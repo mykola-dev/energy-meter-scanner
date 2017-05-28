@@ -1,32 +1,30 @@
-package ds.meterscanner.databinding.viewmodel
+@file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
 
+package ds.meterscanner.mvvm.viewmodel
+
+import android.app.Application
 import android.databinding.ObservableField
 import ds.meterscanner.R
-import ds.meterscanner.databinding.AuthView
-import ds.meterscanner.databinding.BaseViewModel
+import ds.meterscanner.mvvm.BaseViewModel2
+import ds.meterscanner.mvvm.invoke
 
 // todo validation
-class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
+class AuthViewModel(app: Application) : BaseViewModel2(app) {
 
     val login = ObservableField<String>()
     val password = ObservableField<String>()
 
-    override fun onCreate() {
-        super.onCreate()
-        toolbar.title = view.getString(R.string.log_in)
-    }
-
-    override fun onAttach() {
-        super.onAttach()
+    init {
+        toolbar.title = getString(R.string.log_in)
     }
 
     fun onSignIn() = async {
         toggleProgress(true)
         try {
             authenticator.signIn(login.get(), password.get())
-            view.finish()
+            finishCommand()
         } catch (e: Exception) {
-            view.showSnackbar(view.getString(R.string.sign_in_error))
+            showSnackbarCommand(getString(R.string.sign_in_error))
             e.printStackTrace()
         } finally {
             toggleProgress(false)
@@ -37,11 +35,11 @@ class AuthViewModel(view: AuthView) : BaseViewModel<AuthView>(view) {
     fun onSignUp() = async {
         toggleProgress(true)
         try {
-            authenticator.signUp(login.get(), password.get())
-            view.showSnackbar(view.getString(R.string.user_created))
+            authenticator.signUp(login.get()!!, password.get()!!)
+            showSnackbarCommand(getString(R.string.user_created))
             onSignIn()
         } catch (e: Exception) {
-            view.showSnackbar(view.getString(R.string.sign_up_error))
+            showSnackbarCommand(getString(R.string.sign_up_error))
             e.printStackTrace()
         } finally {
             toggleProgress(false)

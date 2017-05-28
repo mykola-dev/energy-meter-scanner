@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding
+package ds.meterscanner.mvvm
 
 import android.content.Context
 import android.databinding.DataBindingUtil

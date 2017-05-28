@@ -1,4 +1,4 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -17,8 +17,8 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.runActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
-import ds.meterscanner.databinding.SettingsView
-import ds.meterscanner.databinding.viewmodel.SettingsViewModel
+import ds.meterscanner.mvvm.SettingsView
+import ds.meterscanner.mvvm.viewmodel.SettingsViewModel
 import ds.meterscanner.scheduler.Scheduler
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

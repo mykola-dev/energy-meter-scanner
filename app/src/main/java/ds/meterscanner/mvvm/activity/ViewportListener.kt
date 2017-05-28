@@ -1,4 +1,4 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import lecho.lib.hellocharts.listener.ViewportChangeListener
 import lecho.lib.hellocharts.model.Viewport

@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding
+package ds.meterscanner.mvvm
 
 import L
 import android.databinding.BaseObservable
@@ -11,8 +11,8 @@ import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
-import ds.meterscanner.databinding.viewmodel.ToolbarViewModel
 import ds.meterscanner.db.FirebaseDb
+import ds.meterscanner.mvvm.viewmodel.ToolbarViewModel
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.ui.Progressable
@@ -23,6 +23,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
 
+@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseViewModel<out V : BaseView>(final override val view: V) : BaseObservable(), ViewModel, KodeinAware, Progressable {
 
     override val kodein: Kodein = view.kodein

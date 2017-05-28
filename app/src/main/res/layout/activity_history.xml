@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.HistoryViewModel"
+            type="ds.meterscanner.mvvm.viewmodel.HistoryViewModel"
             />
     </data>
 

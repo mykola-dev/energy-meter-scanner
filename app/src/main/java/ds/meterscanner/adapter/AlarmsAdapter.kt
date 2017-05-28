@@ -12,9 +12,9 @@ import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.AlarmClickEvent
 import ds.meterscanner.data.AlarmDeleteEvent
-import ds.meterscanner.databinding.BindingHolder
-import ds.meterscanner.databinding.ViewModelAdapter
-import ds.meterscanner.databinding.viewmodel.AlarmItemViewModel
+import ds.meterscanner.mvvm.BindingHolder
+import ds.meterscanner.mvvm.ViewModelAdapter
+import ds.meterscanner.mvvm.viewmodel.AlarmItemViewModel
 import ds.meterscanner.util.formatTime
 import org.greenrobot.eventbus.EventBus
 

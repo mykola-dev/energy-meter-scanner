@@ -1,7 +1,7 @@
 package ds.meterscanner.data
 
 import android.text.format.DateFormat
-import ds.meterscanner.databinding.viewmodel.SnapshotData
+import ds.meterscanner.mvvm.viewmodel.SnapshotData
 
 class CsvCreator {
 

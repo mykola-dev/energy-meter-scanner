@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
-import ds.meterscanner.activity.Requests
+import ds.meterscanner.mvvm.activity.Requests
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.run
 

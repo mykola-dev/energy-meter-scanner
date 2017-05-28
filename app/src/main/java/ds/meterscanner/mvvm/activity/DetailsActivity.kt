@@ -1,11 +1,11 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import ds.bindingtools.arg
 import ds.meterscanner.R
-import ds.meterscanner.databinding.DetailsView
-import ds.meterscanner.databinding.viewmodel.DetailsViewModel
+import ds.meterscanner.mvvm.DetailsView
+import ds.meterscanner.mvvm.viewmodel.DetailsViewModel
 import ds.meterscanner.ui.DatePickers
 import java.util.*
 

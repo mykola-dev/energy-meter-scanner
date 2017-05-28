@@ -1,11 +1,11 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.databinding.ObservableField
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.DetailsView
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
 import java.util.*

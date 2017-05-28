@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.ToolbarViewModel"
+            type="ds.meterscanner.mvvm.viewmodel.ToolbarViewModel"
             />
     </data>
 

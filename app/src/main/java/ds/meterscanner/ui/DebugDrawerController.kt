@@ -2,6 +2,7 @@ package ds.meterscanner.ui
 
 import L
 import android.content.Intent
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.evernote.android.job.scheduledTo
 import com.github.salomonbrys.kodein.Kodein
@@ -9,10 +10,10 @@ import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
-import ds.meterscanner.activity.BaseActivity
-import ds.meterscanner.activity.MainActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.mvvm.activity.BaseActivity
+import ds.meterscanner.mvvm.activity.MainActivity
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.util.*
@@ -26,7 +27,7 @@ import kotlinx.coroutines.experimental.launch
 import java.util.*
 
 
-class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
+class DebugDrawerController(val activity: AppCompatActivity) : KodeinAware {
     override val kodein: Kodein = activity.appKodein()
 
     val debugDrawer: DebugDrawer
@@ -61,7 +62,7 @@ class DebugDrawerController(val activity: BaseActivity<*, *>) : KodeinAware {
             launch(UI) {
                 val weather = netLayer.getWeather().main.temp
                 L.v("temp=$weather°С")
-                Toast.makeText(activity, "temp=$weather", 0).show()
+                activity.toast( "temp=$weather")
             }
         })
 

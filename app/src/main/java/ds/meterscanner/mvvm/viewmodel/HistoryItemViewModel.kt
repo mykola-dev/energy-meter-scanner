@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import android.view.View
 

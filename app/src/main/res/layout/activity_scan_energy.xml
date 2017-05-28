@@ -8,14 +8,14 @@
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.ScannerViewModel"
+            type="ds.meterscanner.mvvm.viewmodel.ScannerViewModel"
             />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.ScanAnalogMeterActivity"
+        tools:context=".mvvm.activity.ScanAnalogMeterActivity"
         >
 
         <ds.meterscanner.ui.widget.BetterEnergyScanView

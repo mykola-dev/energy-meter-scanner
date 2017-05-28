@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.databinding.Bindable
@@ -6,8 +6,8 @@ import ds.bindingtools.observableField
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.coroutines.listenValues
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.ListsView
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.db.model.Snapshot
 
 class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {

@@ -1,10 +1,10 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.databinding.ObservableField
 import android.graphics.Bitmap
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.ScannerView
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.ScannerView
 import ds.meterscanner.ui.widget.DimensionsCallback
 import ds.meterscanner.util.ThreadTools
 

@@ -1,4 +1,4 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +8,9 @@ import android.view.MenuItem
 import com.evernote.android.state.StateSaver
 import ds.meterscanner.R
 import ds.meterscanner.databinding.ActivityChartsBinding
-import ds.meterscanner.databinding.ChartsView
-import ds.meterscanner.databinding.viewmodel.ChartsViewModel
-import ds.meterscanner.databinding.viewmodel.Period
+import ds.meterscanner.mvvm.ChartsView
+import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
+import ds.meterscanner.mvvm.viewmodel.Period
 import ds.meterscanner.util.FileTools
 
 class ChartsActivity : BaseActivity<ActivityChartsBinding, ChartsViewModel>(), ChartsView {

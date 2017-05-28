@@ -7,7 +7,7 @@
  * Created by martin at 2015-07-03
  */
 
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import L
 import android.app.Activity
@@ -24,8 +24,8 @@ import ds.bindingtools.bundle
 import ds.meterscanner.R
 import ds.meterscanner.data.InterruptEvent
 import ds.meterscanner.databinding.ActivityScanEnergyBinding
-import ds.meterscanner.databinding.ScannerView
-import ds.meterscanner.databinding.viewmodel.ScannerViewModel
+import ds.meterscanner.mvvm.ScannerView
+import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
 import org.greenrobot.eventbus.Subscribe
 
 

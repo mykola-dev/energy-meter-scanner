@@ -1,4 +1,4 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import L
 import android.databinding.DataBindingUtil
@@ -20,9 +20,8 @@ import ds.meterscanner.BR
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
-import ds.meterscanner.databinding.BaseView
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.ViewModel
+import ds.meterscanner.mvvm.BaseView
+import ds.meterscanner.mvvm.BaseViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 

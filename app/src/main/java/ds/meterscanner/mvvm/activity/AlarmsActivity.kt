@@ -1,12 +1,12 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import ds.meterscanner.R
 import ds.meterscanner.data.AlarmClickEvent
 import ds.meterscanner.data.AlarmDeleteEvent
-import ds.meterscanner.databinding.AlarmsView
-import ds.meterscanner.databinding.viewmodel.AlarmsViewModel
+import ds.meterscanner.mvvm.AlarmsView
+import ds.meterscanner.mvvm.viewmodel.AlarmsViewModel
 import ds.meterscanner.ui.DatePickers
 import org.greenrobot.eventbus.Subscribe
 import java.util.*

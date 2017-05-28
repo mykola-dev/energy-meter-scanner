@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         applicationId "ds.meterscanner"
@@ -92,6 +92,7 @@ kotlin {
 }
 
 kapt {
+    //correctErrorTypes = true
     arguments {
         arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
     }
@@ -165,6 +166,9 @@ dependencies {
     compile "com.jakewharton.timber:timber:4.5.1"                       // https://github.com/JakeWharton/timber
 
     // development
+    compile "android.arch.lifecycle:runtime:1.0.0-alpha1"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha1"
     kapt "com.android.databinding:compiler:$gradle_plugin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"

@@ -1,8 +1,8 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import ds.meterscanner.R
-import ds.meterscanner.databinding.BaseViewModel
-import ds.meterscanner.databinding.SettingsView
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.SettingsView
 
 class SettingsViewModel(v: SettingsView) : BaseViewModel<SettingsView>(v) {
 

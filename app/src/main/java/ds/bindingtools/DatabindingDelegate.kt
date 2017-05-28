@@ -2,7 +2,6 @@ package ds.bindingtools
 
 import android.databinding.BaseObservable
 import android.databinding.Observable
-import ds.meterscanner.BR
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -34,7 +33,7 @@ fun <T> BaseObservable.observableField(default: T? = null) = ObservableFieldProp
     }
 }
 
-private val bindableResourceClass: Class<*> = BR::class.java
+private val bindableResourceClass: Class<*> = Class.forName("ds.meterscanner.BR")
 private val resourceIdMap: MutableMap<String, Int> = mutableMapOf()
 
 private val String.bindableResourceId: Int get() {

@@ -1,4 +1,4 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import L
 import android.os.Bundle
@@ -10,8 +10,8 @@ import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
 import ds.meterscanner.databinding.ActivityHistoryBinding
-import ds.meterscanner.databinding.ListsView
-import ds.meterscanner.databinding.viewmodel.HistoryViewModel
+import ds.meterscanner.mvvm.ListsView
+import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
 import org.greenrobot.eventbus.Subscribe
 

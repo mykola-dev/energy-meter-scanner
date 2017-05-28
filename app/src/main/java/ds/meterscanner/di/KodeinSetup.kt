@@ -23,7 +23,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.GsonBuilder
 import ds.meterscanner.App
 import ds.meterscanner.BuildConfig
-import ds.meterscanner.EventBusIndex
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.db.FirebaseDb
@@ -129,7 +128,7 @@ val eventBusModule = Kodein.Module {
     bind() from singleton {
         EventBus
             .builder()
-            .addIndex(EventBusIndex())
+            //.addIndex(EventBusIndex())
             .build()
     }
 }

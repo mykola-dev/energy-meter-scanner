@@ -1,11 +1,11 @@
-package ds.meterscanner.databinding.viewmodel
+package ds.meterscanner.mvvm.viewmodel
 
 import android.databinding.ObservableField
 import com.evernote.android.job.scheduledTo
 import ds.meterscanner.R
 import ds.meterscanner.adapter.AlarmsAdapter
-import ds.meterscanner.databinding.AlarmsView
-import ds.meterscanner.databinding.BaseViewModel
+import ds.meterscanner.mvvm.AlarmsView
+import ds.meterscanner.mvvm.BaseViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 

@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding
+package ds.meterscanner.mvvm
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView

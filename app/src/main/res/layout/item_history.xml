@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="ds.meterscanner.databinding.viewmodel.HistoryItemViewModel" />
+            type="ds.meterscanner.mvvm.viewmodel.HistoryItemViewModel" />
     </data>
 
     <RelativeLayout

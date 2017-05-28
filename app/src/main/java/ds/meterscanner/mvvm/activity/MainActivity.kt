@@ -1,28 +1,28 @@
-package ds.meterscanner.activity
+package ds.meterscanner.mvvm.activity
 
 import L
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.Menu
 import ds.bindingtools.arg
 import ds.bindingtools.runActivity
 import ds.bindingtools.runActivityForResult
 import ds.meterscanner.R
 import ds.meterscanner.databinding.MainBinding
-import ds.meterscanner.databinding.MainView
-import ds.meterscanner.databinding.viewmodel.MainViewModel
+import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
+import ds.meterscanner.util.provideViewModel
 
-class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
+class MainActivity : BaseActivity2<MainBinding, MainViewModel>() {
 
     val jobId by arg(-1)
 
     private var isIntentConsumed = false
 
-    override fun instantiateViewModel(state: Bundle?) = MainViewModel(this, jobId ?: -1)
+    override fun provideViewModel(state: Bundle?): MainViewModel = provideViewModel()
+
     override fun getLayoutId() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,37 +31,31 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         L.v("current job id=$jobId")
     }
 
-    override fun runCamera(tries: Int, jobId: Int) {
-        runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
-            ScanAnalogMeterActivity::tries..tries
-            ScanAnalogMeterActivity::jobId..jobId
-            ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+    override fun initViewModel() {
+        super.initViewModel()
+        viewModel.jobId = jobId ?: -1
+        viewModel.runAlarmsCommand.observe(this) {
+            runActivity<AlarmsActivity>()
         }
-    }
-
-    override fun runCharts() {
-        runActivity<ChartsActivity>()
-    }
-
-    override fun runSettings() {
-        runActivity<SettingsActivity>()
-    }
-
-    override fun runHistory() {
-        runActivity<HistoryActivity>()
-    }
-
-    override fun runAlarms() {
-        runActivity<AlarmsActivity>()
-    }
-
-    override fun requestSetupJobs(cb: () -> Unit) {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.attention)
-            .setMessage(R.string.empty_jobs_message)
-            .setPositiveButton(R.string.yes, { _, _ -> cb() })
-            .setNegativeButton(R.string.no, null)
-            .show()
+        viewModel.runHistoryCommand.observe(this) {
+            runActivity<HistoryActivity>()
+        }
+        viewModel.runSettingsCommand.observe(this) {
+            runActivity<SettingsActivity>()
+        }
+        viewModel.runChartsCommand.observe(this) {
+            runActivity<ChartsActivity>()
+        }
+        viewModel.runCameraCommand.observe(this) {
+            runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+                ScanAnalogMeterActivity::tries..it.tries
+                ScanAnalogMeterActivity::jobId..it.jobId
+                ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+            }
+        }
+        viewModel.onLoggedInCommand.observe(this) {
+            handleIntent()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,17 +75,13 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data!=null) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
             val value = data.getDoubleExtra("value", -1.0)
             val bitmap = data.getParcelableExtra<Bitmap>("bitmap")
-            viewModel.onNewData(value, bitmap, data.getBooleanExtra("corrected",false))
+            viewModel.onNewData(value, bitmap, data.getBooleanExtra("corrected", false))
         } else {
             showSnackbar(getString(R.string.scan_error))
         }
-    }
-
-    override fun onLoggedIn() {
-        handleIntent()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -116,7 +106,6 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
             L.w("empty intent")
         }
     }
-
 
 }
 

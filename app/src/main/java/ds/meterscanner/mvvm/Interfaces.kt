@@ -1,4 +1,4 @@
-package ds.meterscanner.databinding
+package ds.meterscanner.mvvm
 
 import android.graphics.Bitmap
 import android.support.annotation.ColorRes
@@ -35,16 +35,6 @@ interface BaseView : View, KodeinAware {
     fun finish()
 }
 
-interface MainView : BaseView {
-    fun runCamera(tries: Int, jobId: Int)
-    fun runCharts()
-    fun runSettings()
-    fun runHistory()
-    fun requestSetupJobs(cb: () -> Unit)
-    fun onLoggedIn()
-    fun runAlarms()
-}
-
 interface SettingsView : BaseView
 
 interface ChartsView : BaseView
@@ -58,7 +48,6 @@ interface AlarmsView : BaseView {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
 }
 
-interface AuthView : BaseView
 interface ScannerView : BaseView {
     fun finishWithResult(value: Double, bitmap: Bitmap? = null, corrected: Boolean = false)
     fun startScanning()
