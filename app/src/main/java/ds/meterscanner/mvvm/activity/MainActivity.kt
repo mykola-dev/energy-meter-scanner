@@ -11,17 +11,16 @@ import ds.bindingtools.runActivity
 import ds.bindingtools.runActivityForResult
 import ds.meterscanner.R
 import ds.meterscanner.databinding.MainBinding
+import ds.meterscanner.mvvm.MainView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
-import ds.meterscanner.util.provideViewModel
 
-class MainActivity : BaseActivity2<MainBinding, MainViewModel>() {
+class MainActivity : BaseActivity3<MainBinding, MainViewModel>(), MainView {
 
     val jobId by arg(-1)
 
-    private var isIntentConsumed = false
-
-    override fun provideViewModel(state: Bundle?): MainViewModel = provideViewModel()
+    override fun provideViewModel(): MainViewModel = viewModelOf()
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -37,33 +36,27 @@ class MainActivity : BaseActivity2<MainBinding, MainViewModel>() {
         viewModel.runAlarmsCommand.observe(this) {
             runActivity<AlarmsActivity>()
         }
-        viewModel.runHistoryCommand.observe(this) {
-            runActivity<HistoryActivity>()
-        }
-        viewModel.runSettingsCommand.observe(this) {
-            runActivity<SettingsActivity>()
-        }
-        viewModel.runChartsCommand.observe(this) {
-            runActivity<ChartsActivity>()
-        }
-        viewModel.runCameraCommand.observe(this) {
-            runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
-                ScanAnalogMeterActivity::tries..it.tries
-                ScanAnalogMeterActivity::jobId..it.jobId
-                ScanAnalogMeterActivity::apiKey..viewModel.apiKey
-            }
-        }
         viewModel.onLoggedInCommand.observe(this) {
             handleIntent()
         }
     }
+
+    override fun onCameraButton() = runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+        ScanAnalogMeterActivity::tries..1
+        ScanAnalogMeterActivity::jobId..-1
+        ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+    }
+
+    override fun onListsButton() = runActivity<HistoryActivity>()
+    override fun onChartsButton() = runActivity<ChartsActivity>()
+    override fun onSettingsButton() = runActivity<SettingsActivity>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+   /* override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(this::isIntentConsumed.name, isIntentConsumed)
     }
@@ -71,7 +64,7 @@ class MainActivity : BaseActivity2<MainBinding, MainViewModel>() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         isIntentConsumed = savedInstanceState.getBoolean(this::isIntentConsumed.name)
-    }
+    }*/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -88,20 +81,24 @@ class MainActivity : BaseActivity2<MainBinding, MainViewModel>() {
         super.onNewIntent(intent)
         setIntent(intent)
         viewModel.jobId = jobId ?: -1
-        isIntentConsumed = false
+        viewModel.isIntentConsumed = false
         handleIntent()
     }
 
     fun handleIntent() {
-        if (isIntentConsumed) {
+        if (viewModel.isIntentConsumed) {
             L.w("intent has been already consumed")
             return
         }
-        isIntentConsumed = true
+        viewModel.isIntentConsumed = true
 
         if (jobId!! >= 0) {
             L.v("going to make a snapshot!")
-            viewModel.takeSnapshot(jobId ?: -1)
+            runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+                ScanAnalogMeterActivity::tries..viewModel.prefs.scanTries
+                ScanAnalogMeterActivity::jobId..jobId
+                ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+            }
         } else {
             L.w("empty intent")
         }

@@ -1,14 +1,24 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
+import android.app.Application
 import android.databinding.ObservableField
 import android.graphics.Bitmap
-import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.ScannerView
+import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.Command
+import ds.meterscanner.mvvm.FinishWithResultCommand
+import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.ui.widget.DimensionsCallback
 import ds.meterscanner.util.ThreadTools
 
-class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseViewModel<ScannerView>(v) {
+class ScannerViewModel(app: Application) : BaseViewModel3(app) {
+
+    val updateViewPortCommand = Command<Unit>()
+    val startScanningCommand = Command<Unit>()
+    val finishWithResultCommand = FinishWithResultCommand()
+
+    var tries: Int = 0
+    var jobId: Int = 0
 
     val results = arrayListOf<Double>()
     val bitmaps = arrayListOf<Bitmap>()
@@ -16,17 +26,16 @@ class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseVie
     val positionCallback = ObservableField<DimensionsCallback>()
     val scaleCallback = ObservableField<DimensionsCallback>()
 
-    override fun onCreate() {
-        super.onCreate()
+    init {
         positionCallback.set({ x, y ->
             prefs.viewportX = x
             prefs.viewportY = y
-            view.updateViewport()
+            updateViewPortCommand()
         })
         scaleCallback.set { width, height ->
             prefs.viewportWidth = width
             prefs.viewportHeight = height
-            view.updateViewport()
+            updateViewPortCommand()
         }
 
         if (jobId < 0 && prefs.saveTemperature) {
@@ -38,7 +47,7 @@ class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseVie
         try {
             val weather = restService.getWeather().main.temp.toFloat()
             prefs.currentTemperature = weather
-            view.showSnackbar("Weather has been updated")
+            showSnackbarCommand("Weather has been updated")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -50,13 +59,13 @@ class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseVie
             var resultString = results.average().toString()
             if (prefs.fixFirstFive && resultString.startsWith("6")) {
                 resultString = resultString.replaceRange(0..0, "5")
-                view.finishWithResult(resultString.toDouble(), bitmaps[0], corrected = true)
+                finishWithResultCommand(resultString.toDouble(), bitmaps[0], corrected = true)
             } else {
-                view.finishWithResult(results.average(), bitmaps[0])
+                finishWithResultCommand(results.average(), bitmaps[0])
             }
         } else {
             L.e("bad scan results!")
-            view.finish()
+            finishCommand()
         }
     }
 
@@ -70,7 +79,7 @@ class ScannerViewModel(v: ScannerView, val tries: Int, val jobId: Int) : BaseVie
         results += result.toDoubleOrNull() ?: return
         bitmaps += bitmap
         if (results.size < tries) {
-            view.startScanning()
+            startScanningCommand()
         } else
             saveAndClose()
     }

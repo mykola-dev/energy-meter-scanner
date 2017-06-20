@@ -11,6 +11,10 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.DetailsViewModel"
             />
+        <variable
+            name="view"
+            type="ds.meterscanner.mvvm.DetailsView"
+            />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -94,7 +98,7 @@
                         android:layout_gravity="end"
                         android:layout_marginTop="18dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:onClick="@{v->viewModel.onDatePick()}"
+                        android:onClick="@{v->view.onDatePick()}"
                         android:padding="4dp"
                         app:srcCompat="@drawable/ic_action_calendar"
 
@@ -137,7 +141,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="@{v->viewModel.onSave()}"
+                    android:onClick="@{v->view.onSave()}"
                     android:text="@string/save"
                     app:theme="@style/PrimaryButton"
                     />

@@ -10,13 +10,12 @@ import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel2
+import ds.meterscanner.mvvm.BaseViewModel3
 import ds.meterscanner.mvvm.Command
-import ds.meterscanner.mvvm.RunCameraScreenCommand
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
-class MainViewModel(app: Application) : BaseViewModel2(app) {
+class MainViewModel(app: Application) : BaseViewModel3(app) {
 
     var buttonsEnabled = ObservableField<Boolean>()
     var apiKeyReady = ObservableField<Boolean>()
@@ -24,14 +23,11 @@ class MainViewModel(app: Application) : BaseViewModel2(app) {
 
     val onLoggedInCommand = Command<Unit>()
     val runAlarmsCommand = Command<Unit>()
-    val runCameraCommand = RunCameraScreenCommand()
-    val runChartsCommand = Command<Unit>()
-    val runSettingsCommand = Command<Unit>()
-    val runHistoryCommand = Command<Unit>()
 
     var jobsChecked = false
     var apiKey: String? = null
     var jobId: Int = -1
+    var isIntentConsumed = false
 
     private val appVersion: String = instance("version")
 
@@ -93,15 +89,6 @@ class MainViewModel(app: Application) : BaseViewModel2(app) {
     override fun toggleProgress(enabled: Boolean) {
         super.toggleProgress(enabled)
         buttonsEnabled.set(!enabled)
-    }
-
-    fun onCameraButton() = runCameraCommand(tries = 1, jobId = -1)
-    fun onListsButton() = runHistoryCommand()
-    fun onChartsButton() = runChartsCommand()
-    fun onSettingsButton() = runSettingsCommand()
-
-    fun takeSnapshot(jobId: Int) {
-        runCameraCommand(prefs.scanTries, jobId)
     }
 
     fun onNewData(value: Double, bitmap: Bitmap, corrected: Boolean) = async {

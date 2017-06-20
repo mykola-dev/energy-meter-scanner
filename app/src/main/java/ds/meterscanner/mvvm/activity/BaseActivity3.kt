@@ -13,49 +13,45 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
-import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
-import ds.meterscanner.mvvm.BaseViewModel2
+import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.View3
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 @Suppress("LeakingThis")
-abstract class BaseActivity2<out B : ViewDataBinding, VM : BaseViewModel2> : AppCompatActivity(), LifecycleRegistryOwner, LazyKodeinAware {
-    override val kodein: LazyKodein = LazyKodein { appKodein() }
+abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> : AppCompatActivity(), LifecycleRegistryOwner, View3 {
     private val registry = LifecycleRegistry(this)
+    override val kodein: LazyKodein = LazyKodein { appKodein() }
 
-    override fun getLifecycle(): LifecycleRegistry {
-        return registry
-    }
-
-    lateinit var viewModel: VM
-    val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
     val bus: EventBus by instance()
-    val prefs: Prefs by instance()
+
+    override fun getLifecycle(): LifecycleRegistry = registry
+
+    override val viewModel: VM by lazy { provideViewModel() }
+    val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
 
     protected open val bindImmediately = false
-
 
     init {
         L.v("::: ${javaClass.simpleName} initialized")
     }
 
-    abstract fun provideViewModel(state: Bundle?): VM
+    abstract fun provideViewModel(): VM
 
     abstract fun getLayoutId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = provideViewModel(savedInstanceState)
         bind()
+
+        //lifecycle.addObserver(EventBusObserver(kodein))
 
         initViewModel()
     }
@@ -63,7 +59,7 @@ abstract class BaseActivity2<out B : ViewDataBinding, VM : BaseViewModel2> : App
     @CallSuper
     open protected fun initViewModel() {
         viewModel.showSnackbarCommand.observe(this) {
-            showSnackbar(it!!.text)
+            showSnackbar(it.text)
         }
         viewModel.runAuthScreenCommand.observe(this) {
             runActivity<AuthActivity>()
@@ -94,8 +90,10 @@ abstract class BaseActivity2<out B : ViewDataBinding, VM : BaseViewModel2> : App
         return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun bind(varId: Int = BR.viewModel) {
-        binding.setVariable(varId, viewModel)
+    private fun bind() {
+        binding.setVariable(BR.viewModel, viewModel)
+        binding.setVariable(BR.view, this)
+
         if (bindImmediately)
             binding.executePendingBindings()
     }
@@ -127,7 +125,7 @@ abstract class BaseActivity2<out B : ViewDataBinding, VM : BaseViewModel2> : App
             s.addCallback(snackCallback)
         }
         if (actionCallback != null)
-            s.setAction(actionText, View.OnClickListener {
+            s.setAction(actionText, {
                 actionCallback()
             })
         s.show()

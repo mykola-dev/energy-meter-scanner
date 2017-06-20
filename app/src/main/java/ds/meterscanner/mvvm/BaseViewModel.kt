@@ -37,7 +37,6 @@ abstract class BaseViewModel<out V : BaseView>(final override val view: V) : Bas
     val toolbar = ToolbarViewModel()
     val showProgress = ObservableBoolean()
 
-    //private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
     private var progressStopSignal = Job()
     var job = Job() // create a job object to manage lifecycle
 

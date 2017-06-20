@@ -1,34 +1,9 @@
 package ds.meterscanner.mvvm
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import android.graphics.Bitmap
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 
-open class Command<T> : LiveData<T>() {
-    operator fun invoke(param: T) {
-        value = param
-    }
-
-    override public fun setValue(value: T?) {
-        super.setValue(value)
-        if (this.value != null)
-            this.value = null   // immediatelly reset value to not repeat it on screen rotate
-    }
-
-    fun observe(owner: LifecycleOwner, block: (T) -> Unit) =
-        super.observe(owner, android.arch.lifecycle.Observer { if (it != null) block(it) })
-
-    override fun observe(owner: LifecycleOwner?, observer: Observer<T>?) {
-        error("Unsupported Operation")
-    }
-
-}
-
-operator fun Command<Unit>.invoke() {
-    value = Unit
-}
 
 class SnackBarCommand : Command<SnackBarCommand.Params>() {
 
@@ -49,13 +24,14 @@ class SnackBarCommand : Command<SnackBarCommand.Params>() {
     )
 }
 
-class RunCameraScreenCommand : Command<RunCameraScreenCommand.Params>() {
-    operator fun invoke(tries: Int, jobId: Int) {
-        value = Params(tries, jobId)
+class FinishWithResultCommand : Command<FinishWithResultCommand.Params>() {
+    operator fun invoke(value: Double, bitmap: Bitmap? = null, corrected: Boolean = false) {
+        this.value = Params(value, bitmap, corrected)
     }
 
     class Params(
-        val tries: Int,
-        val jobId: Int
+        val value: Double,
+        val bitmap: Bitmap?,
+        val corrected: Boolean
     )
 }

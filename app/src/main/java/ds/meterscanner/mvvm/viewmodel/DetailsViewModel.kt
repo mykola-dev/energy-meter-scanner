@@ -1,17 +1,23 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
+import android.app.Application
 import android.databinding.ObservableField
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
-import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 
-class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewModel<DetailsView>(view) {
+class DetailsViewModel(app:Application) : BaseViewModel3(app) {
 
+    var snapshotId: String? = null
+        set(value) {
+            field = value
+
+        }
     val valueField = ObservableField<String>()
     val dateField = ObservableField<String>()
     val valueErrorField = ObservableField<String>()
@@ -19,24 +25,17 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
     val outsideTemp = ObservableField<String>()
     val boilerTemp = ObservableField<String>()
 
-    private lateinit var snapshot: Snapshot
+    lateinit var snapshot: Snapshot
     private val calendar: Calendar = instance()
 
-    override fun onCreate() {
-        super.onCreate()
+    init {
         if (snapshotId != null) {
-            toolbar.title = view.getString(R.string.edit_snapshot)
+            toolbar.title = getString(R.string.edit_snapshot)
         } else {
-            toolbar.title = view.getString(R.string.new_snapshot)
+            toolbar.title = getString(R.string.new_snapshot)
         }
-    }
 
-
-    override fun onAttach() {
-        super.onAttach()
         fetchSnapshot()
-
-
     }
 
     private fun fetchSnapshot() = async {
@@ -58,14 +57,8 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
         valueErrorField.set(null)
     }
 
-    fun onDatePick() {
-        view.pickDate(truncDate()) { date ->
-            snapshot.timestamp = date.time
-            dateField.set(formatTimeDate(date.time))
-        }
-    }
 
-    fun onSave() {
+    fun doSave(view: DetailsView) {
         if (validateValue()) {
             if (boilerTemp.get().isNotEmpty())
                 snapshot.boilerTemp = boilerTemp.get().toInt()
@@ -86,16 +79,22 @@ class DetailsViewModel(view: DetailsView, var snapshotId: String?) : BaseViewMod
             snapshot.value = valueField.get().toDouble()
             return true
         } catch(e: Exception) {
-            valueErrorField.set(view.getString(R.string.invalid_data))
+            valueErrorField.set(getString(R.string.invalid_data))
             return false
         }
     }
 
-    private fun truncDate(): Date {
+    fun onDatePicked(date: Date) {
+        snapshot.timestamp = date.time
+        dateField.set(formatTimeDate(date.time))
+    }
+
+    fun truncDate(): Date {
         calendar.time = Date(snapshot.timestamp)
         calendar.set(Calendar.HOUR_OF_DAY, 12)
         calendar.set(Calendar.MINUTE, 0)
         return calendar.time
     }
+
 
 }

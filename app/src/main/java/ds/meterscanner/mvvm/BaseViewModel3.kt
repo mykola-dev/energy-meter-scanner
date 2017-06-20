@@ -4,6 +4,7 @@ import L
 import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.content.Context
 import android.databinding.ObservableBoolean
 import android.support.annotation.StringRes
 import android.view.Menu
@@ -12,7 +13,6 @@ import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
-import ds.meterscanner.App
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
@@ -28,12 +28,10 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
 
-@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 @SuppressLint("StaticFieldLeak")
-abstract class BaseViewModel2(app: Application) : AndroidViewModel(app), KodeinAware, Progressable {
+abstract class BaseViewModel3(app:Application) : AndroidViewModel(app), KodeinAware, Progressable {
 
     override val kodein: Kodein = app.appKodein()
-    protected val app: App get() = getApplication()
 
     val restService: NetLayer = instance()
     val prefs: Prefs = instance()
@@ -49,7 +47,6 @@ abstract class BaseViewModel2(app: Application) : AndroidViewModel(app), KodeinA
     val finishCommand = Command<Unit>()
     val showSnackbarCommand = SnackBarCommand()
 
-    //private val progressStopSignal: PublishSubject<Boolean> = PublishSubject.create()
     private var progressStopSignal = Job()
     var job = Job() // create a job object to manage lifecycle
 
@@ -104,7 +101,10 @@ abstract class BaseViewModel2(app: Application) : AndroidViewModel(app), KodeinA
         showSnackbarCommand(t.message ?: "Unknown Error")
     }
 
-    protected fun getString(@StringRes id: Int): String = app.getString(id)
+    protected fun getString(@StringRes id: Int): String {
+        val ctx: Context = instance()
+        return ctx.getString(id)
+    }
 
 }
 

@@ -82,8 +82,8 @@ abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : Ap
         return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun bind(varId: Int = BR.viewModel) {
-        binding.setVariable(varId, viewModel)
+    private fun bind() {
+        binding.setVariable(BR.viewModel, viewModel)
         if (bindImmediately)
             binding.executePendingBindings()
     }

@@ -1,15 +1,13 @@
-@file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
-
 package ds.meterscanner.mvvm.viewmodel
 
 import android.app.Application
 import android.databinding.ObservableField
 import ds.meterscanner.R
-import ds.meterscanner.mvvm.BaseViewModel2
+import ds.meterscanner.mvvm.BaseViewModel3
 import ds.meterscanner.mvvm.invoke
 
 // todo validation
-class AuthViewModel(app: Application) : BaseViewModel2(app) {
+class AuthViewModel(app: Application) : BaseViewModel3(app) {
 
     val login = ObservableField<String>()
     val password = ObservableField<String>()

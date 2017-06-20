@@ -25,17 +25,18 @@ import ds.meterscanner.R
 import ds.meterscanner.data.InterruptEvent
 import ds.meterscanner.databinding.ActivityScanEnergyBinding
 import ds.meterscanner.mvvm.ScannerView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
 import org.greenrobot.eventbus.Subscribe
 
 
-class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
+class ScanAnalogMeterActivity : BaseActivity3<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
 
     val tries by arg<Int>()
     val jobId by arg<Int>()
     val apiKey by arg<String>()
 
-    override fun instantiateViewModel(state: Bundle?): ScannerViewModel = ScannerViewModel(this, tries!!, jobId!!)
+    override fun provideViewModel() = viewModelOf<ScannerViewModel>().also { it.tries = tries!!; it.jobId = jobId!! }
 
     override fun getLayoutId(): Int = R.layout.activity_scan_energy
 
@@ -52,6 +53,19 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         energyScanView = binding.energyScanView
 
         initView()
+    }
+
+    override fun initViewModel() {
+        super.initViewModel()
+        viewModel.startScanningCommand.observe(this) {
+            startScanning()
+        }
+        viewModel.finishWithResultCommand.observe(this) {
+            finishWithResult(it.value, it.bitmap, it.corrected)
+        }
+        viewModel.updateViewPortCommand.observe(this) {
+            updateViewport()
+        }
     }
 
     fun initView() {
@@ -86,7 +100,8 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
 
     }
 
-    override fun updateViewport() {
+    fun updateViewport() {
+        val prefs = viewModel.prefs
         with(energyScanView.config) {
             if (prefs.viewportX >= 0 && prefs.viewportY >= 0) {
                 cutoutOffsetX = prefs.viewportX
@@ -106,7 +121,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
     }
 
 
-    override fun startScanning() {
+    fun startScanning() {
         energyScanView.startScanning()
     }
 
@@ -141,7 +156,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         finish()
     }
 
-    override fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {
+    fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {
         val data = Intent().putExtras(bundle {
             "value"..value
             "bitmap"..bitmap
