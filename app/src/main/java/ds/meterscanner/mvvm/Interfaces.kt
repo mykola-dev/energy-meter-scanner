@@ -56,8 +56,11 @@ interface ListsView : BaseView {
     fun scrollToPosition(position: Int)
 }
 
-interface AlarmsView : BaseView {
+interface AlarmsView : View3 {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
+    /*fun onNewAlarm()
+    fun onEditAlarm(jobId:Int)
+    fun onDeleteAlarm(jobId:Int)*/
 }
 
 interface ScannerView : View3 {

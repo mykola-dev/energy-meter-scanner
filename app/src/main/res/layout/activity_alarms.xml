@@ -11,6 +11,10 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.AlarmsViewModel"
             />
+        <variable
+            name="view"
+            type="ds.meterscanner.mvvm.AlarmsView"
+            />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -41,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:onClick="@{v->viewModel.onNewAlarm()}"
+            android:onClick="@{v->viewModel.onNewAlarm(view)}"
             app:srcCompat="@drawable/ic_action_add"
             />
     </android.support.design.widget.CoordinatorLayout>
