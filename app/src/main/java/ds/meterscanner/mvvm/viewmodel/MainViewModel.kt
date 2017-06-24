@@ -9,12 +9,12 @@ import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
-class MainViewModel : BaseViewModel3() {
+class MainViewModel : BaseViewModel() {
 
     var buttonsEnabled = ObservableField<Boolean>()
     var apiKeyReady = ObservableField<Boolean>()

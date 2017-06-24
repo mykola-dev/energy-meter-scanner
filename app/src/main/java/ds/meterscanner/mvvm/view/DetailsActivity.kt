@@ -7,7 +7,7 @@ import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.mvvm.viewmodel.DetailsViewModel
 import ds.meterscanner.ui.DatePickers
 
-class DetailsActivity : BaseActivity3<ViewDataBinding, DetailsViewModel>(), DetailsView {
+class DetailsActivity : BaseActivity<ViewDataBinding, DetailsViewModel>(), DetailsView {
 
     companion object {
         val REQUEST_DETAILS = 1

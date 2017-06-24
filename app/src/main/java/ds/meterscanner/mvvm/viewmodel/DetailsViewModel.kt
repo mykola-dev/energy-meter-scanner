@@ -6,13 +6,13 @@ import android.support.v4.app.FragmentActivity
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 
-class DetailsViewModel : BaseViewModel3() {
+class DetailsViewModel : BaseViewModel() {
 
     var snapshotId: String? = null
         set(value) {

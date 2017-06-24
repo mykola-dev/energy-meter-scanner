@@ -5,11 +5,11 @@ import com.evernote.android.job.scheduledTo
 import ds.meterscanner.R
 import ds.meterscanner.adapter.AlarmsAdapter
 import ds.meterscanner.mvvm.AlarmsView
-import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.BaseViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AlarmsViewModel : BaseViewModel3() {
+class AlarmsViewModel : BaseViewModel() {
 
     val adapter = ObservableField<AlarmsAdapter>()
 

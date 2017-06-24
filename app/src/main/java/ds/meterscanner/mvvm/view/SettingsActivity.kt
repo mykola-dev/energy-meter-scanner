@@ -15,6 +15,7 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.runActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.SettingsView
 import ds.meterscanner.mvvm.viewmodel.SettingsViewModel
 import ds.meterscanner.scheduler.Scheduler
@@ -24,7 +25,7 @@ import kotlin.reflect.KProperty
 @SuppressLint("CommitTransaction")
 class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), SettingsView {
 
-    override fun instantiateViewModel(state: Bundle?): SettingsViewModel = SettingsViewModel(this)
+    override fun provideViewModel(): SettingsViewModel = BaseViewModel(this)
     override fun getLayoutId(): Int = R.layout.activity_settings
 
     override fun onCreate(savedInstanceState: Bundle?) {

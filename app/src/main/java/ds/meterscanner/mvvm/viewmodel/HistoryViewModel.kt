@@ -1,27 +1,24 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.databinding.Bindable
-import ds.bindingtools.observableField
+import android.databinding.ObservableField
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.coroutines.listenValues
-import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.Command
+import ds.meterscanner.mvvm.ListsView
 
-class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
+class HistoryViewModel : BaseViewModel() {
 
-    @get:Bindable var adapter by observableField<HistoryAdapter>()
+    val adapter = ObservableField<HistoryAdapter>()
 
-    override fun onCreate() {
-        super.onCreate()
-        toolbar.title = view.getString(R.string.history)
-        adapter = HistoryAdapter()
-    }
+    val scrollToPositionCommand = Command<Int>()
 
-    override fun onAttach() {
-        super.onAttach()
+    init {
+        toolbar.title = getString(R.string.history)
+        adapter.set(HistoryAdapter())
         listenSnapshots()
     }
 
@@ -32,8 +29,8 @@ class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
             for (data in channel) {
                 L.d("list updated! size=${data.size}")
                 toggleProgress(false)
-                adapter?.setData(data)
-                view.scrollToPosition(data.size - 1)
+                adapter.get().setData(data)
+                scrollToPositionCommand(data.size - 1)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -42,16 +39,16 @@ class HistoryViewModel(view: ListsView) : BaseViewModel<ListsView>(view) {
 
     }
 
-    fun onNewSnapshot() {
+    fun onNewSnapshot(view: ListsView) {
         view.runDetails(null)
     }
 
     fun toggleSelectionMode(enable: Boolean) {
-        adapter?.isSelectionMode = enable
+        adapter.get().isSelectionMode = enable
     }
 
     fun deleteSelectedItems() {
-        db.deleteSnapshots(adapter!!.getData().filter { it.selected })
+        db.deleteSnapshots(adapter.get().getData().filter { it.selected })
     }
 
 }

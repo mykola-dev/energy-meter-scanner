@@ -2,13 +2,10 @@ package ds.meterscanner.mvvm.viewmodel
 
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.SettingsView
 
-class SettingsViewModel(v: SettingsView) : BaseViewModel<SettingsView>(v) {
+class SettingsViewModel : BaseViewModel() {
 
-    override fun onCreate() {
-        super.onCreate()
-        toolbar.title = view.getString(R.string.settings)
-
+    init {
+        toolbar.title = getString(R.string.settings)
     }
 }

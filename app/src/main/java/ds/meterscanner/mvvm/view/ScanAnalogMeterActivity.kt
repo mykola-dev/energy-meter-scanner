@@ -30,7 +30,7 @@ import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
 import org.greenrobot.eventbus.Subscribe
 
 
-class ScanAnalogMeterActivity : BaseActivity3<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
+class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
 
     val tries by arg<Int>()
     val jobId by arg<Int>()

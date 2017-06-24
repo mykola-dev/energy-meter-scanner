@@ -6,14 +6,12 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.net.Uri
 import android.text.format.DateFormat
-import com.evernote.android.state.State
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
-import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.ChartsView
-import ds.meterscanner.mvvm.viewmodel.StackMode.*
 import ds.meterscanner.db.model.Snapshot
+import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.viewmodel.StackMode.*
 import ds.meterscanner.util.FileTools
 import ds.meterscanner.util.MathTools
 import ds.meterscanner.util.getColorTemp
@@ -26,17 +24,17 @@ import lecho.lib.hellocharts.util.ChartUtils
 import java.io.Serializable
 import java.util.*
 
-class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
+class ChartsViewModel : BaseViewModel() {
 
     val checkedButton = ObservableInt()
     val columnsData = ObservableField<ColumnChartData>()
     val previewData = ObservableField<ColumnChartData>()
     val linesData = ObservableField<LineChartData>()
 
-    @State var tempVisible = true
-    @State var positiveCorrection = true
-    @State var currMode: StackMode = MONTH
-    @State var period: Period = Period.LAST_SEASON
+    var tempVisible = true
+    var positiveCorrection = true
+    var currMode: StackMode = MONTH
+    var period: Period = Period.LAST_SEASON
         set(value) {
             field = value
             update()
@@ -45,9 +43,8 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
     private val calendar: Calendar = instance()
     private var data: List<SnapshotData> = listOf()
 
-    override fun onCreate() {
-        super.onCreate()
-        toolbar.title = view.getString(R.string.charts)
+    init {
+        toolbar.title = getString(R.string.charts)
 
         checkedButton.set(when (currMode) {
             StackMode.AS_IS -> R.id.all_button
@@ -87,10 +84,10 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         val csvData = CsvCreator().createCsvData(data)
         try {
             FileTools.saveFile(cr, uri, csvData)
-            view.showSnackbar(view.getString(R.string.file_saved))
+            showSnackbarCommand(getString(R.string.file_saved))
         } catch(e: Exception) {
             e.printStackTrace()
-            view.showSnackbar(view.getString(R.string.io_error))
+            showSnackbarCommand(getString(R.string.io_error))
         }
     }
 
@@ -112,7 +109,7 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         toggleProgress(false)
 
         if (cols.columns.isEmpty()) {
-            view.showSnackbar(view.getString(R.string.empty_data))
+            showSnackbarCommand(getString(R.string.empty_data))
             return@async
         }
 
@@ -131,7 +128,7 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         val formatter = SimpleColumnChartValueFormatter(1)
         data.forEachIndexed { i, d ->
             val value = SubcolumnValue(d.delta.toFloat())
-            value.color = view.getColour(d.colorId)
+            value.color = resources.getColor(d.colorId)
             val column = Column(listOf(value))
             column.setHasLabelsOnlyForSelected(true)
             column.formatter = formatter
@@ -148,7 +145,7 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
                 if (d.temperature == null)
                     line.pointRadius = 0
                 else {
-                    line.pointColor = view.getColour(getColorTemp(tempValue))
+                    line.pointColor = resources.getColor(getColorTemp(tempValue))
                     line.setHasLabels(true)
                     //line.setHasLabelsOnlyForSelected(true)
                 }
@@ -160,17 +157,17 @@ class ChartsViewModel(v: ChartsView) : BaseViewModel<ChartsView>(v) {
         val columnData = ColumnChartData(columns)
         val lineData = LineChartData(lines)
         columnData.axisXBottom = Axis()
-            .setName(view.getString(R.string.date))
+            .setName(getString(R.string.date))
             .setValues(axisValues)
             .setMaxLabelChars(axisValues[0].labelAsChars.size - 1)
             .setHasTiltedLabels(true)
         columnData.axisYLeft = Axis()
             .setHasLines(true)
-            .setName(view.getString(R.string.consumption))
+            .setName(getString(R.string.consumption))
         lineData.axisYLeft = Axis
             .generateAxisFromRange(-50f, 50f, 5f)
             .setHasLines(true)
-            .setName(view.getString(R.string.t_label))
+            .setName(getString(R.string.t_label))
 
         lineData.isValueLabelBackgroundEnabled = false
         lineData.setValueLabelsTextColor(ChartUtils.DEFAULT_DARKEN_COLOR)
@@ -339,7 +336,7 @@ data class SnapshotData(
     var offset: Double = 0.0,
     var timestamp: Long = 0,
     var temperature: Int? = null,
-    /*@ColorRes */var colorId: Int = 0
+    var colorId: Int = 0
 ) {
     fun getValueWithOffset() = value + offset
 }

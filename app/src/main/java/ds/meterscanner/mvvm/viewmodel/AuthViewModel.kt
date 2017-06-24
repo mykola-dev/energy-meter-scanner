@@ -2,11 +2,11 @@ package ds.meterscanner.mvvm.viewmodel
 
 import android.databinding.ObservableField
 import ds.meterscanner.R
-import ds.meterscanner.mvvm.BaseViewModel3
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.invoke
 
 // todo validation
-class AuthViewModel : BaseViewModel3() {
+class AuthViewModel : BaseViewModel() {
 
     val login = ObservableField<String>()
     val password = ObservableField<String>()

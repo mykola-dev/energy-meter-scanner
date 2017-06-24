@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm.view
 
 import L
-import android.os.Bundle
 import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +9,7 @@ import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
 import ds.meterscanner.databinding.ActivityHistoryBinding
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
@@ -21,18 +21,28 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
     private var actionMode: ActionMode? = null
     private var selectedItems = 0
 
-    override fun instantiateViewModel(state: Bundle?): HistoryViewModel = HistoryViewModel(this)
+    override fun provideViewModel(): HistoryViewModel = BaseViewModel(this)
     override fun getLayoutId(): Int = R.layout.activity_history
 
-    @Subscribe
-    fun onHistoryClickEvent(e: HistoryClickEvent) {
-        runDetails(e.snapshot.id)
+    override fun initViewModel() {
+        super.initViewModel()
+        viewModel.scrollToPositionCommand.observe(this) {
+            post {
+                binding.recyclerView.scrollToPosition(it)
+            }
+        }
     }
+
 
     override fun runDetails(snapshotId: String?) {
         runActivity<DetailsActivity>(DetailsActivity.REQUEST_DETAILS) {
             DetailsActivity::snapshotId..snapshotId
         }
+    }
+
+    @Subscribe
+    fun onHistoryClickEvent(e: HistoryClickEvent) {
+        runDetails(e.snapshot.id)
     }
 
     @Subscribe
@@ -45,12 +55,6 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
         else
             actionMode?.invalidate()
 
-    }
-
-    override fun scrollToPosition(position: Int) {
-        post {
-            binding.recyclerView.scrollToPosition(position)
-        }
     }
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {

@@ -16,7 +16,7 @@ import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
 
-class MainActivity : BaseActivity3<MainBinding, MainViewModel>(), MainView {
+class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
 
     val jobId by arg(-1)
 

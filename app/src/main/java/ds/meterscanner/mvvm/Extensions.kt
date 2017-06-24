@@ -39,7 +39,7 @@ open class Command<T> : LiveData<T>() {
     }
 
     fun observe(owner: LifecycleOwner, block: (T) -> Unit) =
-        super.observe(owner, android.arch.lifecycle.Observer { if (it != null) block(it) })
+        super.observe(owner, Observer { if (it != null) block(it) })
 
     override fun observe(owner: LifecycleOwner?, observer: Observer<T>?) {
         error("Unsupported Operation")

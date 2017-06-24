@@ -9,9 +9,9 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 
 
-class Authenticator:KodeinGlobalAware {
+class Authenticator : KodeinGlobalAware {
 
-    val auth: FirebaseAuth =  instance()
+    val auth: FirebaseAuth = instance()
     private val firebaseAnalytics: FirebaseAnalytics = instance()
 
     private val authListeners = mutableMapOf<String, FirebaseAuth.AuthStateListener>()

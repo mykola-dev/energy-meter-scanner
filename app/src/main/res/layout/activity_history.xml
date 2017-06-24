@@ -11,6 +11,10 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.HistoryViewModel"
             />
+        <variable
+            name="view"
+            type="ds.meterscanner.mvvm.ListsView"
+            />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -49,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:onClick="@{v->viewModel.onNewSnapshot()}"
+            android:onClick="@{v->viewModel.onNewSnapshot(view)}"
             app:srcCompat="@drawable/ic_action_add"
             />
     </android.support.design.widget.CoordinatorLayout>

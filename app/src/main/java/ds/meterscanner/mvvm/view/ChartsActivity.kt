@@ -2,12 +2,11 @@ package ds.meterscanner.mvvm.view
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.evernote.android.state.StateSaver
 import ds.meterscanner.R
 import ds.meterscanner.databinding.ActivityChartsBinding
+import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.ChartsView
 import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
 import ds.meterscanner.mvvm.viewmodel.Period
@@ -15,11 +14,7 @@ import ds.meterscanner.util.FileTools
 
 class ChartsActivity : BaseActivity<ActivityChartsBinding, ChartsViewModel>(), ChartsView {
 
-    override fun instantiateViewModel(state: Bundle?): ChartsViewModel {
-        val vm = ChartsViewModel(this)
-        StateSaver.restoreInstanceState(vm, state)
-        return vm
-    }
+    override fun provideViewModel(): ChartsViewModel = BaseViewModel(this)
 
     override fun getLayoutId(): Int = R.layout.activity_charts
 
@@ -38,11 +33,6 @@ class ChartsActivity : BaseActivity<ActivityChartsBinding, ChartsViewModel>(), C
         menu.findItem(R.id.action_show_temp).isChecked = viewModel.tempVisible
 
         return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        StateSaver.saveInstanceState(viewModel, outState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
