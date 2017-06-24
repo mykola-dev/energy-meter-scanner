@@ -7,7 +7,7 @@
  * Created by martin at 2015-07-03
  */
 
-package ds.meterscanner.mvvm.activity
+package ds.meterscanner.mvvm.view
 
 import L
 import android.app.Activity

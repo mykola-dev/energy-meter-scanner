@@ -5,7 +5,17 @@ import android.arch.lifecycle.ViewModel
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
-inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(): T = ViewModelProviders.of(this)[T::class.java]
+open class ViewModelFactory {
+    operator inline fun <reified T : ViewModel> invoke(activity:FragmentActivity, factory: ViewModelProvider.Factory? = null): T = activity.viewModelOf(factory)
+}
+
+inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(factory: ViewModelProvider.Factory? = null): T {
+    return if (factory != null)
+        ViewModelProviders.of(this, factory)[T::class.java]
+    else
+        ViewModelProviders.of(this)[T::class.java]
+}
+
 inline fun <reified T : ViewModel> Fragment.viewModelOf(): T = ViewModelProviders.of(this)[T::class.java]
 
 fun <T> LiveData<T>.observe(owner: LifecycleOwner, block: (T?) -> Unit) = observe(owner, Observer { block(it) })

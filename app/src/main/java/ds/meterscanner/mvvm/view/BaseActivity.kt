@@ -1,80 +1,75 @@
-package ds.meterscanner.mvvm.activity
+package ds.meterscanner.mvvm.view
 
 import L
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.annotation.CallSuper
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
+import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.RefreshEvent
-import ds.meterscanner.mvvm.BaseViewModel3
-import ds.meterscanner.mvvm.View3
+import ds.meterscanner.mvvm.BaseView
+import ds.meterscanner.mvvm.BaseViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-@Suppress("LeakingThis")
-abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> : AppCompatActivity(), LifecycleRegistryOwner, View3 {
-    private val registry = LifecycleRegistry(this)
+abstract class BaseActivity<out B : ViewDataBinding, VM : BaseViewModel<*>> : AppCompatActivity(), BaseView {
 
-    val bus: EventBus = instance()
-
-    override fun getLifecycle(): LifecycleRegistry = registry
-
-    override val viewModel: VM by lazy { provideViewModel() }
+    final override val kodein: Kodein by lazy { appKodein() }
+    override lateinit var viewModel: VM
     val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
+    val bus: EventBus by lazy<EventBus> { instance() }
+    val prefs by lazy<Prefs> { instance() }
 
     protected open val bindImmediately = false
+
 
     init {
         L.v("::: ${javaClass.simpleName} initialized")
     }
 
-    abstract fun provideViewModel(): VM
+    abstract fun instantiateViewModel(state: Bundle?): VM
 
     abstract fun getLayoutId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = instantiateViewModel(savedInstanceState)
         bind()
-
-        //lifecycle.addObserver(EventBusObserver(kodein))
-
-        initViewModel()
+        viewModel.onCreate()
     }
 
-    @CallSuper
-    open protected fun initViewModel() {
-        viewModel.showSnackbarCommand.observe(this) {
-            showSnackbar(it.text)
-        }
-        viewModel.runAuthScreenCommand?.observe(this) {
-            runActivity<AuthActivity>()
-        }
-        viewModel.finishCommand.observe(this) {
-            finish()
-        }
-
-    }
+    override fun getColour(id: Int): Int = ContextCompat.getColor(this, id)
 
     override fun onStart() {
         super.onStart()
+        viewModel.onAttach()
         bus.register(this)
     }
 
+    //override fun getColor(id: Int): Int = ContextCompat.getColor(this.id)
+
     override fun onStop() {
         super.onStop()
+        viewModel.onDetach()
         bus.unregister(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDestroy()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -89,11 +84,10 @@ abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> :
 
     private fun bind() {
         binding.setVariable(BR.viewModel, viewModel)
-        binding.setVariable(BR.view, this)
-
         if (bindImmediately)
             binding.executePendingBindings()
     }
+
 
     private fun setupToolbar() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
@@ -104,12 +98,12 @@ abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> :
         }
     }
 
-    protected fun showSnackbar(
+    override fun showSnackbar(
         text: String,
-        callback: (() -> Unit)? = null,
-        duration: Int = Snackbar.LENGTH_LONG,
-        @StringRes actionText: Int = 0,
-        actionCallback: (() -> Unit)? = null
+        callback: (() -> Unit)?,
+        duration: Int,
+        @StringRes actionText: Int,
+        actionCallback: (() -> Unit)?
     ) {
         val content = findViewById(R.id.coordinator) ?: findViewById(android.R.id.content)
         val s = Snackbar.make(content, text, duration)
@@ -122,7 +116,7 @@ abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> :
             s.addCallback(snackCallback)
         }
         if (actionCallback != null)
-            s.setAction(actionText, {
+            s.setAction(actionText, View.OnClickListener {
                 actionCallback()
             })
         s.show()
@@ -139,6 +133,10 @@ abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> :
 
     protected fun onToolbarCreated(toolbar: Toolbar) {
 
+    }
+
+    override fun runAuthScreen() {
+        runActivity<AuthActivity>()
     }
 
     @Subscribe

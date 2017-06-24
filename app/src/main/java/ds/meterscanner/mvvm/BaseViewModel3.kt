@@ -36,7 +36,7 @@ abstract class BaseViewModel3 : android.arch.lifecycle.ViewModel(), KodeinGlobal
     val showProgress = ObservableBoolean()
 
     // commands
-    open val runAuthScreenCommand:Command<Unit>? = Command()
+    open val runAuthScreenCommand: Command<Unit>? = Command()
     val finishCommand = Command<Unit>()
     val showSnackbarCommand = SnackBarCommand()
 
@@ -92,5 +92,6 @@ abstract class BaseViewModel3 : android.arch.lifecycle.ViewModel(), KodeinGlobal
 
     protected fun getString(@StringRes id: Int): String = resources.getString(id)
 
+    companion object Factory : ViewModelFactory()
 }
 

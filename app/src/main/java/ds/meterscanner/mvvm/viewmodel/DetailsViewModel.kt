@@ -2,11 +2,13 @@ package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.databinding.ObservableField
+import android.support.v4.app.FragmentActivity
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BaseViewModel3
 import ds.meterscanner.mvvm.DetailsView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 
@@ -95,5 +97,13 @@ class DetailsViewModel : BaseViewModel3() {
         return calendar.time
     }
 
+    companion object Factory {
+        operator fun invoke(activity: FragmentActivity, snapshotId:String?): DetailsViewModel {
+            val vm = activity.viewModelOf<DetailsViewModel>()
+            vm.snapshotId = snapshotId
+            return vm
+        }
+
+    }
 
 }

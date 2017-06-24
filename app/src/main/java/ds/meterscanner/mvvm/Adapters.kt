@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import ds.meterscanner.mvvm.activity.ViewportListener
+import ds.meterscanner.mvvm.view.ViewportListener
 import ds.meterscanner.ui.recyclerview.DividerItemDecoration
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.model.ColumnChartData

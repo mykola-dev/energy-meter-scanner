@@ -15,7 +15,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mvvm.activity.ScanAnalogMeterActivity"
+        tools:context=".mvvm.view.ScanAnalogMeterActivity"
         >
 
         <ds.meterscanner.ui.widget.BetterEnergyScanView

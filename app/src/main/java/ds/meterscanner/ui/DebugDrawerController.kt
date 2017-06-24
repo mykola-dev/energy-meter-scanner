@@ -4,14 +4,12 @@ import L
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.evernote.android.job.scheduledTo
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.activity.MainActivity
+import ds.meterscanner.mvvm.view.MainActivity
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.util.*

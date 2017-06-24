@@ -9,7 +9,7 @@ import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
-import ds.meterscanner.mvvm.activity.MainActivity
+import ds.meterscanner.mvvm.view.MainActivity
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.scheduler.Scheduler
 

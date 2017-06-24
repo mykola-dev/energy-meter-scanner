@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name="ds.meterscanner.mvvm.activity.MainActivity"
+            android:name="ds.meterscanner.mvvm.view.MainActivity"
             android:launchMode="singleTask"
             >
             <intent-filter>
@@ -28,31 +28,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ds.meterscanner.mvvm.activity.SettingsActivity"
+            android:name="ds.meterscanner.mvvm.view.SettingsActivity"
             android:launchMode="singleTask"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.ChartsActivity"
+            android:name="ds.meterscanner.mvvm.view.ChartsActivity"
             android:launchMode="singleTask"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.HistoryActivity"
+            android:name="ds.meterscanner.mvvm.view.HistoryActivity"
             android:launchMode="singleTask"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.AlarmsActivity"
+            android:name="ds.meterscanner.mvvm.view.AlarmsActivity"
             android:launchMode="singleTask"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.ScanAnalogMeterActivity"
+            android:name="ds.meterscanner.mvvm.view.ScanAnalogMeterActivity"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.AuthActivity"
+            android:name="ds.meterscanner.mvvm.view.AuthActivity"
             android:windowSoftInputMode="adjustResize"
             />
         <activity
-            android:name="ds.meterscanner.mvvm.activity.DetailsActivity"
+            android:name="ds.meterscanner.mvvm.view.DetailsActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             />
 

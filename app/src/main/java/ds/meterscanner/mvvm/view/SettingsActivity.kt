@@ -1,4 +1,4 @@
-package ds.meterscanner.mvvm.activity
+package ds.meterscanner.mvvm.view
 
 import android.annotation.SuppressLint
 import android.content.Intent

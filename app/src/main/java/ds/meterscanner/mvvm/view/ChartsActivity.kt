@@ -1,4 +1,4 @@
-package ds.meterscanner.mvvm.activity
+package ds.meterscanner.mvvm.view
 
 import android.app.Activity
 import android.content.Intent
