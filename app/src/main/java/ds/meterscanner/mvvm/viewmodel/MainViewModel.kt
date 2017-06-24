@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.app.Application
 import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.text.format.DateUtils
@@ -15,7 +14,7 @@ import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
-class MainViewModel(app: Application) : BaseViewModel3(app) {
+class MainViewModel : BaseViewModel3() {
 
     var buttonsEnabled = ObservableField<Boolean>()
     var apiKeyReady = ObservableField<Boolean>()

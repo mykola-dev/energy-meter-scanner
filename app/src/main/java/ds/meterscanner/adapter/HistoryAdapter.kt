@@ -3,24 +3,22 @@ package ds.meterscanner.adapter
 import android.databinding.ViewDataBinding
 import android.support.v4.content.ContextCompat
 import android.view.View
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
+import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BindingHolder
 import ds.meterscanner.mvvm.ViewModelAdapter
 import ds.meterscanner.mvvm.viewmodel.HistoryItemViewModel
-import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
 import org.greenrobot.eventbus.EventBus
 
-class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), LazyKodeinAware {
-    override val kodein: LazyKodein = LazyKodein { context.appKodein() }
-    val bus: EventBus by instance()
+class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), KodeinGlobalAware {
+
+    val bus: EventBus = instance()
 
     var isSelectionMode = false
         set(value) {
@@ -36,7 +34,7 @@ class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), LazyK
         viewModel.value = item.value.toString()
         viewModel.date = formatTimeDate(item.timestamp)
         viewModel.temp = item.outsideTemp?.toString() ?: ""
-        viewModel.tempColor = ContextCompat.getColor(context,getColorTemp(item.outsideTemp ?: 0))
+        viewModel.tempColor = ContextCompat.getColor(context, getColorTemp(item.outsideTemp ?: 0))
         viewModel.onClick = View.OnClickListener {
             if (!isSelectionMode)
                 bus.post(HistoryClickEvent(getItem(holder.adapterPosition)))

@@ -1,13 +1,18 @@
 package ds.meterscanner.auth
 
 import L
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
+import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 
 
-class Authenticator(val auth: FirebaseAuth, private val firebaseAnalytics: FirebaseAnalytics) {
+class Authenticator:KodeinGlobalAware {
+
+    val auth: FirebaseAuth =  instance()
+    private val firebaseAnalytics: FirebaseAnalytics = instance()
 
     private val authListeners = mutableMapOf<String, FirebaseAuth.AuthStateListener>()
 

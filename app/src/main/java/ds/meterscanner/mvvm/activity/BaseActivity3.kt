@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.runActivity
 import ds.meterscanner.BR
@@ -28,9 +26,8 @@ import org.greenrobot.eventbus.Subscribe
 @Suppress("LeakingThis")
 abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> : AppCompatActivity(), LifecycleRegistryOwner, View3 {
     private val registry = LifecycleRegistry(this)
-    override val kodein: LazyKodein = LazyKodein { appKodein() }
 
-    val bus: EventBus by instance()
+    val bus: EventBus = instance()
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
@@ -61,7 +58,7 @@ abstract class BaseActivity3<out B : ViewDataBinding, out VM : BaseViewModel3> :
         viewModel.showSnackbarCommand.observe(this) {
             showSnackbar(it.text)
         }
-        viewModel.runAuthScreenCommand.observe(this) {
+        viewModel.runAuthScreenCommand?.observe(this) {
             runActivity<AuthActivity>()
         }
         viewModel.finishCommand.observe(this) {

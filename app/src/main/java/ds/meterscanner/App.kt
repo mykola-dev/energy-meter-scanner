@@ -4,25 +4,24 @@ import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
 import com.evernote.android.job.JobManager
 import com.facebook.stetho.Stetho
-import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.github.salomonbrys.kodein.lazy
 import ds.meterscanner.data.Prefs
-import ds.meterscanner.di.mainComponent
+import ds.meterscanner.di.setupGlobalKodein
 import ds.meterscanner.scheduler.SnapshotJobCreator
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 
-class App : MultiDexApplication(), KodeinAware {
-
-    override val kodein = mainComponent(this)
+class App : MultiDexApplication(), KodeinGlobalAware {
 
     val jobManager: JobManager by kodein.lazy.instance()
     val prefs: Prefs by kodein.lazy.instance()
 
     override fun onCreate() {
         super.onCreate()
+        setupGlobalKodein(this)
         initTimber()
         initStetho()
         initJobManager()

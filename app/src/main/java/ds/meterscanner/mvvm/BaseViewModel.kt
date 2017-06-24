@@ -4,8 +4,7 @@ import L
 import android.databinding.BaseObservable
 import android.databinding.ObservableBoolean
 import android.view.Menu
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.auth.Authenticator
@@ -24,9 +23,7 @@ import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.Subscribe
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-abstract class BaseViewModel<out V : BaseView>(final override val view: V) : BaseObservable(), ViewModel, KodeinAware, Progressable {
-
-    override val kodein: Kodein = view.kodein
+abstract class BaseViewModel<out V : BaseView>(final override val view: V) : BaseObservable(), ViewModel, KodeinGlobalAware, Progressable {
 
     val restService: NetLayer = instance()
     val prefs: Prefs = instance()

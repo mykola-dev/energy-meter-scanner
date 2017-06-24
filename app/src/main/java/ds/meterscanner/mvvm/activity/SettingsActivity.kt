@@ -9,9 +9,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
 import com.evernote.android.job.rescheduled
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.runActivity
@@ -41,12 +39,10 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
     }
 
 
-    class SettingsFragment : PreferenceFragmentCompat(), LazyKodeinAware, SharedPreferences.OnSharedPreferenceChangeListener {
+    class SettingsFragment : PreferenceFragmentCompat(), KodeinGlobalAware, SharedPreferences.OnSharedPreferenceChangeListener {
 
-        override val kodein: LazyKodein = LazyKodein { activity.appKodein() }
-
-        val prefs: Prefs by instance()
-        val scheduler: Scheduler by instance()
+        val prefs: Prefs = instance()
+        val scheduler: Scheduler = instance()
 
         val scanTries: EditTextPreference by PreferenceDelegate()
         val city: EditTextPreference by PreferenceDelegate()

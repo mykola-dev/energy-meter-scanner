@@ -4,12 +4,14 @@
 
 package ds.meterscanner.di
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.bumptech.glide.Glide
 import com.evernote.android.job.JobManager
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.bind
+import com.github.salomonbrys.kodein.conf.global
 import com.github.salomonbrys.kodein.erased.instance
 import com.github.salomonbrys.kodein.erased.provider
 import com.github.salomonbrys.kodein.erased.singleton
@@ -25,6 +27,7 @@ import ds.meterscanner.App
 import ds.meterscanner.BuildConfig
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.data.ResourceProvider
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.net.WeatherRestApi
@@ -36,7 +39,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-
+@Deprecated("use global kodein")
 fun mainComponent(app: App) = Kodein {
     bind() from singleton { app.applicationContext }
     import(networkModule)
@@ -45,6 +48,18 @@ fun mainComponent(app: App) = Kodein {
     import(authModule)
     import(schedulerModule)
     import(miscModule)
+}
+
+fun App.setupGlobalKodein(app: App) = with (Kodein.global) {
+    this.addConfig {
+        bind() from singleton { app.applicationContext }
+    }
+    addImport(networkModule)
+    addImport(firebaseModule)
+    addImport(eventBusModule)
+    addImport(authModule)
+    addImport(schedulerModule)
+    addImport(miscModule)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +117,7 @@ val schedulerModule = Kodein.Module {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+@SuppressLint("MissingPermission")
 val firebaseModule = Kodein.Module {
 
     bind() from singleton {
@@ -109,17 +125,18 @@ val firebaseModule = Kodein.Module {
         FirebaseApp.initializeApp(instance())
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
-        return@singleton FirebaseDatabase.getInstance()
+        FirebaseDatabase.getInstance()
     }
     bind() from singleton { FirebaseAuth.getInstance() }
     bind() from singleton { FirebaseDb(kodein) }
     bind() from singleton { FirebaseAnalytics.getInstance(instance()) }
     bind() from singleton { FirebaseStorage.getInstance() }
     bind() from singleton { FirebaseRemoteConfig.getInstance() }
+
 }
 
 val authModule = Kodein.Module {
-    bind() from singleton { Authenticator(instance(), instance()) }
+    bind() from instance(Authenticator())
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,4 +165,6 @@ val miscModule = Kodein.Module {
         val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         pInfo.versionName
     }
+
+    bind() from singleton { ResourceProvider(instance()) }
 }

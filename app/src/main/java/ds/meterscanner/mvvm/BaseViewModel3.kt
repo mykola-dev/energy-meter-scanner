@@ -2,20 +2,15 @@ package ds.meterscanner.mvvm
 
 import L
 import android.annotation.SuppressLint
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.content.Context
 import android.databinding.ObservableBoolean
 import android.support.annotation.StringRes
 import android.view.Menu
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
-import ds.meterscanner.data.RefreshEvent
+import ds.meterscanner.data.ResourceProvider
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.mvvm.viewmodel.ToolbarViewModel
 import ds.meterscanner.net.NetLayer
@@ -26,45 +21,43 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import org.greenrobot.eventbus.Subscribe
 
 @SuppressLint("StaticFieldLeak")
-abstract class BaseViewModel3(app:Application) : AndroidViewModel(app), KodeinAware, Progressable {
-
-    override val kodein: Kodein = app.appKodein()
+abstract class BaseViewModel3 : android.arch.lifecycle.ViewModel(), KodeinGlobalAware, Progressable {
 
     val restService: NetLayer = instance()
     val prefs: Prefs = instance()
     val authenticator: Authenticator = instance()
     val db: FirebaseDb = instance()
     val scheduler: Scheduler = instance()
+    val resources: ResourceProvider = instance()
 
     val toolbar = ToolbarViewModel()
     val showProgress = ObservableBoolean()
 
     // commands
-    val runAuthScreenCommand = Command<Unit>()
+    open val runAuthScreenCommand:Command<Unit>? = Command()
     val finishCommand = Command<Unit>()
     val showSnackbarCommand = SnackBarCommand()
 
     private var progressStopSignal = Job()
     var job = Job() // create a job object to manage lifecycle
 
-    override fun onCleared() {
-        super.onCleared()
-        authenticator.stopListen(this)
-        job.cancel()
-        progressStopSignal.cancel()
-    }
-
     init {
         authenticator.startListen(this, { logged ->
             if (logged)
                 onLoggedIn(authenticator.getUser()!!)
             else
-                runAuthScreenCommand()
+                runAuthScreenCommand?.invoke()
         })
 
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        authenticator.stopListen(this)
+        job.cancel()
+        progressStopSignal.cancel()
     }
 
     protected open fun onLoggedIn(user: FirebaseUser) {}
@@ -85,10 +78,6 @@ abstract class BaseViewModel3(app:Application) : AndroidViewModel(app), KodeinAw
         }
     }
 
-    @Subscribe
-    fun onRefresh(e: RefreshEvent) {
-    }
-
     open fun onPrepareMenu(menu: Menu) {}
 
     fun async(block: suspend CoroutineScope.() -> Unit) {
@@ -101,10 +90,7 @@ abstract class BaseViewModel3(app:Application) : AndroidViewModel(app), KodeinAw
         showSnackbarCommand(t.message ?: "Unknown Error")
     }
 
-    protected fun getString(@StringRes id: Int): String {
-        val ctx: Context = instance()
-        return ctx.getString(id)
-    }
+    protected fun getString(@StringRes id: Int): String = resources.getString(id)
 
 }
 

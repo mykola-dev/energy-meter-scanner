@@ -3,8 +3,7 @@ package ds.meterscanner.mvvm
 import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.LazyKodeinAware
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import java.util.*
 
 interface ViewModel {
@@ -20,13 +19,13 @@ interface View {
     val viewModel: ViewModel
 }
 
-interface View3 : LazyKodeinAware {
+interface View3 : KodeinGlobalAware {
     val viewModel: BaseViewModel3
     fun finish()
 }
 
 @Deprecated("")
-interface BaseView : View, KodeinAware {
+interface BaseView : View, KodeinGlobalAware {
     fun runAuthScreen()
     fun getString(@StringRes id: Int): String
     fun getColour(@ColorRes id: Int): Int
@@ -58,16 +57,9 @@ interface ListsView : BaseView {
 
 interface AlarmsView : View3 {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
-    /*fun onNewAlarm()
-    fun onEditAlarm(jobId:Int)
-    fun onDeleteAlarm(jobId:Int)*/
 }
 
-interface ScannerView : View3 {
-    //fun finishWithResult(value: Double, bitmap: Bitmap? = null, corrected: Boolean = false)
-    //fun startScanning()
-    //fun updateViewport()
-}
+interface ScannerView : View3
 
 interface DetailsView : View3 {
     fun onDatePick()

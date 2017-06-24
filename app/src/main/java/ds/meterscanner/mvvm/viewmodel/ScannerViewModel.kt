@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.app.Application
 import android.databinding.ObservableField
 import android.graphics.Bitmap
 import ds.meterscanner.mvvm.BaseViewModel3
@@ -11,7 +10,7 @@ import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.ui.widget.DimensionsCallback
 import ds.meterscanner.util.ThreadTools
 
-class ScannerViewModel(app: Application) : BaseViewModel3(app) {
+class ScannerViewModel : BaseViewModel3() {
 
     val updateViewPortCommand = Command<Unit>()
     val startScanningCommand = Command<Unit>()

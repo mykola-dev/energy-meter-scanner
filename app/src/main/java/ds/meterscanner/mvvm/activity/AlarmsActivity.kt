@@ -14,7 +14,6 @@ import java.util.*
 
 class AlarmsActivity : BaseActivity3<ViewDataBinding, AlarmsViewModel>(), AlarmsView {
 
-
     override fun provideViewModel(): AlarmsViewModel = viewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_alarms
 

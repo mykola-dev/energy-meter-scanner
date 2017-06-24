@@ -5,9 +5,7 @@ import android.view.View
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.rescheduled
 import com.evernote.android.job.scheduledTo
-import com.github.salomonbrys.kodein.LazyKodein
-import com.github.salomonbrys.kodein.LazyKodeinAware
-import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.data.AlarmClickEvent
@@ -18,10 +16,9 @@ import ds.meterscanner.mvvm.viewmodel.AlarmItemViewModel
 import ds.meterscanner.util.formatTime
 import org.greenrobot.eventbus.EventBus
 
-class AlarmsAdapter : ViewModelAdapter<AlarmItemViewModel, JobRequest>(), LazyKodeinAware {
+class AlarmsAdapter : ViewModelAdapter<AlarmItemViewModel, JobRequest>(), KodeinGlobalAware {
 
-    override val kodein: LazyKodein = LazyKodein { context.appKodein() }
-    val bus: EventBus by instance()
+    val bus: EventBus = instance()
 
     override val layoutId: Int = R.layout.item_alarm
 

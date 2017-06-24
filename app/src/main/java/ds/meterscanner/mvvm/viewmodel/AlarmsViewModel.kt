@@ -1,8 +1,5 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import android.app.Application
-import android.databinding.BaseObservable
-import android.databinding.Observable
 import android.databinding.ObservableField
 import com.evernote.android.job.scheduledTo
 import ds.meterscanner.R
@@ -12,7 +9,7 @@ import ds.meterscanner.mvvm.BaseViewModel3
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AlarmsViewModel(app: Application) : BaseViewModel3(app), Observable by BaseObservable() {
+class AlarmsViewModel : BaseViewModel3() {
 
     val adapter = ObservableField<AlarmsAdapter>()
 
@@ -23,7 +20,7 @@ class AlarmsViewModel(app: Application) : BaseViewModel3(app), Observable by Bas
     }
 
     private fun fillAdapter() {
-        val data = scheduler.getScheduledJobs().toList().sortedBy { it.scheduledTo() }
+        val data = scheduler.getScheduledJobs().sortedBy { it.scheduledTo() }
         adapter.get().setData(data)
     }
 

@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.app.Application
 import android.databinding.ObservableField
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
@@ -11,7 +10,7 @@ import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 
-class DetailsViewModel(app:Application) : BaseViewModel3(app) {
+class DetailsViewModel : BaseViewModel3() {
 
     var snapshotId: String? = null
         set(value) {

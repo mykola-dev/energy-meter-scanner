@@ -43,13 +43,6 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
     val snapshotsReference: DatabaseReference
         get() = database.getReference(USERS).child(auth.getUser()!!.uid).child(SNAPSHOTS)
 
-   /* fun getAllSnapshotsRx(startDate: Long): Single<List<Snapshot>> {
-        return snapshotsReference
-            .orderByChild(Snapshot::timestamp.name)
-            .startAt(startDate.toDouble())
-            .getValues()
-    }*/
-
     suspend fun getAllSnapshots(startDate: Long): List<Snapshot> {
         return snapshotsReference
             .orderByChild(Snapshot::timestamp.name)
