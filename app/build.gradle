@@ -48,16 +48,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
-    flavorDimensions "minSdk", "abi"
+    flavorDimensions "abi"
     productFlavors {
-        dev {
-            dimension "minSdk"
-            minSdkVersion 21
-        }
-        regular {
-            dimension "minSdk"
-        }
-
         x86 {
             dimension "abi"
             ndk.abiFilter "x86"
