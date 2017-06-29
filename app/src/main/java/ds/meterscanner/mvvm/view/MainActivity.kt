@@ -56,16 +56,6 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         return super.onCreateOptionsMenu(menu)
     }
 
-   /* override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(this::isIntentConsumed.name, isIntentConsumed)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        isIntentConsumed = savedInstanceState.getBoolean(this::isIntentConsumed.name)
-    }*/
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null) {

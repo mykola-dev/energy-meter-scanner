@@ -1,11 +1,11 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.android.application'
-//apply plugin: 'com.archinamon.aspectj'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-//apply plugin: "build-time-tracker"
+apply plugin: "build-time-tracker"
 //apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.archinamon.aspectj'
 
 android {
     compileSdkVersion 25
@@ -98,7 +98,7 @@ kapt {
     }
 }
 
-/*buildtimetracker {
+buildtimetracker {
     reporters {
 
         summary {
@@ -109,15 +109,7 @@ kapt {
         }
 
     }
-}*/
-
-def skipKapt = findProperty("skipKapt")=="true"
-
-afterEvaluate {
-    println("kapt enabled=${!skipKapt}")
-    tasks.findAll { it.name.contains("kapt") }.forEach { it.enabled = !skipKapt }
 }
-
 
 dependencies {
     def supportVersion = '25.3.1'
