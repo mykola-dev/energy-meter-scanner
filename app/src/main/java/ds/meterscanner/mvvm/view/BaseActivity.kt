@@ -18,13 +18,13 @@ import ds.bindingtools.runActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
 import ds.meterscanner.data.RefreshEvent
+import ds.meterscanner.mvvm.BaseView
 import ds.meterscanner.mvvm.BaseViewModel
-import ds.meterscanner.mvvm.View
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 @Suppress("LeakingThis")
-abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : AppCompatActivity(), LifecycleRegistryOwner, View {
+abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : AppCompatActivity(), LifecycleRegistryOwner, BaseView {
     private val registry = LifecycleRegistry(this)
 
     val bus: EventBus = instance()

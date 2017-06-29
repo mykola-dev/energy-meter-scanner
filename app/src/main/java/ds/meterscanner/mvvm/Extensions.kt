@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm
 
 import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModel
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
@@ -39,7 +38,7 @@ open class Command<T> : LiveData<T>() {
     }
 
     fun observe(owner: LifecycleOwner, block: (T) -> Unit) =
-        super.observe(owner, Observer { if (it != null) block(it) })
+        super.observe(owner, Observer { if (it != null) block(it) })    // bypass nulls
 
     override fun observe(owner: LifecycleOwner?, observer: Observer<T>?) {
         error("Unsupported Operation")

@@ -3,32 +3,36 @@ package ds.meterscanner.mvvm
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import java.util.*
 
-interface View : KodeinGlobalAware {
+interface BaseView : KodeinGlobalAware {
     val viewModel: BaseViewModel
     fun finish()
 }
 
-interface SettingsView : View
-interface ChartsView : View
-interface AuthView : View
-interface MainView : View {
+interface SettingsView : BaseView
+
+interface ChartsView : BaseView
+
+interface AuthView : BaseView
+
+interface ScannerView : BaseView
+
+interface MainView : BaseView {
     fun onCameraButton()
     fun onListsButton()
     fun onChartsButton()
     fun onSettingsButton()
 }
 
-interface ListsView : View {
+interface ListsView : BaseView {
     fun runDetails(snapshotId: String?)
 }
 
-interface AlarmsView : View {
+interface AlarmsView : BaseView {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
 }
 
-interface ScannerView : View
 
-interface DetailsView : View {
+interface DetailsView : BaseView {
     fun onDatePick()
     fun onSave()
 }
