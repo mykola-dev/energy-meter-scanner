@@ -24,5 +24,6 @@ That's it!
 - RxJava 2 (abandoned in favor of Kotlin coroutines)
 - Firebase
 - MVVM (sort of)
+- Architecture Components
 - Kodein DI
 - OpenWeatherMap API
