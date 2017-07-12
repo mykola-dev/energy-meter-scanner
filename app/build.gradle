@@ -4,7 +4,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: "build-time-tracker"
-//apply plugin: 'com.getkeepsafe.dexcount'
 //apply plugin: 'com.archinamon.aspectj'
 
 android {
@@ -64,18 +63,6 @@ android {
 /*aspectj {
     debugInfo true
 }*/
-/*
-dexcount {
-    format = "tree"
-    includeClasses = false
-    includeFieldCount = false
-    includeTotalMethodCount = true
-    orderByMethodCount = true
-    verbose = false
-    maxTreeDepth = 3
-    enableForInstantRun = false
-    runOnEachAssemble = false
-}*/
 
 kotlin {
     experimental {
@@ -104,74 +91,74 @@ buildtimetracker {
 }
 
 dependencies {
-    def supportVersion = '25.3.1'
-    def firebaseVersion = '10.2.1'
-    def retrofitVersion = '2.2.0'
+    def supportVersion = '25.4.0'
+    def firebaseVersion = '11.0.2'
+    def retrofitVersion = '2.3.0'
 
     // supportlib stuff
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:percent:$supportVersion"
-    compile "com.android.support:gridlayout-v7:$supportVersion"
-    compile "com.android.support:preference-v7:$supportVersion"
-    compile "com.android.support:preference-v14:$supportVersion"
-    compile 'com.takisoft.fix:preference-v7:25.3.1.0'                   // https://github.com/Gericop/Android-Support-Preference-V7-Fix
-    compile "com.android.support:multidex:1.0.1"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:percent:$supportVersion"
+    implementation "com.android.support:gridlayout-v7:$supportVersion"
+    implementation "com.android.support:preference-v7:$supportVersion"
+    implementation "com.android.support:preference-v14:$supportVersion"
+    implementation 'com.takisoft.fix:preference-v7:25.4.0.3'                   // https://github.com/Gericop/Android-Support-Preference-V7-Fix
+    implementation "com.android.support:multidex:1.0.1"
 
-    compile "com.google.firebase:firebase-auth:$firebaseVersion"
-    compile "com.google.firebase:firebase-database:$firebaseVersion"
-    compile "com.google.firebase:firebase-messaging:$firebaseVersion"
-    compile "com.google.firebase:firebase-storage:$firebaseVersion"
-    compile "com.google.firebase:firebase-config:$firebaseVersion"
+    implementation "com.google.firebase:firebase-auth:$firebaseVersion"
+    implementation "com.google.firebase:firebase-database:$firebaseVersion"
+    implementation "com.google.firebase:firebase-messaging:$firebaseVersion"
+    implementation "com.google.firebase:firebase-storage:$firebaseVersion"
+    implementation "com.google.firebase:firebase-config:$firebaseVersion"
 
     // networking
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"          // https://github.com/square/retrofit
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:3.6.0"
-    compile 'com.github.bumptech.glide:glide:3.7.0'                     // https://github.com/bumptech/glide
-    compile 'com.evernote:android-job:1.1.9'                            // https://github.com/evernote/android-job
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"          // https://github.com/square/retrofit
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
+    implementation 'com.github.bumptech.glide:glide:3.8.0'                     // https://github.com/bumptech/glide
+    implementation 'com.evernote:android-job:1.1.11'                           // https://github.com/evernote/android-job
 
     // injectors
-    compile 'com.github.salomonbrys.kodein:kodein-erased:4.0.0'         // https://salomonbrys.github.io/Kodein/
-    compile 'com.github.salomonbrys.kodein:kodein-conf:4.0.0'
-    compile 'com.github.salomonbrys.kodein:kodein-android:4.0.0'
-    //compile 'com.evernote:android-state:1.1.1'                          // https://github.com/evernote/android-state
+    implementation 'com.github.salomonbrys.kodein:kodein-erased:4.0.0'         // https://salomonbrys.github.io/Kodein/
+    implementation 'com.github.salomonbrys.kodein:kodein-conf:4.0.0'
+    implementation 'com.github.salomonbrys.kodein:kodein-android:4.0.0'
+    //implementation 'com.evernote:android-state:1.1.1'                          // https://github.com/evernote/android-state
     //kapt 'com.evernote:android-state-processor:1.1.1'
 
     // ui
-    compile 'com.wdullaer:materialdatetimepicker:3.1.3'                 // https://github.com/wdullaer/MaterialDateTimePicker
-    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'            // https://github.com/lecho/hellocharts-android
+    implementation 'com.wdullaer:materialdatetimepicker:3.2.2'                 // https://github.com/wdullaer/MaterialDateTimePicker
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'            // https://github.com/lecho/hellocharts-android
 
     // etc
-    compile 'io.anyline:anylinesdk:3.10.0@aar'
-    compile "org.greenrobot:eventbus:3.0.0"                             // https://github.com/greenrobot/EventBus
-    kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"           // see apt params
-    compile "com.jakewharton.timber:timber:4.5.1"                       // https://github.com/JakeWharton/timber
+    implementation 'io.anyline:anylinesdk:3.11.0@aar'                          // https://www.anyline.io/download/
+    implementation "org.greenrobot:eventbus:3.0.0"                             // https://github.com/greenrobot/EventBus
+    kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"                  // see kapt params
+    implementation "com.jakewharton.timber:timber:4.5.1"                       // https://github.com/JakeWharton/timber
 
     // development
-    compile "android.arch.lifecycle:runtime:1.0.0-alpha3"
-    compile "android.arch.lifecycle:extensions:1.0.0-alpha3"
-    kapt "android.arch.lifecycle:compiler:1.0.0-alpha3"
+    implementation "android.arch.lifecycle:runtime:1.0.0-alpha4"
+    implementation "android.arch.lifecycle:extensions:1.0.0-alpha4"
+    kapt "android.arch.lifecycle:compiler:1.0.0-alpha4"
     kapt "com.android.databinding:compiler:$gradle_plugin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    compile 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.5.0'
-    debugCompile "com.facebook.stetho:stetho:1.5.0"                     // https://github.com/facebook/stetho
-    debugCompile "com.facebook.stetho:stetho-okhttp3:1.5.0"
-    //provided "com.facebook.stetho:stetho:1.4.2"
-    //provided "com.facebook.stetho:stetho-okhttp3:1.4.2"
-    //compile "com.github.simonpercic:oklog3:1.0.1"                       // https://github.com/simonpercic/OkLog
-    debugCompile "io.palaima.debugdrawer:debugdrawer:0.7.0"
-    releaseCompile "io.palaima.debugdrawer:debugdrawer-no-op:0.7.0"
-    compile "io.palaima.debugdrawer:debugdrawer-actions:0.7.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.6.0'
+    debugImplementation "com.facebook.stetho:stetho:1.5.0"                     // https://github.com/facebook/stetho
+    debugImplementation "com.facebook.stetho:stetho-okhttp3:1.5.0"
+    provided "com.facebook.stetho:stetho:1.5.0"
+    provided "com.facebook.stetho:stetho-okhttp3:1.5.0"
+    //implementation "com.github.simonpercic:oklog3:1.0.1"                       // https://github.com/simonpercic/OkLog
+    debugImplementation "io.palaima.debugdrawer:debugdrawer:0.7.0"
+    releaseImplementation "io.palaima.debugdrawer:debugdrawer-no-op:0.7.0"
+    implementation "io.palaima.debugdrawer:debugdrawer-actions:0.7.0"
 
     // tests
-    compile fileTree(dir: "libs", include: ["*.jar"])
-    testCompile "junit:junit:4.12"
-    testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    testImplementation "junit:junit:4.12"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 
 }
 

@@ -38,20 +38,20 @@ suspend inline fun <reified T : Any> Query.getChildValue() = getValue<T> { data,
     val values = data.children.map { it.getValue(cls) }
     if (!values.isEmpty()) {
         L.v("latest value $values")
-        values[0]
+        values[0]!!
     } else
         throw IllegalStateException("empty childs")
 }
 
 suspend inline fun <reified T : Any> Query.getValue(): T = getValue { data, cls ->
-    data.getValue(cls)
+    data.getValue(cls)!!
 }
 
 suspend inline fun <reified T : Any> Query.getValues() = suspendCancellableCoroutine<List<T>> { continuation ->
 
     val listener: ValueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            val value = snapshot.children.map { it.getValue(T::class.java) }
+            val value = snapshot.children.map { it.getValue(T::class.java)!! }
             L.v("snapshot=$value")
             continuation.resume(value)
         }
@@ -75,7 +75,7 @@ suspend inline fun <reified T : Any> Query.listenValues(ctx: CoroutineContext) =
     val listener: ValueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             L.i("count ${snapshot.childrenCount}")
-            val values = snapshot.children.map { it.getValue(T::class.java) }
+            val values = snapshot.children.map { it.getValue(T::class.java)!! }
             L.v("sent to channel? ${channel.offer(values)}")
         }
 
