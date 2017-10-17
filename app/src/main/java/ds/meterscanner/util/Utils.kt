@@ -37,10 +37,10 @@ fun <T> profile(name: String = "", f: () -> T): T {
 }
 
 @ColorRes
-fun getColorTemp(temp: Int): Int {
-    return if (temp > 10) R.color.temperature_warm
-    else if (temp > 0) R.color.temperature_norm
-    else if (temp > -10) R.color.temperature_cold
-    else if (temp > -20) R.color.temperature_frost
-    else R.color.temperature_extreme
+fun getColorTemp(temp: Int): Int = when {
+    temp > 10 -> R.color.temperature_warm
+    temp > 0 -> R.color.temperature_norm
+    temp > -10 -> R.color.temperature_cold
+    temp > -20 -> R.color.temperature_frost
+    else -> R.color.temperature_extreme
 }

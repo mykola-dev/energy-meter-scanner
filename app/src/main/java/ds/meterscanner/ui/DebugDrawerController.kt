@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.evernote.android.job.scheduledTo
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
-import ds.bindingtools.runActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.view.MainActivity
@@ -57,7 +57,7 @@ class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware
             launch(UI) {
                 val weather = netLayer.getWeather().main.temp
                 L.v("temp=$weather°С")
-                activity.toast( "temp=$weather")
+                activity.toast("temp=$weather")
             }
         })
 
@@ -72,10 +72,9 @@ class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware
         })
 
         val runMainActivityAction = ButtonAction("Run MainActivity", {
-            //activity.finish()
-            postDelayed(100, {
-                activity.app.runActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK)
-            })
+            postDelayed(100) {
+                activity.app.startActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         })
 
         debugDrawer = DebugDrawer.Builder(activity)
@@ -94,12 +93,12 @@ class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware
         return sb.toString()
     }
 
-   /*
+    /*
 
-    fun init() {
+     fun init() {
 
-    }
+     }
 
 
-*/
+ */
 }

@@ -1,4 +1,4 @@
-package ds.bindingtools
+package ds.meterscanner.mvvm
 
 import android.databinding.BaseObservable
 import android.databinding.Observable
@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
 
 fun <T> BaseObservable.observableField(default: T? = null) = ObservableFieldProperty(this, default)
 
-/*private*/ class ObservableFieldProperty<T>(private val parent: BaseObservable, var current: T?) : ReadWriteProperty<Observable, T?> {
+class ObservableFieldProperty<T>(private val parent: BaseObservable, private var current: T?) : ReadWriteProperty<Observable, T?> {
 
     private var fieldId: Int = -1
 
@@ -17,9 +17,7 @@ fun <T> BaseObservable.observableField(default: T? = null) = ObservableFieldProp
         return this
     }
 
-    override fun getValue(thisRef: Observable, property: KProperty<*>): T? {
-        return current
-    }
+    override fun getValue(thisRef: Observable, property: KProperty<*>): T? = current
 
     override fun setValue(thisRef: Observable, property: KProperty<*>, value: T?) {
         if (current != value) {
@@ -47,6 +45,4 @@ private val String.bindableResourceId: Int get() {
     }
 }
 
-fun bindableResourceIdForKProperty(property: KProperty<*>): Int {
-    return resourceIdMap.getOrPut(property.name) { property.name.bindableResourceId }
-}
+fun bindableResourceIdForKProperty(property: KProperty<*>): Int = resourceIdMap.getOrPut(property.name) { property.name.bindableResourceId }

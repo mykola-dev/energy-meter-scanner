@@ -7,8 +7,8 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import ds.bindingtools.arg
-import ds.bindingtools.runActivity
-import ds.bindingtools.runActivityForResult
+import ds.bindingtools.startActivity
+import ds.bindingtools.startActivityForResult
 import ds.meterscanner.R
 import ds.meterscanner.databinding.MainBinding
 import ds.meterscanner.mvvm.MainView
@@ -34,22 +34,22 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         super.initViewModel()
         viewModel.jobId = jobId ?: -1
         viewModel.runAlarmsCommand.observe(this) {
-            runActivity<AlarmsActivity>()
+            startActivity<AlarmsActivity>()
         }
         viewModel.onLoggedInCommand.observe(this) {
             handleIntent()
         }
     }
 
-    override fun onCameraButton() = runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
-        ScanAnalogMeterActivity::tries..1
-        ScanAnalogMeterActivity::jobId..-1
-        ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+    override fun onCameraButton() = startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+        ScanAnalogMeterActivity::tries to 1
+        ScanAnalogMeterActivity::jobId to -1
+        ScanAnalogMeterActivity::apiKey to viewModel.apiKey
     }
 
-    override fun onListsButton() = runActivity<HistoryActivity>()
-    override fun onChartsButton() = runActivity<ChartsActivity>()
-    override fun onSettingsButton() = runActivity<SettingsActivity>()
+    override fun onListsButton() = startActivity<HistoryActivity>()
+    override fun onChartsButton() = startActivity<ChartsActivity>()
+    override fun onSettingsButton() = startActivity<SettingsActivity>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
@@ -84,10 +84,10 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
 
         if (jobId!! >= 0) {
             L.v("going to make a snapshot!")
-            runActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
-                ScanAnalogMeterActivity::tries..viewModel.prefs.scanTries
-                ScanAnalogMeterActivity::jobId..jobId
-                ScanAnalogMeterActivity::apiKey..viewModel.apiKey
+            startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+                ScanAnalogMeterActivity::tries to viewModel.prefs.scanTries
+                ScanAnalogMeterActivity::jobId to jobId
+                ScanAnalogMeterActivity::apiKey to viewModel.apiKey
             }
         } else {
             L.w("empty intent")

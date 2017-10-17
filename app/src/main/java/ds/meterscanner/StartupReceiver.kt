@@ -8,9 +8,9 @@ import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
-import ds.bindingtools.runActivity
-import ds.meterscanner.mvvm.view.MainActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.mvvm.view.MainActivity
 import ds.meterscanner.scheduler.Scheduler
 
 class StartupReceiver : BroadcastReceiver(), KodeinInjected {
@@ -24,7 +24,7 @@ class StartupReceiver : BroadcastReceiver(), KodeinInjected {
         injector.inject(context.appKodein())
         if (prefs.autostart) {
             scheduler.restoreFromPrefs()
-            context.runActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
     }

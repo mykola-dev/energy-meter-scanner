@@ -37,7 +37,7 @@ class ScannerViewModel : BaseViewModel() {
             updateViewPortCommand()
         }
 
-        if (jobId < 0 && prefs.saveTemperature) {
+        if (jobId == 0 && prefs.saveTemperature) {
             updateWeather()
         }
     }

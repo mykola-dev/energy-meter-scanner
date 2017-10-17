@@ -13,8 +13,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.github.salomonbrys.kodein.erased.instance
-import ds.bindingtools.runActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
 import ds.meterscanner.data.RefreshEvent
@@ -57,7 +58,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
             showSnackbar(it.text)
         }
         viewModel.runAuthScreenCommand?.observe(this) {
-            runActivity<AuthActivity>()
+            startActivity<AuthActivity>()
         }
         viewModel.finishCommand.observe(this) {
             finish()
@@ -94,7 +95,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar?
+        val toolbar:Toolbar? = findViewById(R.id.toolbar)
         if (toolbar != null) {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton())
@@ -109,7 +110,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
         @StringRes actionText: Int = 0,
         actionCallback: (() -> Unit)? = null
     ) {
-        val content = findViewById(R.id.coordinator) ?: findViewById(android.R.id.content)
+        val content: View = findViewById(R.id.coordinator) ?: findViewById(android.R.id.content)
         val s = Snackbar.make(content, text, duration)
         if (callback != null) {
             val snackCallback = object : Snackbar.Callback() {

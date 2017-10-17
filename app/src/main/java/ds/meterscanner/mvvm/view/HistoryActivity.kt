@@ -4,7 +4,7 @@ import L
 import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import ds.bindingtools.runActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
@@ -35,8 +35,8 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
 
 
     override fun runDetails(snapshotId: String?) {
-        runActivity<DetailsActivity>(DetailsActivity.REQUEST_DETAILS) {
-            DetailsActivity::snapshotId..snapshotId
+        startActivity<DetailsActivity>(DetailsActivity.REQUEST_DETAILS) {
+            DetailsActivity::snapshotId to snapshotId
         }
     }
 

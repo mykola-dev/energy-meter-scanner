@@ -5,7 +5,5 @@ import com.evernote.android.job.JobCreator
 
 class SnapshotJobCreator : JobCreator {
 
-    override fun create(tag: String): Job? {
-        return Class.forName(tag).newInstance() as Job?
-    }
+    override fun create(tag: String): Job? = Class.forName(tag).newInstance() as Job?
 }

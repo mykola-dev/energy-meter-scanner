@@ -12,7 +12,7 @@ import com.evernote.android.job.rescheduled
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
-import ds.bindingtools.runActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.mvvm.BaseViewModel
@@ -58,7 +58,7 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
             addPreferencesFromResource(R.xml.prefs)
 
             alarms.setOnPreferenceClickListener {
-                activity.runActivity<AlarmsActivity>()
+                activity.startActivity<AlarmsActivity>()
                 true
             }
 

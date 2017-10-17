@@ -5,11 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.LayoutRes
+import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import java.io.Serializable
-import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -18,52 +17,49 @@ inline fun <reified T : Any> Activity.arg(default: T? = null): ReadOnlyProperty<
 
 inline fun <reified T : Any> Fragment.arg(default: T? = null): ReadOnlyProperty<Fragment, T?> = FragmentArgsDelegate(default, T::class)
 
-inline fun <reified T : Activity> Context.runActivity(b: Bundle? = null, flags: Int = 0) {
+inline fun <reified T : Activity> Context.startActivity(b: Bundle? = null, flags: Int = 0) {
     val i = Intent(this, T::class.java).addFlags(flags)
     if (b != null)
         i.putExtras(b)
     startActivity(i)
 }
 
-inline fun <reified T : Activity> Activity.runActivityForResult(b: Bundle? = null, requestCode: Int, flags: Int = 0) {
+inline fun <reified T : Activity> Activity.startActivityForResult(b: Bundle? = null, requestCode: Int, flags: Int = 0) {
     val i = Intent(this, T::class.java).addFlags(flags)
     if (b != null)
         i.putExtras(b)
     startActivityForResult(i, requestCode)
 }
 
-inline fun <reified T : Activity> Context.runActivity(flags: Int = 0, noinline f: BundleBuilder.() -> Unit) {
+inline fun <reified T : Activity> Context.startActivity(flags: Int = 0, noinline f: BundleBuilder.() -> Unit) {
     val b = bundle(f)
-    runActivity<T>(b, flags)
+    startActivity<T>(b, flags)
 }
 
-inline fun <reified T : Activity> Activity.runActivityForResult(requestCode: Int, flags: Int = 0, noinline f: BundleBuilder.() -> Unit) {
+inline fun <reified T : Activity> Activity.startActivityForResult(requestCode: Int, flags: Int = 0, noinline f: BundleBuilder.() -> Unit) {
     val b = bundle(f)
-    runActivityForResult<T>(b, requestCode, flags)
+    startActivityForResult<T>(b, requestCode, flags)
 }
 
-
-inline fun <reified T : Fragment> FragmentActivity.replaceFragment(@LayoutRes layoutId: Int, args: Bundle? = null) {
+inline fun <reified T : Fragment> FragmentActivity.replaceFragment(@IdRes layoutId: Int, args: Bundle? = null) {
     val fragment = Fragment.instantiate(this, T::class.java.name, args)
     supportFragmentManager
-        .beginTransaction()
-        .replace(layoutId, fragment)
-        .commitNow()
+            .beginTransaction()
+            .replace(layoutId, fragment)
+            .commitNow()
 }
 
-inline fun <reified T : Fragment> FragmentActivity.replaceFragment(@LayoutRes layoutId: Int, f: BundleBuilder.(T) -> Unit) {
+inline fun <reified T : Fragment> FragmentActivity.replaceFragment(@IdRes layoutId: Int, f: BundleBuilder.(T) -> Unit) {
     val fragment = Fragment.instantiate(this, T::class.java.name) as T
     val builder = BundleBuilder()
     f(builder, fragment)
     fragment.arguments = builder.build()
 
     supportFragmentManager
-        .beginTransaction()
-        .replace(layoutId, fragment)
-        .commitNow()
-
+            .beginTransaction()
+            .replace(layoutId, fragment)
+            .commitNow()
 }
-
 
 @Suppress("unchecked_cast")
 class ActivityArgsDelegate<out T : Any>(val default: T?, val cls: KClass<*>) : ReadOnlyProperty<Activity, T?> {
@@ -75,9 +71,7 @@ class ActivityArgsDelegate<out T : Any>(val default: T?, val cls: KClass<*>) : R
         return parseExtras(property.name, a.intent.extras, cls, default)
     }
 
-
 }
-
 
 class FragmentArgsDelegate<out T : Any>(val default: T?, val cls: KClass<*>) : ReadOnlyProperty<Fragment, T?> {
 
@@ -92,7 +86,6 @@ class FragmentArgsDelegate<out T : Any>(val default: T?, val cls: KClass<*>) : R
 
 @Suppress("unchecked_cast")
 private fun <T : Any> parseExtras(key: String, extras: Bundle, cls: KClass<*>, default: T?): T? {
-    println("key=$key class=$cls default=$default")
     with(extras) {
         return when (cls) {
             String::class -> getString(key, default as String?) as T?
@@ -112,7 +105,7 @@ private fun <T : Any> parseExtras(key: String, extras: Bundle, cls: KClass<*>, d
             Serializable::class -> getSerializable(key) as T?
             ArrayList::class -> getStringArrayList(key) as T?
             Array<String>::class -> getStringArray(key) as T?
-            else -> throw IllegalArgumentException()
+            else -> error("Class ${cls.javaObjectType.simpleName} doesn't supported")
         }
     }
 }

@@ -158,9 +158,9 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
 
     fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {
         val data = Intent().putExtras(bundle {
-            "value"..value
-            "bitmap"..bitmap
-            "corrected"..corrected
+            "value" to value
+            "bitmap" to bitmap
+            "corrected" to corrected
         })
         setResult(Activity.RESULT_OK, data)
         finish()

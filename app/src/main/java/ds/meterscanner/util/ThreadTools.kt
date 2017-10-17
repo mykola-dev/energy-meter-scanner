@@ -7,7 +7,8 @@ import java.util.concurrent.TimeUnit
 
 object ThreadTools {
 
-    val countDowns = mutableMapOf<Int, CountDownLatch>()
+    private val countDowns = mutableMapOf<Int, CountDownLatch>()
+
     val isUiThread: Boolean
         get() = Thread.currentThread() === Looper.getMainLooper().thread
 

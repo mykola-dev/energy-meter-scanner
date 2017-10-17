@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import ds.bindingtools.PrefsAware
+import ds.bindingtools.PreferencesAware
 import ds.bindingtools.pref
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.run
 
-class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : PrefsAware {
+class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : PreferencesAware {
 
     override val forcePersistDefaults = true
     override val sharedPreferences: SharedPreferences = ctx.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)

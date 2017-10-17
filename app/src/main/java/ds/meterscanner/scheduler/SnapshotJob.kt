@@ -8,11 +8,11 @@ import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
-import ds.bindingtools.runActivity
-import ds.meterscanner.mvvm.view.MainActivity
+import ds.bindingtools.startActivity
 import ds.meterscanner.data.InterruptEvent
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.db.FirebaseDb
+import ds.meterscanner.mvvm.view.MainActivity
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.util.ThreadTools
 import ds.meterscanner.util.formatTimeDate
@@ -24,16 +24,17 @@ import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 
+private const val JOB_RETRIES = 3
+
 class SnapshotJob : Job(), KodeinInjected {
     override val injector: KodeinInjector = KodeinInjector()
 
-    val JOB_RETRIES = 3
 
-    val prefs: Prefs by instance()
-    val bus: EventBus by instance()
-    val restService: NetLayer by instance()
-    val db: FirebaseDb by instance()
-    val scheduler: Scheduler by instance()
+    private val prefs: Prefs by instance()
+    private val bus: EventBus by instance()
+    private val restService: NetLayer by instance()
+    private val db: FirebaseDb by instance()
+    private val scheduler: Scheduler by instance()
 
     override fun onRunJob(params: Job.Params): Job.Result {
         injector.inject(context.appKodein())
@@ -54,13 +55,14 @@ class SnapshotJob : Job(), KodeinInjected {
             }
         }
 
-        val result = if (success) {
-            Job.Result.SUCCESS
-        } else if (params.failureCount < JOB_RETRIES) {
-            L.e("job failures=${params.failureCount + 1}")
-            Job.Result.RESCHEDULE
-        } else
-            Job.Result.FAILURE
+        val result = when {
+            success -> Job.Result.SUCCESS
+            params.failureCount < JOB_RETRIES -> {
+                L.e("job failures=${params.failureCount + 1}")
+                Job.Result.RESCHEDULE
+            }
+            else -> Job.Result.FAILURE
+        }
 
         db.log("job status: id=${params.id} start=${params.startMs / 1000}  backoff${params.backoffMs / 1000} policy=${params.backoffPolicy} tag=${params.tag} " +
             "end=${params.endMs / 1000} failures=${params.failureCount} isExact=${params.isExact} ${formatTimeDate(params.scheduledAt)}")
@@ -68,34 +70,17 @@ class SnapshotJob : Job(), KodeinInjected {
         return result
     }
 
-    fun doJob(context: Context, jobId: Int): Boolean = runBlocking {
+    private fun doJob(context: Context, jobId: Int): Boolean = runBlocking {
         if (ThreadTools.isUiThread)
             error("Main Thread detected")
 
         L.v("scheduler: start the job")
-        /*(
-            if (prefs.saveTemperature)
-                restService
-                    .getWeatherRx()
-                    .map { it.main.temp }
-                    .timeout(10, TimeUnit.SECONDS)
-            else
-                Observable.just(0.0)
-            )
-            .doOnNext { prefs.currentTemperature = it.toFloat() }
-            .doOnNext { L.v("fetched weather, t=$it") }
-            .onErrorReturn { prefs.currentTemperature.toDouble() }
-            .observeOn(mainThread())
-            .subscribe {
-                context.applicationContext.runActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK) {
-                    MainActivity::jobId..jobId
-                }
-
-            }*/
 
         val weather: Double = if (prefs.saveTemperature) {
             try {
-                withTimeout(10_000) { restService.getWeather().main.temp }
+                withTimeout(10_000) {
+                    restService.getWeather().main.temp
+                }
             } catch (e: Exception) {
                 prefs.currentTemperature.toDouble()
             }
@@ -104,8 +89,8 @@ class SnapshotJob : Job(), KodeinInjected {
         prefs.currentTemperature = weather.toFloat()
         L.v("fetched weather, t=$weather")
         launch(UI) {
-            context.applicationContext.runActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK) {
-                MainActivity::jobId..jobId
+            context.applicationContext.startActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK) {
+                MainActivity::jobId to jobId
             }
         }
 
