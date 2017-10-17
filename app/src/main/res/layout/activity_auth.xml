@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
+                    bind:error="@{viewModel.loginError}"
                     >
 
                     <android.support.design.widget.TextInputEditText
@@ -62,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
+                    bind:error="@{viewModel.passwordError}"
                     >
 
                     <android.support.design.widget.TextInputEditText

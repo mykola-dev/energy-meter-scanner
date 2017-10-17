@@ -14,7 +14,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 2
-        versionName "1.3 build" + new SimpleDateFormat("MMdd").format(new Date())
+        versionName "1.4 build" + new SimpleDateFormat("MMdd").format(new Date())
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }

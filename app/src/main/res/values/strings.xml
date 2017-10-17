@@ -65,5 +65,8 @@
     <string name="weeks">Weeks</string>
     <string name="months">Months</string>
     <string name="years">Years</string>
+    <string name="wrong_email">Wrong Email</string>
+    <string name="shouldnt_be_empty">Shouldn\'t be empty</string>
+    <string name="error_unknown">Unknown Error</string>
 
 </resources>

@@ -1,15 +1,27 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import android.databinding.ObservableField
+import android.util.Patterns
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.invoke
 
-// todo validation
 class AuthViewModel : BaseViewModel() {
 
-    val login = ObservableField<String>()
-    val password = ObservableField<String>()
+    val login = ObservableField<String>("")
+    val password = ObservableField<String>("")
+    val loginError = ValidatorField(login) {
+        when {
+            !Patterns.EMAIL_ADDRESS.matcher(it).matches() -> getString(R.string.wrong_email)
+            else -> ""
+        }
+    }
+    val passwordError = ValidatorField(password) {
+        when {
+            it.isEmpty() -> getString(R.string.shouldnt_be_empty)
+            else -> ""
+        }
+    }
 
     override val runAuthScreenCommand = null
 
@@ -18,30 +30,15 @@ class AuthViewModel : BaseViewModel() {
     }
 
     fun onSignIn() = async {
-        toggleProgress(true)
-        try {
-            authenticator.signIn(login.get(), password.get())
-            finishCommand()
-        } catch (e: Exception) {
-            showSnackbarCommand(getString(R.string.sign_in_error))
-            e.printStackTrace()
-        } finally {
-            toggleProgress(false)
-        }
-
+        loginError.validate() && passwordError.validate() || return@async
+        authenticator.signIn(login.get(), password.get())
+        finishCommand()
     }
 
     fun onSignUp() = async {
-        toggleProgress(true)
-        try {
-            authenticator.signUp(login.get()!!, password.get()!!)
-            showSnackbarCommand(getString(R.string.user_created))
-            onSignIn()
-        } catch (e: Exception) {
-            showSnackbarCommand(getString(R.string.sign_up_error))
-            e.printStackTrace()
-        } finally {
-            toggleProgress(false)
-        }
+        loginError.validate() && passwordError.validate() || return@async
+        authenticator.signUp(login.get()!!, password.get()!!)
+        showSnackbarCommand(getString(R.string.user_created))
+        onSignIn()
     }
 }

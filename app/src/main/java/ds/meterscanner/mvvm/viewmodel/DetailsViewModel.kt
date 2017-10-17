@@ -17,8 +17,15 @@ class DetailsViewModel(
 ) : BaseViewModel() {
 
     val valueField = ObservableField<String>()
+    val valueErrorField = ValidatorField(valueField) { value ->
+        try {
+            snapshot.value = value.toDouble()
+            ""
+        } catch (e: Exception) {
+            getString(R.string.invalid_data)
+        }
+    }
     val dateField = ObservableField<String>()
-    val valueErrorField = ObservableField<String>()
     val imageUrl = ObservableField<String>()
     val outsideTemp = ObservableField<String>()
     val boilerTemp = ObservableField<String>()
@@ -56,7 +63,8 @@ class DetailsViewModel(
     }
 
     fun onSave(view: DetailsView) {
-        if (validateValue()) {
+        if (valueErrorField.validate()) {
+            snapshot.value = valueField.get().toDouble()
             if (boilerTemp.get().isNotEmpty())
                 snapshot.boilerTemp = boilerTemp.get().toInt()
 
@@ -69,15 +77,6 @@ class DetailsViewModel(
 
             view.finish()
         }
-    }
-
-    // todo proper validators
-    private fun validateValue(): Boolean = try {
-        snapshot.value = valueField.get().toDouble()
-        true
-    } catch (e: Exception) {
-        valueErrorField.set(getString(R.string.invalid_data))
-        false
     }
 
     fun onDatePicked(date: Date) {

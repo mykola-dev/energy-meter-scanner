@@ -9,6 +9,7 @@ import android.view.Menu
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
+import ds.meterscanner.R
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.ResourceProvider
@@ -82,29 +83,27 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
     open fun onPrepareMenu(menu: Menu) {}
 
     fun async(showErrors: Boolean = true, withProgress: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
-        if (lifecycleJob.isCompleted)
-            lifecycleJob = Job()
+        /* if (lifecycleJob.isCompleted) lifecycleJob = Job()*/
 
         if (withProgress)
             toggleProgress(true)
 
-        launch(UI + lifecycleJob, block = block).invokeOnCompletion { e ->
-            if (withProgress)
-                toggleProgress(false)
-
-            if (e != null) {
-                e.printStackTrace()
+        launch(UI + lifecycleJob, block = {
+            try {
+                block()
+            } catch (e: Exception) {
+                L.w(e)
                 if (showErrors) {
-                    showSnackbarCommand(e.message ?: "Unknown Error")
-                } else
-                    throw e
+                    onErrorSnack(e)
+                } else throw e
+            } finally {
+                if (withProgress)
+                    toggleProgress(false)
             }
-        }
+        })
     }
 
-    fun onErrorSnack(t: Throwable) {
-        showSnackbarCommand(t.message ?: "Unknown Error")
-    }
+    protected fun onErrorSnack(t: Throwable) = showSnackbarCommand(t.message ?: getString(R.string.error_unknown))
 
     protected fun getString(@StringRes id: Int): String = resources.getString(id)
 
