@@ -10,6 +10,10 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.AuthViewModel"
             />
+        <variable
+            name="view"
+            type="ds.meterscanner.mvvm.AuthView"
+            />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -99,7 +103,6 @@
 
             </LinearLayout>
         </ds.meterscanner.ui.widget.RefreshLayout>
-
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

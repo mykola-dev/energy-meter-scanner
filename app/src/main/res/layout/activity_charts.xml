@@ -11,6 +11,11 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.ChartsViewModel"
             />
+
+        <variable
+            name="view"
+            type="ds.meterscanner.mvvm.ChartsView"
+            />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -91,31 +96,31 @@
                     <RadioButton
                         android:id="@+id/all_button"
                         style="@style/bottom_button"
-                        android:text="All"
+                        android:text="@string/all"
                         />
 
                     <RadioButton
                         android:id="@+id/days_button"
                         style="@style/bottom_button"
-                        android:text="Days"
+                        android:text="@string/days"
                         />
 
                     <RadioButton
                         android:id="@+id/weeks_button"
                         style="@style/bottom_button"
-                        android:text="Weeks"
+                        android:text="@string/weeks"
                         />
 
                     <RadioButton
                         android:id="@+id/months_button"
                         style="@style/bottom_button"
-                        android:text="Months"
+                        android:text="@string/months"
                         />
 
                     <RadioButton
                         android:id="@+id/years_button"
                         style="@style/bottom_button"
-                        android:text="Years"
+                        android:text="@string/years"
                         />
 
                 </RadioGroup>

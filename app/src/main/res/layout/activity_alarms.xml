@@ -11,6 +11,7 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.AlarmsViewModel"
             />
+
         <variable
             name="view"
             type="ds.meterscanner.mvvm.AlarmsView"

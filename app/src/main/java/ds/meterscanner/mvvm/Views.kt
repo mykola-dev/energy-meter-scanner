@@ -17,10 +17,10 @@ interface AuthView : BaseView
 interface ScannerView : BaseView
 
 interface MainView : BaseView {
-    fun onCameraButton()
-    fun onListsButton()
-    fun onChartsButton()
-    fun onSettingsButton()
+    fun navigateCameraScreen()
+    fun navigateListsScreen()
+    fun navigateChartsScreen()
+    fun navigateSettingsScreen()
 }
 
 interface ListsView : BaseView {
@@ -33,7 +33,6 @@ interface AlarmsView : BaseView {
 
 
 interface DetailsView : BaseView {
-    fun onDatePick()
-    fun onSave()
+    fun pickDate()
 }
 

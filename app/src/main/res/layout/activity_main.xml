@@ -69,7 +69,7 @@
                         android:id="@+id/button1"
                         style="@style/dashboard_button"
                         android:enabled="@{viewModel.buttonsEnabled &amp;&amp; viewModel.apiKeyReady}"
-                        android:onClick="@{v -> view.onCameraButton()}"
+                        android:onClick="@{v -> viewModel.onCameraButton(view)}"
                         app:srcCompat="@drawable/ic_photo_camera"
                         />
 
@@ -77,7 +77,7 @@
                         android:id="@+id/button2"
                         style="@style/dashboard_button"
                         android:enabled="@{viewModel.buttonsEnabled}"
-                        android:onClick="@{v -> view.onChartsButton()}"
+                        android:onClick="@{v -> viewModel.onChartsButton(view)}"
                         app:srcCompat="@drawable/ic_timeline"
                         />
 
@@ -86,7 +86,7 @@
                         android:id="@+id/button3"
                         style="@style/dashboard_button"
                         android:enabled="@{viewModel.buttonsEnabled}"
-                        android:onClick="@{v -> view.onListsButton()}"
+                        android:onClick="@{v -> viewModel.onListsButton(view)}"
                         app:srcCompat="@drawable/ic_view_list"
                         />
 
@@ -94,7 +94,7 @@
                         android:id="@+id/button4"
                         style="@style/dashboard_button"
                         android:enabled="@{viewModel.buttonsEnabled}"
-                        android:onClick="@{v -> view.onSettingsButton()}"
+                        android:onClick="@{v -> viewModel.onSettingsButton(view)}"
                         app:srcCompat="@drawable/ic_settings"
                         />
 

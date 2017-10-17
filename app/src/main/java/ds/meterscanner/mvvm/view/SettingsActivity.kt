@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm.view
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.SharedPreferences
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -15,8 +14,8 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.startActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
-import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.SettingsView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.SettingsViewModel
 import ds.meterscanner.scheduler.Scheduler
 import kotlin.properties.ReadOnlyProperty
@@ -25,7 +24,7 @@ import kotlin.reflect.KProperty
 @SuppressLint("CommitTransaction")
 class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), SettingsView {
 
-    override fun provideViewModel(): SettingsViewModel = BaseViewModel(this)
+    override fun provideViewModel(): SettingsViewModel = viewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +38,18 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
         }
     }
 
-
     class SettingsFragment : PreferenceFragmentCompat(), KodeinGlobalAware, SharedPreferences.OnSharedPreferenceChangeListener {
 
         val prefs: Prefs = instance()
         val scheduler: Scheduler = instance()
 
-        val scanTries: EditTextPreference by PreferenceDelegate()
-        val city: EditTextPreference by PreferenceDelegate()
-        val alarms: Preference by PreferenceDelegate()
-        val jpegQuality: EditTextPreference by PreferenceDelegate()
-        val boilerTemp: EditTextPreference by PreferenceDelegate()
-        val correctionThreshold: EditTextPreference by PreferenceDelegate()
-        val shotTimeout: EditTextPreference by PreferenceDelegate()
+        private val scanTries: EditTextPreference by PreferenceDelegate()
+        private val city: EditTextPreference by PreferenceDelegate()
+        private val alarms: Preference by PreferenceDelegate()
+        private val jpegQuality: EditTextPreference by PreferenceDelegate()
+        private val boilerTemp: EditTextPreference by PreferenceDelegate()
+        private val correctionThreshold: EditTextPreference by PreferenceDelegate()
+        private val shotTimeout: EditTextPreference by PreferenceDelegate()
 
         override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
             preferenceManager.sharedPreferencesName = "main_prefs"
@@ -89,17 +87,17 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
             alarms.summary = scheduler.getScheduledJobs().filter { !it.rescheduled }.size.toString()
         }
 
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
-
-        }
-
     }
 
 }
 
 @Suppress("UNCHECKED_CAST")
 class PreferenceDelegate<out T : Preference> : ReadOnlyProperty<PreferenceFragmentCompat, T> {
-    override fun getValue(thisRef: PreferenceFragmentCompat, property: KProperty<*>): T = thisRef.findPreference(property.name) as T
+    private var cached: T? = null
+    override fun getValue(thisRef: PreferenceFragmentCompat, property: KProperty<*>): T {
+        if (cached == null)
+            cached = thisRef.findPreference(property.name) as T
+        return cached!!
+    }
 
 }

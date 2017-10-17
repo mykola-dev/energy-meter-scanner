@@ -43,8 +43,5 @@ class AuthViewModel : BaseViewModel() {
         } finally {
             toggleProgress(false)
         }
-
     }
-
-
 }

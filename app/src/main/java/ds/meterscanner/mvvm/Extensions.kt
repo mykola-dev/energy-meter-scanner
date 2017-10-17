@@ -1,12 +1,11 @@
 package ds.meterscanner.mvvm
 
+import L
 import android.arch.lifecycle.*
+import android.support.annotation.MainThread
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-
-open class ViewModelFactory {
-    operator inline fun <reified T : ViewModel> invoke(activity:FragmentActivity, factory: ViewModelProvider.Factory? = null): T = activity.viewModelOf(factory)
-}
+import java.util.concurrent.atomic.AtomicBoolean
 
 inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(factory: ViewModelProvider.Factory? = null): T {
     return if (factory != null)
@@ -17,7 +16,7 @@ inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(factory: ViewMod
 
 inline fun <reified T : ViewModel> Fragment.viewModelOf(): T = ViewModelProviders.of(this)[T::class.java]
 
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, block: (T?) -> Unit) = observe(owner, Observer { block(it) })
+fun <T> LiveData<T>.observe(owner: LifecycleOwner, block: (T) -> Unit) = observe(owner, Observer { block(it!!) })
 
 operator fun Command<Unit>.invoke() {
     value = Unit
@@ -26,22 +25,34 @@ operator fun Command<Unit>.invoke() {
 /**
  * One-shot command
  */
-open class Command<T> : LiveData<T>() {
+open class Command<T> : MutableLiveData<T>() {
+
+    private val pending = AtomicBoolean(false)
+
+    @MainThread
+    override fun observe(owner: LifecycleOwner, observer: Observer<T>) {
+        if (hasActiveObservers()) {
+            L.w("${javaClass.simpleName}: Multiple observers registered but only one will be notified of changes.")
+        }
+
+        super.observe(owner, Observer {
+            if (pending.compareAndSet(true, false)) {
+                observer.onChanged(it)
+            }
+        })
+    }
+
+    @MainThread
+    override fun setValue(t: T) {
+        pending.set(true)
+        super.setValue(t)
+    }
+
+    override fun getValue(): T = super.getValue()!!
+
+    @MainThread
     operator fun invoke(param: T) {
         value = param
-    }
-
-    override public fun setValue(value: T?) {
-        super.setValue(value)
-        if (this.value != null)
-            this.value = null   // immediatelly reset value to not repeat it on screen rotate
-    }
-
-    fun observe(owner: LifecycleOwner, block: (T) -> Unit) =
-        super.observe(owner, Observer { if (it != null) block(it) })    // bypass nulls
-
-    override fun observe(owner: LifecycleOwner?, observer: Observer<T>?) {
-        error("Unsupported Operation")
     }
 
 }

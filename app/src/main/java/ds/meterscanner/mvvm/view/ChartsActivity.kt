@@ -6,15 +6,15 @@ import android.view.Menu
 import android.view.MenuItem
 import ds.meterscanner.R
 import ds.meterscanner.databinding.ActivityChartsBinding
-import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.ChartsView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
 import ds.meterscanner.mvvm.viewmodel.Period
 import ds.meterscanner.util.FileTools
 
 class ChartsActivity : BaseActivity<ActivityChartsBinding, ChartsViewModel>(), ChartsView {
 
-    override fun provideViewModel(): ChartsViewModel = BaseViewModel(this)
+    override fun provideViewModel(): ChartsViewModel = viewModelOf()
 
     override fun getLayoutId(): Int = R.layout.activity_charts
 

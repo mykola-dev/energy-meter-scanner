@@ -1,24 +1,21 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableField
-import android.support.v4.app.FragmentActivity
 import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.DetailsView
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 
-class DetailsViewModel : BaseViewModel() {
+class DetailsViewModel(
+    private val snapshotId: String? = null
+) : BaseViewModel() {
 
-    var snapshotId: String? = null
-        set(value) {
-            field = value
-
-        }
     val valueField = ObservableField<String>()
     val dateField = ObservableField<String>()
     val valueErrorField = ObservableField<String>()
@@ -41,7 +38,7 @@ class DetailsViewModel : BaseViewModel() {
 
     private fun fetchSnapshot() = async {
         snapshot = if (snapshotId != null)
-            db.getSnapshotById(snapshotId!!)
+            db.getSnapshotById(snapshotId)
         else
             Snapshot(boilerTemp = prefs.boilerTemp, outsideTemp = prefs.currentTemperature.toInt())
 
@@ -58,8 +55,7 @@ class DetailsViewModel : BaseViewModel() {
         valueErrorField.set(null)
     }
 
-
-    fun doSave(view: DetailsView) {
+    fun onSave(view: DetailsView) {
         if (validateValue()) {
             if (boilerTemp.get().isNotEmpty())
                 snapshot.boilerTemp = boilerTemp.get().toInt()
@@ -75,14 +71,13 @@ class DetailsViewModel : BaseViewModel() {
         }
     }
 
-    private fun validateValue(): Boolean {
-        try {
-            snapshot.value = valueField.get().toDouble()
-            return true
-        } catch(e: Exception) {
-            valueErrorField.set(getString(R.string.invalid_data))
-            return false
-        }
+    // todo proper validators
+    private fun validateValue(): Boolean = try {
+        snapshot.value = valueField.get().toDouble()
+        true
+    } catch (e: Exception) {
+        valueErrorField.set(getString(R.string.invalid_data))
+        false
     }
 
     fun onDatePicked(date: Date) {
@@ -97,13 +92,11 @@ class DetailsViewModel : BaseViewModel() {
         return calendar.time
     }
 
-    companion object Factory {
-        operator fun invoke(activity: FragmentActivity, snapshotId:String?): DetailsViewModel {
-            val vm = activity.viewModelOf<DetailsViewModel>()
-            vm.snapshotId = snapshotId
-            return vm
-        }
+    fun onDatePick(view: DetailsView) = view.pickDate()
 
+    class Factory(private val snapshotId: String? = null) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = DetailsViewModel(snapshotId) as T
     }
 
 }

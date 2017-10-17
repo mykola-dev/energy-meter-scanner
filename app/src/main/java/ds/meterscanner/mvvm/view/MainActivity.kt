@@ -12,6 +12,7 @@ import ds.bindingtools.startActivityForResult
 import ds.meterscanner.R
 import ds.meterscanner.databinding.MainBinding
 import ds.meterscanner.mvvm.MainView
+import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
@@ -41,15 +42,15 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         }
     }
 
-    override fun onCameraButton() = startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
+    override fun navigateCameraScreen() = startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
         ScanAnalogMeterActivity::tries to 1
         ScanAnalogMeterActivity::jobId to -1
         ScanAnalogMeterActivity::apiKey to viewModel.apiKey
     }
 
-    override fun onListsButton() = startActivity<HistoryActivity>()
-    override fun onChartsButton() = startActivity<ChartsActivity>()
-    override fun onSettingsButton() = startActivity<SettingsActivity>()
+    override fun navigateListsScreen() = startActivity<HistoryActivity>()
+    override fun navigateChartsScreen() = startActivity<ChartsActivity>()
+    override fun navigateSettingsScreen() = startActivity<SettingsActivity>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)

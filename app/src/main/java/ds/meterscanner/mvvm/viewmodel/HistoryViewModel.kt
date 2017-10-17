@@ -12,6 +12,7 @@ import ds.meterscanner.mvvm.ListsView
 
 class HistoryViewModel : BaseViewModel() {
 
+    // todo observable list
     val adapter = ObservableField<HistoryAdapter>()
 
     val scrollToPositionCommand = Command<Int>()
@@ -39,17 +40,13 @@ class HistoryViewModel : BaseViewModel() {
 
     }
 
-    fun onNewSnapshot(view: ListsView) {
-        view.runDetails(null)
-    }
+    fun onNewSnapshot(view: ListsView) = view.runDetails(null)
 
     fun toggleSelectionMode(enable: Boolean) {
         adapter.get().isSelectionMode = enable
     }
 
-    fun deleteSelectedItems() {
-        db.deleteSnapshots(adapter.get().getData().filter { it.selected })
-    }
+    fun deleteSelectedItems() = db.deleteSnapshots(adapter.get().getData().filter { it.selected })
 
 }
 

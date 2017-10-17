@@ -25,6 +25,7 @@ import ds.meterscanner.R
 import ds.meterscanner.data.InterruptEvent
 import ds.meterscanner.databinding.ActivityScanEnergyBinding
 import ds.meterscanner.mvvm.ScannerView
+import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
 import org.greenrobot.eventbus.Subscribe
@@ -68,7 +69,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         }
     }
 
-    fun initView() {
+    private fun initView() {
         energyScanView.scanMode = EnergyScanView.ScanMode.ANALOG_METER
 
         // set individual camera settings for this example by getting the current preferred settings and adapting them
@@ -100,7 +101,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
 
     }
 
-    fun updateViewport() {
+    private fun updateViewport() {
         val prefs = viewModel.prefs
         with(energyScanView.config) {
             if (prefs.viewportX >= 0 && prefs.viewportY >= 0) {
@@ -121,7 +122,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
     }
 
 
-    fun startScanning() {
+    private fun startScanning() {
         energyScanView.startScanning()
     }
 
@@ -156,7 +157,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         finish()
     }
 
-    fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {
+    private fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {
         val data = Intent().putExtras(bundle {
             "value" to value
             "bitmap" to bitmap

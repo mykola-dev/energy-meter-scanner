@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.2.0-beta-31'
-    ext.coroutines_version = '0.19'
+    ext.coroutines_version = '0.19.1'
     ext.gradle_plugin_version = '3.0.0-rc1'
 
     repositories {

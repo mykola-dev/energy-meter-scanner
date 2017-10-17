@@ -11,6 +11,7 @@ import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.Command
+import ds.meterscanner.mvvm.MainView
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
@@ -52,7 +53,7 @@ class MainViewModel : BaseViewModel() {
         onLoggedInCommand()
     }
 
-    fun prepareApiKey() = async {
+    private fun prepareApiKey() = async {
         try {
             apiKey = prefs.apiKey()
             apiKeyReady.set(true)
@@ -114,4 +115,9 @@ class MainViewModel : BaseViewModel() {
             true
         }
     }
+
+    fun onCameraButton(view:MainView) = view.navigateCameraScreen()
+    fun onListsButton(view:MainView) = view.navigateListsScreen()
+    fun onChartsButton(view:MainView) = view.navigateChartsScreen()
+    fun onSettingsButton(view:MainView) = view.navigateSettingsScreen()
 }

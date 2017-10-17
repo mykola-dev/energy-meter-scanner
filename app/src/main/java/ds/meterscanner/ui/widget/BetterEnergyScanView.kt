@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import at.nineyards.anyline.modules.energy.EnergyScanView
 import ds.meterscanner.ui.widget.BetterEnergyScanView.Direction.*
-import ds.meterscanner.util.abs
 import ds.meterscanner.util.toDips
+import kotlin.math.*
 
 typealias DimensionsCallback = (Int, Int) -> Unit
 
@@ -15,9 +15,9 @@ class BetterEnergyScanView(context: Context, attrs: AttributeSet) : EnergyScanVi
 
     enum class Direction { HORIZONTAL_SCALE, VERTICAL_SCALE, POSITION, NONE }
 
-    var currX = -1f
-    var currY = -1f
-    var editMode: Direction = NONE
+    private var currX = -1f
+    private var currY = -1f
+    private var editMode: Direction = NONE
     var positionCallback: DimensionsCallback? = null
     var scaleCallback: DimensionsCallback? = null
 
@@ -46,11 +46,11 @@ class BetterEnergyScanView(context: Context, attrs: AttributeSet) : EnergyScanVi
                             editMode = POSITION
                         } else {
                             val offsetThreshold = 10.toDips(context)
-                            if (offsetX.abs() > offsetThreshold || offsetY.abs() > offsetThreshold)
-                                if (offsetY.abs() > offsetX.abs())
-                                    editMode = VERTICAL_SCALE
+                            if (offsetX.absoluteValue > offsetThreshold || offsetY.absoluteValue > offsetThreshold)
+                                editMode = if (offsetY.absoluteValue > offsetX.absoluteValue)
+                                    VERTICAL_SCALE
                                 else
-                                    editMode = HORIZONTAL_SCALE
+                                    HORIZONTAL_SCALE
                         }
                     }
 

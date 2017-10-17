@@ -10,6 +10,7 @@ import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.produce
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.experimental.intrinsics.suspendCoroutineOrReturn
 
 suspend inline fun <reified T : Any> Query.getValue(crossinline logic: (DataSnapshot, Class<T>) -> T) = suspendCancellableCoroutine<T> { continuation ->
 
@@ -98,3 +99,6 @@ suspend inline fun <reified T : Any> Query.listenValues(ctx: CoroutineContext) =
         removeEventListener(listener)
     }
 }
+
+// https://github.com/Kotlin/kotlinx.coroutines/issues/114
+suspend fun coroutineContext(): CoroutineContext = suspendCoroutineOrReturn { cont -> cont.context }

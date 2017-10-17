@@ -47,7 +47,6 @@
     <string name="t_label">Temperature °C</string>
     <string name="show_temperature">Show Temperature</string>
     <string name="empty_data">Empty Data</string>
-    <string name="all">All</string>
     <string name="last_year">Last Year</string>
     <string name="period">Period</string>
     <string name="last_season">Last Season</string>
@@ -61,5 +60,10 @@
     <string name="go">Go</string>
     <string name="shot_timeout">Shot Timeout</string>
     <string name="run_on_startup">Run on Startup</string>
+    <string name="all">All</string>
+    <string name="days">Days</string>
+    <string name="weeks">Weeks</string>
+    <string name="months">Months</string>
+    <string name="years">Years</string>
 
 </resources>

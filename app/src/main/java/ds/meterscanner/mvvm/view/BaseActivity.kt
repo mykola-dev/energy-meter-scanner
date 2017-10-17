@@ -1,8 +1,6 @@
 package ds.meterscanner.mvvm.view
 
 import L
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -21,16 +19,14 @@ import ds.meterscanner.R
 import ds.meterscanner.data.RefreshEvent
 import ds.meterscanner.mvvm.BaseView
 import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.observe
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 @Suppress("LeakingThis")
-abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : AppCompatActivity(), LifecycleRegistryOwner, BaseView {
-    private val registry = LifecycleRegistry(this)
+abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : AppCompatActivity(), BaseView {
 
     val bus: EventBus = instance()
-
-    override fun getLifecycle(): LifecycleRegistry = registry
 
     override val viewModel: VM by lazy { provideViewModel() }
     val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }

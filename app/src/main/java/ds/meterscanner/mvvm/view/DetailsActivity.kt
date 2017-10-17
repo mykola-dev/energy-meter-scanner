@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding
 import ds.bindingtools.arg
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.DetailsView
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.DetailsViewModel
 import ds.meterscanner.ui.DatePickers
 
@@ -15,12 +16,10 @@ class DetailsActivity : BaseActivity<ViewDataBinding, DetailsViewModel>(), Detai
 
     val snapshotId by arg<String>()
 
-    override fun provideViewModel() = DetailsViewModel(this, snapshotId)
+    override fun provideViewModel(): DetailsViewModel = viewModelOf(DetailsViewModel.Factory(snapshotId))
 
     override fun getLayoutId(): Int = R.layout.activity_details
 
-    override fun onDatePick() = DatePickers.pickDateTime(this, viewModel.truncDate(), viewModel::onDatePicked)
-
-    override fun onSave() = viewModel.doSave(this)
+    override fun pickDate() = DatePickers.pickDateTime(this, viewModel.truncDate(), viewModel::onDatePicked)
 
 }

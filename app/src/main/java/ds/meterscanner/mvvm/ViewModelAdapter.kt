@@ -7,20 +7,19 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import ds.meterscanner.BR
 import ds.meterscanner.adapter.DiffCallback
 import java.lang.reflect.ParameterizedType
 
 // simple viewmodel adapter
 abstract class ViewModelAdapter<VM, D>(
     private var data: List<D> = listOf(),
-    private val viewModelId: Int = ds.meterscanner.BR.viewModel
+    private val viewModelId: Int = BR.viewModel
 ) : RecyclerView.Adapter<BindingHolder<ViewDataBinding, VM>>() {
 
     lateinit protected var context: Context
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount(): Int = data.size
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         context = recyclerView.context
@@ -39,13 +38,9 @@ abstract class ViewModelAdapter<VM, D>(
         holder.binding.executePendingBindings()
     }
 
-    fun getItem(position: Int): D {
-        return data[position]
-    }
+    fun getItem(position: Int): D = data[position]
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
 
     fun setData(data: List<D>) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(this.data, data))
@@ -59,19 +54,15 @@ abstract class ViewModelAdapter<VM, D>(
 
     protected abstract fun onFillViewModel(holder: BindingHolder<ViewDataBinding, VM>, viewModel: VM, item: D, position: Int)
 
-    open protected fun instantiateViewModel(): VM {
-        return getViewModelType().newInstance()
-    }
+    open protected fun instantiateViewModel(): VM = getViewModelType().newInstance()
 
-    private fun getViewModelType(): Class<VM> {
-        return getParametrizedType(javaClass).getActualTypeArguments()[0] as Class<VM>
-    }
+    @Suppress("UNCHECKED_CAST")
+    private fun getViewModelType(): Class<VM> = getParametrizedType(javaClass).actualTypeArguments[0] as Class<VM>
 
-    private fun getParametrizedType(clazz: Class<*>): ParameterizedType {
+    private fun getParametrizedType(clazz: Class<*>): ParameterizedType =
         if (clazz.superclass == ViewModelAdapter::class.java) { // check that we are at the top of the hierarchy
-            return clazz.genericSuperclass as ParameterizedType
+            clazz.genericSuperclass as ParameterizedType
         } else {
-            return getParametrizedType(clazz.superclass)
+            getParametrizedType(clazz.superclass)
         }
-    }
 }

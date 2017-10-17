@@ -33,7 +33,7 @@ class ChartsViewModel : BaseViewModel() {
 
     var tempVisible = true
     var positiveCorrection = true
-    var currMode: StackMode = MONTH
+    private var currMode: StackMode = MONTH
     var period: Period = Period.LAST_SEASON
         set(value) {
             field = value
@@ -96,7 +96,7 @@ class ChartsViewModel : BaseViewModel() {
         toggleProgress(true)
 
         val snapshots = db.getAllSnapshots(calculatePeriodStart(period))
-        val snapshotData = run(CommonPool + job) {
+        val snapshotData = run(CommonPool + lifecycleJob) {
             val snapshotData = profile("prepareSnapshotData") { prepareSnapshotData(snapshots) }
             if (currMode == AS_IS)
                 snapshotData
@@ -104,7 +104,7 @@ class ChartsViewModel : BaseViewModel() {
                 profile("stackData") { stackData(snapshotData) }
         }
         data = snapshotData
-        val (cols, lines) = run(CommonPool + job) { profile("prepareChartData") { prepareChartData(snapshotData) } }
+        val (cols, lines) = run(CommonPool + lifecycleJob) { profile("prepareChartData") { prepareChartData(snapshotData) } }
 
         toggleProgress(false)
 

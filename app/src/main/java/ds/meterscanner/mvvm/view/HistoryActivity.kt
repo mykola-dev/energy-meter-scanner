@@ -9,8 +9,9 @@ import ds.meterscanner.R
 import ds.meterscanner.data.HistoryClickEvent
 import ds.meterscanner.data.ItemSelectEvent
 import ds.meterscanner.databinding.ActivityHistoryBinding
-import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.ListsView
+import ds.meterscanner.mvvm.observe
+import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
 import org.greenrobot.eventbus.Subscribe
@@ -21,7 +22,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
     private var actionMode: ActionMode? = null
     private var selectedItems = 0
 
-    override fun provideViewModel(): HistoryViewModel = BaseViewModel(this)
+    override fun provideViewModel(): HistoryViewModel = viewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_history
 
     override fun initViewModel() {
@@ -32,7 +33,6 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
             }
         }
     }
-
 
     override fun runDetails(snapshotId: String?) {
         startActivity<DetailsActivity>(DetailsActivity.REQUEST_DETAILS) {

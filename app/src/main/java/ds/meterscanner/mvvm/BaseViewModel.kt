@@ -42,7 +42,7 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
     val showSnackbarCommand = SnackBarCommand()
 
     private var progressStopSignal = Job()
-    var job = Job() // create a job object to manage lifecycle
+    var lifecycleJob = Job() // create a job object to manage lifecycle
 
     init {
         authenticator.startListen(this, { logged ->
@@ -57,7 +57,7 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
     override fun onCleared() {
         super.onCleared()
         authenticator.stopListen(this)
-        job.cancel()
+        lifecycleJob.cancel()
         progressStopSignal.cancel()
     }
 
@@ -81,10 +81,25 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
 
     open fun onPrepareMenu(menu: Menu) {}
 
-    fun async(block: suspend CoroutineScope.() -> Unit) {
-        if (job.isCompleted)
-            job = Job()
-        launch(UI + job, block = block)
+    fun async(showErrors: Boolean = true, withProgress: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
+        if (lifecycleJob.isCompleted)
+            lifecycleJob = Job()
+
+        if (withProgress)
+            toggleProgress(true)
+
+        launch(UI + lifecycleJob, block = block).invokeOnCompletion { e ->
+            if (withProgress)
+                toggleProgress(false)
+
+            if (e != null) {
+                e.printStackTrace()
+                if (showErrors) {
+                    showSnackbarCommand(e.message ?: "Unknown Error")
+                } else
+                    throw e
+            }
+        }
     }
 
     fun onErrorSnack(t: Throwable) {
@@ -93,6 +108,5 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
 
     protected fun getString(@StringRes id: Int): String = resources.getString(id)
 
-    companion object Factory : ViewModelFactory()
 }
 

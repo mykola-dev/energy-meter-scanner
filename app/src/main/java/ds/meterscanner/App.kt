@@ -16,7 +16,7 @@ import timber.log.Timber
 
 class App : MultiDexApplication(), KodeinGlobalAware {
 
-    val jobManager: JobManager by kodein.lazy.instance()
+    private val jobManager: JobManager by kodein.lazy.instance()
     val prefs: Prefs by kodein.lazy.instance()
 
     override fun onCreate() {

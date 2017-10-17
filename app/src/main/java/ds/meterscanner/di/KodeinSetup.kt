@@ -51,6 +51,7 @@ fun mainComponent(app: App) = Kodein {
     import(miscModule)
 }
 
+// todo back to normal kodein
 fun App.setupGlobalKodein(app: App) = with (Kodein.global) {
     this.addConfig {
         bind() from singleton { app.applicationContext }
@@ -102,7 +103,6 @@ val networkModule = Kodein.Module {
             .baseUrl(instance<String>("host"))
             .client(instance("weather"))
             .addConverterFactory(GsonConverterFactory.create())
-            //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
     bind() from singleton { instance<Retrofit>().create(WeatherRestApi::class.java) }
@@ -142,6 +142,7 @@ val authModule = Kodein.Module {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// todo get rid?
 val eventBusModule = Kodein.Module {
     bind() from singleton {
         EventBus

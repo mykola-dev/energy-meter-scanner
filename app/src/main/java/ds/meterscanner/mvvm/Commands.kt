@@ -4,14 +4,15 @@ import android.graphics.Bitmap
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 
-
 class SnackBarCommand : Command<SnackBarCommand.Params>() {
 
-    operator fun invoke(text: String,
-                        callback: (() -> Unit)? = null,
-                        duration: Int = Snackbar.LENGTH_LONG,
-                        @StringRes actionText: Int = 0,
-                        actionCallback: (() -> Unit)? = null) {
+    operator fun invoke(
+        text: String,
+        callback: (() -> Unit)? = null,
+        duration: Int = Snackbar.LENGTH_LONG,
+        @StringRes actionText: Int = 0,
+        actionCallback: (() -> Unit)? = null
+    ) {
         value = Params(text, callback, duration, actionText, actionCallback)
     }
 

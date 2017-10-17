@@ -10,9 +10,4 @@ val Context.app: App
 
 fun Context.toast(text: CharSequence): Unit = Toast.makeText(this.applicationContext, text, Toast.LENGTH_SHORT).show()
 
-fun Double.abs() = Math.abs(this)
-fun Int.abs() = Math.abs(this)
-fun Long.abs() = Math.abs(this)
-fun Float.abs() = Math.abs(this)
-
 fun Number.toDips(context: Context) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), context.resources.displayMetrics)

@@ -29,6 +29,5 @@ class AlarmsAdapter : ViewModelAdapter<AlarmItemViewModel, JobRequest>(), Kodein
         viewModel.rescheduled = item.rescheduled
     }
 
-
 }
 
