@@ -20,7 +20,7 @@
         android:background="?selectableItemBackground"
         android:enabled="@{!viewModel.rescheduled}"
         android:gravity="center_vertical"
-        android:onClick="@{viewModel.onClick}"
+        android:onClick="@{v->viewModel.onClick()}"
         android:orientation="horizontal"
         >
 
@@ -56,7 +56,7 @@
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{viewModel.onDeleteClick}"
+            android:onClick="@{v->viewModel.onDeleteClick()}"
             android:padding="8dp"
             app:srcCompat="@drawable/ic_action_clear"
             />

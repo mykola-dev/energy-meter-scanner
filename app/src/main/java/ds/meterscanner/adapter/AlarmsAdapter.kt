@@ -1,7 +1,6 @@
 package ds.meterscanner.adapter
 
 import android.databinding.ViewDataBinding
-import android.view.View
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.rescheduled
 import com.evernote.android.job.scheduledTo
@@ -19,9 +18,10 @@ class AlarmsAdapter(
     override val layoutId: Int = R.layout.item_alarm
 
     override fun onFillViewModel(holder: BindingHolder<ViewDataBinding, AlarmItemViewModel>, viewModel: AlarmItemViewModel, item: JobRequest, position: Int) {
+        viewModel.jobId = item.jobId
         viewModel.time = formatTime(item.scheduledTo())
-        viewModel.onClick = View.OnClickListener { onEditAlarm(item.jobId) }
-        viewModel.onDeleteClick = View.OnClickListener { onDeleteAlarm(item.jobId) }
+        viewModel.onClickDelegate = onEditAlarm
+        viewModel.onDeleteClickDelegate = onDeleteAlarm
         viewModel.rescheduled = item.rescheduled
     }
 }

@@ -38,7 +38,7 @@
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            bind:adapterFactory="@{viewModel.adapter}"
+            bind:adapter="@{viewModel.adapter}"
             bind:dividers="@{true}"
             bind:items="@{viewModel.listItems}"
             tools:listitem="@layout/item_alarm"

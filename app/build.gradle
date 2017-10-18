@@ -104,7 +104,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
     implementation 'com.github.bumptech.glide:glide:3.8.0'                                          // https://github.com/bumptech/glide
-    implementation 'com.evernote:android-job:1.1.11'                                                // https://github.com/evernote/android-job
+    implementation 'com.evernote:android-job:1.2.0'                                                 // https://github.com/evernote/android-job
 
     // injectors
     implementation 'com.github.salomonbrys.kodein:kodein-erased:4.1.0'                              // https://salomonbrys.github.io/Kodein/
@@ -116,8 +116,6 @@ dependencies {
     // ui
     implementation 'com.wdullaer:materialdatetimepicker:3.2.2'                                      // https://github.com/wdullaer/MaterialDateTimePicker
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'                                 // https://github.com/lecho/hellocharts-android
-    //implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:2.2.0'            // https://github.com/evant/binding-collection-adapter
-    //implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:2.2.0'
 
     // etc
     implementation 'io.anyline:anylinesdk:3.11.0@aar'                                               // https://www.anyline.io/download/

@@ -86,7 +86,7 @@ fun setupPreview(view: PreviewColumnChartView, data: ColumnChartData?, columns: 
 }
 
 @Suppress("UNCHECKED_CAST")
-@BindingAdapter("items", "adapterFactory", requireAll = false)
+@BindingAdapter("items", "adapter", requireAll = false)
 fun <T> setAdapterItems(view: RecyclerView, items: List<T>?, adapter: ViewModelAdapter<*, T>) {
     if (view.adapter == null)
         view.adapter = adapter

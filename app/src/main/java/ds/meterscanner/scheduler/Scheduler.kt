@@ -70,7 +70,7 @@ class Scheduler(override val kodein: Kodein) : KodeinAware {
     fun scheduleSnapshotJob(delay: Long) {
         L.v("scheduler: schedule next task ${formatTimeDate(System.currentTimeMillis() + delay)}")
         JobRequest.Builder(SnapshotJob::class.java.name)
-            .setPersisted(true)
+            //.setPersisted(true)
             .setExact(delay)
             .setBackoffCriteria(TimeUnit.MINUTES.toMillis(2), JobRequest.BackoffPolicy.LINEAR)
             .build()

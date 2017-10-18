@@ -7,6 +7,7 @@ import ds.meterscanner.R
 import ds.meterscanner.adapter.AlarmsAdapter
 import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.PickTimeCommand
+import ds.meterscanner.mvvm.ViewModelAdapter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -51,7 +52,7 @@ class AlarmsViewModel : BaseViewModel() {
         fillAdapter()
     }
 
-    fun adapter() = AlarmsAdapter(::onEditAlarm, ::onDeleteAlarm)
+    val adapter: ViewModelAdapter<*, *> get() = AlarmsAdapter(::onEditAlarm, ::onDeleteAlarm)
 
 }
 

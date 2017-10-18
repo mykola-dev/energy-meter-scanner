@@ -1,10 +1,12 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import android.view.View
-
 class AlarmItemViewModel {
+    lateinit var onClickDelegate: (jobId: Int) -> Unit
+    lateinit var onDeleteClickDelegate: (jobId: Int) -> Unit
+    var jobId: Int = -1
+
     var time: String = ""
-    var onClick: View.OnClickListener? = null
-    var onDeleteClick: View.OnClickListener? = null
     var rescheduled: Boolean = false
+    fun onClick() = onClickDelegate(jobId)
+    fun onDeleteClick() = onDeleteClickDelegate(jobId)
 }
