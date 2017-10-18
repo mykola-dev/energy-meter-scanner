@@ -140,6 +140,8 @@ dependencies {
     debugImplementation "io.palaima.debugdrawer:debugdrawer:0.7.0"
     releaseImplementation "io.palaima.debugdrawer:debugdrawer-no-op:0.7.0"
     implementation "io.palaima.debugdrawer:debugdrawer-actions:0.7.0"
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'                          // https://github.com/square/leakcanary
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     // tests
     implementation fileTree(dir: "libs", include: ["*.jar"])

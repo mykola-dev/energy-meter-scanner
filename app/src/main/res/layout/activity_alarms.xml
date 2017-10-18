@@ -38,7 +38,7 @@
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            bind:adapter="@{viewModel.adapter}"
+            bind:adapter="@{view.adapter}"
             bind:dividers="@{true}"
             bind:items="@{viewModel.listItems}"
             tools:listitem="@layout/item_alarm"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:onClick="@{v->viewModel.onNewAlarm()}"
+            android:onClick="@{v->viewModel.onNewAlarm(view)}"
             app:srcCompat="@drawable/ic_action_add"
             />
     </android.support.design.widget.CoordinatorLayout>

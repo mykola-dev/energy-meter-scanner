@@ -11,6 +11,7 @@
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.HistoryViewModel"
             />
+
         <variable
             name="view"
             type="ds.meterscanner.mvvm.ListsView"
@@ -41,8 +42,9 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                bind:adapter="@{viewModel.adapter}"
+                bind:adapter="@{view.adapter}"
                 bind:dividers="@{true}"
+                bind:items="@{viewModel.listItems}"
                 tools:listitem="@layout/item_history"
                 />
 

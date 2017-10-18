@@ -10,7 +10,6 @@ data class Snapshot(
     var image: String? = null
 ) {
     var timestamp: Long = 0
-        get() = field
         set(value) {
             field = value
             date = formatTimeDate(value)
@@ -19,6 +18,7 @@ data class Snapshot(
     var id: String? = null
     lateinit var date: String
 
+    // used in view
     @get:Exclude var selected = false
 
     init {

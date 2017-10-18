@@ -6,18 +6,25 @@ import android.view.Menu
 import android.view.MenuItem
 import ds.bindingtools.startActivity
 import ds.meterscanner.R
-import ds.meterscanner.data.HistoryClickEvent
-import ds.meterscanner.data.ItemSelectEvent
+import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.databinding.ActivityHistoryBinding
 import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
-import org.greenrobot.eventbus.Subscribe
 
 
 class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>(), ListsView, ActionMode.Callback {
+
+    override val adapter: HistoryAdapter
+        get() = HistoryAdapter(
+            viewModel.isActionMode.value ?: false,
+            { snapshot ->
+                navigateDetails(snapshot.id)
+            },
+            ::onToggleSelection
+        )
 
     private var actionMode: ActionMode? = null
     private var selectedItems = 0
@@ -32,30 +39,31 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
                 binding.recyclerView.scrollToPosition(it)
             }
         }
+
+        viewModel.isActionMode.observe(this) {
+            (binding.recyclerView.adapter as? HistoryAdapter)
+                ?.isActionMode = it
+        }
+
+        onToggleSelection()
     }
 
-    override fun runDetails(snapshotId: String?) {
+    private fun onToggleSelection() {
+        selectedItems = viewModel.getSeledtedItemsCount()
+        when {
+            selectedItems == 0 -> actionMode?.finish()
+            actionMode != null -> actionMode!!.invalidate()
+            else -> post { actionMode = startSupportActionMode(this) }  // hack
+        }
+    }
+
+    override fun navigateDetails(snapshotId: String?) {
         startActivity<DetailsActivity>(DetailsActivity.REQUEST_DETAILS) {
             DetailsActivity::snapshotId to snapshotId
         }
     }
 
-    @Subscribe
-    fun onHistoryClickEvent(e: HistoryClickEvent) {
-        runDetails(e.snapshot.id)
-    }
-
-    @Subscribe
-    fun onItemSelectEvent(e: ItemSelectEvent) {
-        selectedItems = e.totalSelected
-        if (actionMode == null) {
-            actionMode = startSupportActionMode(this)
-        } else if (e.totalSelected == 0)
-            actionMode?.finish()
-        else
-            actionMode?.invalidate()
-
-    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         L.v("actionmode: onActionItemClicked")
@@ -72,7 +80,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.history_actions, menu)
-        viewModel.toggleSelectionMode(true)
+        viewModel.isActionMode.value = true
         return true
     }
 
@@ -83,6 +91,6 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
 
     override fun onDestroyActionMode(mode: ActionMode) {
         this.actionMode = null
-        viewModel.toggleSelectionMode(false)
+        viewModel.isActionMode.value = false
     }
 }

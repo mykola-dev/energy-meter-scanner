@@ -3,7 +3,6 @@ package ds.meterscanner.mvvm
 import android.graphics.Bitmap
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
-import java.util.*
 
 class SnackBarCommand : Command<SnackBarCommand.Params>() {
 
@@ -35,16 +34,5 @@ class FinishWithResultCommand : Command<FinishWithResultCommand.Params>() {
         val value: Double,
         val bitmap: Bitmap?,
         val corrected: Boolean
-    )
-}
-
-class PickTimeCommand : Command<PickTimeCommand.Params>() {
-    operator fun invoke(time: Date, callback: (hour: Int, minute: Int) -> Unit) {
-        this.value = Params(time, callback)
-    }
-
-    class Params(
-        val time: Date,
-        val callback: (hour: Int, minute: Int) -> Unit
     )
 }

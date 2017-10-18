@@ -4,23 +4,21 @@ import android.databinding.ViewDataBinding
 import android.support.v4.content.ContextCompat
 import android.view.View
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
-import ds.meterscanner.data.HistoryClickEvent
-import ds.meterscanner.data.ItemSelectEvent
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BindingHolder
 import ds.meterscanner.mvvm.ViewModelAdapter
 import ds.meterscanner.mvvm.viewmodel.HistoryItemViewModel
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
-import org.greenrobot.eventbus.EventBus
 
-class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), KodeinGlobalAware {
+class HistoryAdapter(
+    isActionMode: Boolean,
+    private val onItemClick: (Snapshot) -> Unit,
+    private val onToggleSelection: () -> Unit
+) : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), KodeinGlobalAware {
 
-    val bus: EventBus = instance()
-
-    var isSelectionMode = false
+    var isActionMode = isActionMode
         set(value) {
             if (!value)
                 clearSelections()
@@ -36,8 +34,8 @@ class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), Kodei
         viewModel.temp = item.outsideTemp?.toString() ?: ""
         viewModel.tempColor = ContextCompat.getColor(context, getColorTemp(item.outsideTemp ?: 0))
         viewModel.onClick = View.OnClickListener {
-            if (!isSelectionMode)
-                bus.post(HistoryClickEvent(getItem(holder.adapterPosition)))
+            if (!isActionMode)
+                onItemClick(getItem(holder.adapterPosition))
             else {
                 toggleSelection(holder.adapterPosition)
             }
@@ -46,24 +44,20 @@ class HistoryAdapter : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), Kodei
             toggleSelection(holder.adapterPosition)
             true
         }
-        viewModel.selectMode = isSelectionMode
+        viewModel.selectMode = isActionMode
         viewModel.checked = item.selected
-        viewModel.imageUrl = if (!isSelectionMode) item.image else ""
+        viewModel.imageUrl = if (!isActionMode) item.image else ""
     }
 
     private fun toggleSelection(position: Int) {
         val item = getItem(position)
         item.selected = !item.selected
         notifyItemChanged(position)
-        bus.post(ItemSelectEvent(getItem(position), getSeledtedItemsCount()))
+        onToggleSelection()
     }
 
     private fun clearSelections() {
         getData().forEach { it.selected = false }
     }
 
-    private fun getSeledtedItemsCount() = getData().filter { it.selected }.size
-
-
 }
-

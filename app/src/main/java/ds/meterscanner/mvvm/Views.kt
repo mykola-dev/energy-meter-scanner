@@ -1,6 +1,9 @@
 package ds.meterscanner.mvvm
 
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
+import ds.meterscanner.adapter.AlarmsAdapter
+import ds.meterscanner.adapter.HistoryAdapter
+import java.util.*
 
 interface BaseView : KodeinGlobalAware {
     val viewModel: BaseViewModel
@@ -11,7 +14,6 @@ interface SettingsView : BaseView
 interface ChartsView : BaseView
 interface AuthView : BaseView
 interface ScannerView : BaseView
-interface AlarmsView : BaseView
 
 interface MainView : BaseView {
     fun navigateCameraScreen()
@@ -21,9 +23,14 @@ interface MainView : BaseView {
 }
 
 interface ListsView : BaseView {
-    fun runDetails(snapshotId: String?)
+    fun navigateDetails(snapshotId: String?)
+    val adapter: HistoryAdapter
 }
 
+interface AlarmsView : BaseView {
+    fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
+    val adapter: AlarmsAdapter
+}
 
 interface DetailsView : BaseView {
     fun pickDate()

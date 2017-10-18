@@ -7,6 +7,7 @@ import com.facebook.stetho.Stetho
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.github.salomonbrys.kodein.lazy
+import com.squareup.leakcanary.LeakCanary
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.di.setupGlobalKodein
 import ds.meterscanner.scheduler.SnapshotJobCreator
@@ -21,6 +22,7 @@ class App : MultiDexApplication(), KodeinGlobalAware {
 
     override fun onCreate() {
         super.onCreate()
+        //initLeakCanary() || return
         setupGlobalKodein(this)
         initTimber()
         initStetho()
@@ -33,6 +35,16 @@ class App : MultiDexApplication(), KodeinGlobalAware {
         launch(UI) {
             prefs.fetchRemote()
         }
+    }
+
+    private fun initLeakCanary(): Boolean {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return false
+        }
+        LeakCanary.install(this)
+        return true
     }
 
     private fun initJobManager() {
