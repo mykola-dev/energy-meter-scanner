@@ -1,6 +1,8 @@
 package ds.meterscanner.mvvm
 
 import android.databinding.BindingAdapter
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutCompat.VERTICAL
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.VISIBLE
@@ -8,7 +10,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ds.meterscanner.mvvm.view.ViewportListener
-import ds.meterscanner.ui.recyclerview.DividerItemDecoration
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.model.ColumnChartData
 import lecho.lib.hellocharts.model.LineChartData
@@ -26,7 +27,7 @@ fun setVisible(view: View, visible: Boolean?) {
 @BindingAdapter("dividers")
 fun dividers(recyclerView: RecyclerView, showDividers: Boolean) {
     if (showDividers) {
-        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL_LIST))
+        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, VERTICAL))
     }
 }
 
@@ -82,4 +83,14 @@ fun setupPreview(view: PreviewColumnChartView, data: ColumnChartData?, columns: 
     tempViewport.left = tempViewport.right - visibleItems
     view.currentViewport = tempViewport
     view.zoomType = ZoomType.HORIZONTAL
+}
+
+@Suppress("UNCHECKED_CAST")
+@BindingAdapter("items", "adapterFactory", requireAll = false)
+fun <T> setAdapterItems(view: RecyclerView, items: List<T>?, adapter: ViewModelAdapter<*, T>) {
+    if (view.adapter == null)
+        view.adapter = adapter
+
+    if (items != null)
+        (view.adapter as ViewModelAdapter<*, T>).setData(items)
 }

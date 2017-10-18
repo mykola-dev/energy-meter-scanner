@@ -7,6 +7,8 @@
 
     <data>
 
+        <import type="ds.meterscanner.adapter.AlarmsAdapter" />
+
         <variable
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.AlarmsViewModel"
@@ -35,10 +37,11 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            bind:adapter="@{viewModel.adapter}"
-            bind:dividers="@{true}"
-            tools:listitem="@layout/item_alarm"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            bind:adapterFactory="@{viewModel.adapter}"
+            bind:dividers="@{true}"
+            bind:items="@{viewModel.listItems}"
+            tools:listitem="@layout/item_alarm"
             />
 
         <android.support.design.widget.FloatingActionButton
@@ -46,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:onClick="@{v->viewModel.onNewAlarm(view)}"
+            android:onClick="@{v->viewModel.onNewAlarm()}"
             app:srcCompat="@drawable/ic_action_add"
             />
     </android.support.design.widget.CoordinatorLayout>

@@ -12,7 +12,6 @@ import ds.meterscanner.mvvm.ListsView
 
 class HistoryViewModel : BaseViewModel() {
 
-    // todo observable list
     val adapter = ObservableField<HistoryAdapter>()
 
     val scrollToPositionCommand = Command<Int>()
@@ -26,7 +25,7 @@ class HistoryViewModel : BaseViewModel() {
     private fun listenSnapshots() = async {
         try {
             toggleProgress(true)
-            val channel = db.getSnapshots().listenValues<Snapshot>(context)
+            val channel = db.getSnapshots().listenValues<Snapshot>(coroutineContext)
             for (data in channel) {
                 L.d("list updated! size=${data.size}")
                 toggleProgress(false)
@@ -37,7 +36,6 @@ class HistoryViewModel : BaseViewModel() {
             e.printStackTrace()
             onErrorSnack(e)
         }
-
     }
 
     fun onNewSnapshot(view: ListsView) = view.runDetails(null)

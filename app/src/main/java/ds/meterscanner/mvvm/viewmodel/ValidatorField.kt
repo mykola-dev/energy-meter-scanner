@@ -2,7 +2,6 @@ package ds.meterscanner.mvvm.viewmodel
 
 import android.databinding.ObservableField
 
-@Suppress("MemberVisibilityCanPrivate")
 class ValidatorField(
     private val field: ObservableField<String>,
     private val validator: (String) -> String

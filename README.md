@@ -1,7 +1,7 @@
 # Energy Meter Scanner
 #### The easy way to collect gas/electric/water/etc meter stats
 
-Powered by Anylne OCR SDK
+Powered by Anyline OCR SDK
 
 ### Quick Start
 - Setup your Firebase account (DB, Storage, Email Authentication and Remote Config are required). Fortunately Android Studio is able to do it for you.
@@ -19,11 +19,11 @@ That's it!
 <img src="https://github.com/deviant-studio/energy-meter-scanner/blob/master/media/qemu-system-i386_2017-01-29_10-43-30.jpg" width="40%"/> <img src="https://github.com/deviant-studio/energy-meter-scanner/blob/master/media/qemu-system-i386_2017-01-30_10-39-39.jpg" width="40%"/>
 
 ### Technologies used in this project:
-- Kotlin 1.1
+- Kotlin 1.2
 - Anyline OCR engine
-- RxJava 2 (abandoned in favor of Kotlin coroutines)
 - Firebase
 - MVVM (sort of)
 - Architecture Components
 - Kodein DI
 - OpenWeatherMap API
+- RxJava 2 (abandoned in favor of Kotlin coroutines)
