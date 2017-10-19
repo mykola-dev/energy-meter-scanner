@@ -10,9 +10,14 @@ interface BaseView : KodeinGlobalAware {
     fun finish()
 }
 
+interface BindableView : KodeinGlobalAware {
+    val viewModel: BindableViewModel
+    fun finish()
+}
+
 interface SettingsView : BaseView
 interface ChartsView : BaseView
-interface AuthView : BaseView
+interface AuthView : BindableView
 interface ScannerView : BaseView
 
 interface MainView : BaseView {

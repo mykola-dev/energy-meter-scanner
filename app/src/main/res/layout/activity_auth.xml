@@ -1,110 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
-    <data>
+    <include layout="@layout/toolbar" />
 
-        <variable
-            name="viewModel"
-            type="ds.meterscanner.mvvm.viewmodel.AuthViewModel"
-            />
-        <variable
-            name="view"
-            type="ds.meterscanner.mvvm.AuthView"
-            />
-    </data>
-
-    <android.support.design.widget.CoordinatorLayout
+    <ds.meterscanner.ui.widget.RefreshLayout
+        android:id="@+id/progressView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <include
-            layout="@layout/toolbar"
-            bind:viewModel="@{viewModel.toolbar}"
-            />
-
-        <ds.meterscanner.ui.widget.RefreshLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            bind:refreshing="@{viewModel.showProgress}"
+            android:orientation="vertical"
+            android:paddingEnd="72dp"
+            android:paddingStart="72dp"
+            android:paddingTop="32dp"
             >
+
+                <!--bind:error="@{viewModel.loginError}"-->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/loginField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+                <!--bind:error="@{viewModel.passwordError}"-->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/passwordField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingEnd="72dp"
-                android:paddingStart="72dp"
-                android:paddingTop="32dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 >
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/signinButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email"
-                    bind:error="@{viewModel.loginError}"
-                    >
+                    android:layout_weight="1"
+                    android:text="@string/sign_in"
+                    />
 
-                    <android.support.design.widget.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:text="@={viewModel.login}"
-                        />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/signupButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"
-                    bind:error="@{viewModel.passwordError}"
-                    >
-
-                    <android.support.design.widget.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:text="@={viewModel.password}"
-                        />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:enabled="@{!viewModel.showProgress}"
-                        android:onClick="@{v->viewModel.onSignIn()}"
-                        android:text="@string/sign_in"
-                        />
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:enabled="@{!viewModel.showProgress}"
-                        android:onClick="@{v->viewModel.onSignUp()}"
-                        android:text="@string/sign_up"
-                        android:theme="@style/PrimaryButton"
-                        />
-
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:text="@string/sign_up"
+                    android:theme="@style/PrimaryButton"
+                    />
 
             </LinearLayout>
-        </ds.meterscanner.ui.widget.RefreshLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
-</layout>
+        </LinearLayout>
+    </ds.meterscanner.ui.widget.RefreshLayout>
+
+</android.support.design.widget.CoordinatorLayout>
