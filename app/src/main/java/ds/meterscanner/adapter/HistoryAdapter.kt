@@ -57,7 +57,7 @@ class HistoryAdapter(
     }
 
     private fun clearSelections() {
-        getData().forEach { it.selected = false }
+        data.forEach { it.selected = false }
     }
 
 }

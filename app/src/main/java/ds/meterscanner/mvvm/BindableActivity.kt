@@ -69,7 +69,7 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     protected open fun bindView() = viewModel.bind {
         to(::toolbarTitle, toolbar::setTitle, toolbar::getTitle)
         to(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
-        to(::showProgress, progressView::setRefreshing, progressView::isRefreshing)
+        to(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
     }
 
     protected fun unbindView() {

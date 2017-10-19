@@ -13,11 +13,18 @@ import java.lang.reflect.ParameterizedType
 
 // simple viewmodel adapter
 abstract class ViewModelAdapter<VM, D>(
-    private var data: List<D> = listOf(),
+    data: List<D> = emptyList(),
     private val viewModelId: Int = BR.viewModel
 ) : RecyclerView.Adapter<BindingHolder<ViewDataBinding, VM>>() {
 
     lateinit protected var context: Context
+
+    var data: List<D> = data
+        set(value) {
+            val diffResult = DiffUtil.calculateDiff(DiffCallback(field, value))
+            field = value
+            diffResult.dispatchUpdatesTo(this)
+        }
 
     override fun getItemCount(): Int = data.size
 
@@ -41,14 +48,6 @@ abstract class ViewModelAdapter<VM, D>(
     fun getItem(position: Int): D = data[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
-
-    fun setData(data: List<D>) {
-        val diffResult = DiffUtil.calculateDiff(DiffCallback(this.data, data))
-        this.data = data
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun getData() = data
 
     protected abstract val layoutId: Int
 

@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm
 
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import ds.meterscanner.adapter.AlarmsAdapter
 import ds.meterscanner.adapter.HistoryAdapter
 import java.util.*
 
@@ -32,9 +31,8 @@ interface ListsView : BaseView {
     val adapter: HistoryAdapter
 }
 
-interface AlarmsView : BaseView {
+interface AlarmsView : BindableView {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
-    val adapter: AlarmsAdapter
 }
 
 interface DetailsView : BaseView {

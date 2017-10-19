@@ -1,50 +1,50 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import android.databinding.ObservableField
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.scheduledTo
+import ds.databinding.binding
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.AlarmsView
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AlarmsViewModel : BaseViewModel() {
+class AlarmsViewModel : BindableViewModel() {
 
-    val listItems = ObservableField<List<JobRequest>>()
+    var listItems: List<JobRequest> by binding()
 
     init {
-        toolbar.title = getString(R.string.alarms)
-        fillAdapter()
+        toolbarTitle = getString(R.string.alarms)
+        fillList()
     }
 
-    private fun fillAdapter() {
+    private fun fillList() {
         val alarms = scheduler.getScheduledJobs().sortedBy { it.scheduledTo() }
-        listItems.set(alarms)
+        listItems = alarms
     }
 
-    fun onNewAlarm(view:AlarmsView) {
+    fun onNewAlarm(view: AlarmsView) {
         val time = Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5))
         view.pickTime(time) { hours, minutes ->
             scheduler.scheduleSnapshotJob(hours, minutes)
             scheduler.saveToPrefs()
-            fillAdapter()
+            fillList()
         }
     }
 
-    fun onEditAlarm(view:AlarmsView, jobId: Int) {
+    fun onEditAlarm(view: AlarmsView, jobId: Int) {
         val time = Date(scheduler.getJob(jobId)?.scheduledTo() ?: System.currentTimeMillis())
         view.pickTime(time) { hours, minutes ->
             scheduler.clearJob(jobId)
             scheduler.scheduleSnapshotJob(hours, minutes)
             scheduler.saveToPrefs()
-            fillAdapter()
+            fillList()
         }
     }
 
     fun onDeleteAlarm(jobId: Int) {
         scheduler.clearJob(jobId)
         scheduler.saveToPrefs()
-        fillAdapter()
+        fillList()
     }
 }

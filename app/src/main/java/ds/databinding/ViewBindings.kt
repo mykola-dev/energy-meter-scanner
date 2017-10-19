@@ -7,6 +7,7 @@ import java.util.*
 import kotlin.jvm.internal.CallableReference
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
@@ -49,6 +50,7 @@ private inline fun <T> getBinding(vm: Bindable, prop: KProperty<*>): BindingData
 fun <T : Any?> bindTo(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) = bindInternal(prop, setter, getter)
 
 fun <T : Any?> Bindable.to(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) = bindInternal(prop, setter, getter)
+fun <T : Any?> Bindable.to(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>, getter: (() -> T)? = null) = bindInternal(prop, { mutableProp.set(it) }, getter)
 
 fun <T : Bindable> T.bind(builder: T.() -> Unit) = builder(this)
 

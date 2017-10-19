@@ -92,7 +92,7 @@ fun <T> setAdapterItems(view: RecyclerView, items: List<T>?, adapter: ViewModelA
         view.adapter = adapter
 
     if (items != null) {
-        (view.adapter as ViewModelAdapter<*, T>).setData(items)
+        (view.adapter as ViewModelAdapter<*, T>).data = items
     }
 
 }

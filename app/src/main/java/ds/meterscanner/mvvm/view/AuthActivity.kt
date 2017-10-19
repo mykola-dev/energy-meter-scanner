@@ -21,8 +21,8 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
             to(::password, passwordField::setText, passwordField::getText)
             to(::showProgress, { signinButton.isEnabled = !it })
             to(::showProgress, { signupButton.isEnabled = !it })
-            signinButton.setOnClickListener { this.onSignIn() }
-            signupButton.setOnClickListener { this.onSignUp() }
+            signinButton.setOnClickListener { onSignIn() }
+            signupButton.setOnClickListener { onSignUp() }
         }
     }
 
