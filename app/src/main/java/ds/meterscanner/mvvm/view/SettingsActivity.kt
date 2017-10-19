@@ -59,7 +59,6 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
                 activity.startActivity<AlarmsActivity>()
                 true
             }
-
         }
 
         override fun onStart() {
@@ -86,9 +85,7 @@ class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), Set
             shotTimeout.summary = shotTimeout.text
             alarms.summary = scheduler.getScheduledJobs().filter { !it.rescheduled }.size.toString()
         }
-
     }
-
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -99,5 +96,4 @@ class PreferenceDelegate<out T : Preference> : ReadOnlyProperty<PreferenceFragme
             cached = thisRef.findPreference(property.name) as T
         return cached!!
     }
-
 }

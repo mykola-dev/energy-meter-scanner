@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+// todo more tests :)
 @RunWith(MockitoJUnitRunner::class)
 class AlarmsViewModelTest {
 

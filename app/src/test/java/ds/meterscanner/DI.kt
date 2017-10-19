@@ -11,7 +11,6 @@ import ds.meterscanner.data.ResourceProvider
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
-import org.greenrobot.eventbus.EventBus
 
 fun viewModelKodein() = with(Kodein.global) {
     addImport(mockModule)
@@ -24,6 +23,4 @@ private val mockModule = Kodein.Module {
     bind() from instance(mock<Authenticator>())
     bind() from instance(mock<Scheduler>())
     bind() from instance(mock<ResourceProvider>())
-    bind() from instance(mock<EventBus>())
-
 }

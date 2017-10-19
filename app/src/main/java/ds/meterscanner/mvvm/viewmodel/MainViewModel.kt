@@ -4,7 +4,6 @@ import L
 import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.text.format.DateUtils
-import android.view.Menu
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.meterscanner.R
@@ -24,12 +23,12 @@ class MainViewModel : BaseViewModel() {
     val onLoggedInCommand = Command<Unit>()
     val runAlarmsCommand = Command<Unit>()
 
-    var jobsChecked = false
+    private var jobsChecked = false
     var apiKey: String? = null
     var jobId: Int = -1
     var isIntentConsumed = false
 
-    private val appVersion: String = instance("version")
+    val appVersion: String = instance("version")
 
     init {
         toggleProgress(true)
@@ -104,16 +103,6 @@ class MainViewModel : BaseViewModel() {
             db.deleteSnapshots(listOf(s))
         })
         updateLastSnapshot()
-    }
-
-    override fun onPrepareMenu(menu: Menu) {
-        super.onPrepareMenu(menu)
-        menu.findItem(R.id.action_version).title = "v$appVersion"
-
-        menu.findItem(R.id.action_logout).setOnMenuItemClickListener {
-            logout()
-            true
-        }
     }
 
     fun onCameraButton(view:MainView) = view.navigateCameraScreen()

@@ -59,10 +59,6 @@ android {
     }
 }
 
-/*aspectj {
-    debugInfo true
-}*/
-
 kotlin {
     experimental {
         coroutines "enable"
@@ -71,9 +67,9 @@ kotlin {
 
 kapt {
     //correctErrorTypes = true
-    arguments {
+    /*arguments {
         arg("eventBusIndex", "ds.meterscanner.EventBusIndex")
-    }
+    }*/
 }
 
 dependencies {
@@ -119,8 +115,8 @@ dependencies {
 
     // etc
     implementation 'io.anyline:anylinesdk:3.11.0@aar'                                               // https://www.anyline.io/download/
-    implementation "org.greenrobot:eventbus:3.0.0"                                                  // https://github.com/greenrobot/EventBus
-    kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"                                       // see kapt params
+    //implementation "org.greenrobot:eventbus:3.0.0"                                                // https://github.com/greenrobot/EventBus
+    //kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"                                     // see kapt params
     implementation "com.jakewharton.timber:timber:4.5.1"                                            // https://github.com/JakeWharton/timber
 
     // development

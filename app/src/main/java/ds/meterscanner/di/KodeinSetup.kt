@@ -25,7 +25,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.GsonBuilder
 import ds.meterscanner.App
 import ds.meterscanner.BuildConfig
-import ds.meterscanner.EventBusIndex
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.ResourceProvider
@@ -35,30 +34,16 @@ import ds.meterscanner.net.WeatherRestApi
 import ds.meterscanner.scheduler.Scheduler
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-@Deprecated("use global kodein")
-fun mainComponent(app: App) = Kodein {
-    bind() from singleton { app.applicationContext }
-    import(networkModule)
-    import(firebaseModule)
-    import(eventBusModule)
-    import(authModule)
-    import(schedulerModule)
-    import(miscModule)
-}
-
-// todo back to normal kodein
-fun App.setupGlobalKodein(app: App) = with (Kodein.global) {
+fun App.setupGlobalKodein(app: App) = with(Kodein.global) {
     this.addConfig {
         bind() from singleton { app.applicationContext }
     }
     addImport(networkModule)
     addImport(firebaseModule)
-    addImport(eventBusModule)
     addImport(authModule)
     addImport(schedulerModule)
     addImport(miscModule)
@@ -137,19 +122,7 @@ val firebaseModule = Kodein.Module {
 }
 
 val authModule = Kodein.Module {
-    bind() from singleton { Authenticator()}
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// todo get rid?
-val eventBusModule = Kodein.Module {
-    bind() from singleton {
-        EventBus
-            .builder()
-            .addIndex(EventBusIndex())
-            .build()
-    }
+    bind() from singleton { Authenticator() }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

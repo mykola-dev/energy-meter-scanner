@@ -7,9 +7,7 @@ import com.takisoft.fix.support.v7.preference.EditTextPreference
 
 class IntEditTextPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : EditTextPreference(context, attrs) {
 
-    override fun getPersistedString(defaultReturnValue: String?): String {
-        return getPersistedInt(-1).toString()
-    }
+    override fun getPersistedString(defaultReturnValue: String?): String = getPersistedInt(-1).toString()
 
     override fun persistString(value: String?): Boolean {
         val v = try {

@@ -5,9 +5,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 
-class ResourceProvider(val context:Context) {
-
+class ResourceProvider(val context: Context) {
     fun getString(@StringRes id: Int): String = context.getString(id)
-
-    fun getColor(@ColorRes id: Int): Int = ContextCompat.getColor(context,id)
+    fun getColor(@ColorRes id: Int): Int = ContextCompat.getColor(context, id)
 }

@@ -85,7 +85,7 @@ class ChartsViewModel : BaseViewModel() {
         try {
             FileTools.saveFile(cr, uri, csvData)
             showSnackbarCommand(getString(R.string.file_saved))
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             showSnackbarCommand(getString(R.string.io_error))
         }
@@ -314,14 +314,12 @@ class ChartsViewModel : BaseViewModel() {
         return calendar.timeInMillis
     }
 
-    private fun formatDate(timestamp: Long): String {
-        return when (currMode) {
-            StackMode.AS_IS -> DateFormat.format("dd-MM-yy", timestamp).toString()
-            StackMode.DAY -> DateFormat.format("dd-MM-yy", timestamp).toString()
-            StackMode.WEEK -> DateFormat.format("M/yy", timestamp).toString()
-            StackMode.MONTH -> DateFormat.format("M/yy", timestamp).toString()
-            StackMode.YEAR -> DateFormat.format("yyyy", timestamp).toString()
-        }
+    private fun formatDate(timestamp: Long): String = when (currMode) {
+        StackMode.AS_IS -> DateFormat.format("dd-MM-yy", timestamp).toString()
+        StackMode.DAY -> DateFormat.format("dd-MM-yy", timestamp).toString()
+        StackMode.WEEK -> DateFormat.format("M/yy", timestamp).toString()
+        StackMode.MONTH -> DateFormat.format("M/yy", timestamp).toString()
+        StackMode.YEAR -> DateFormat.format("yyyy", timestamp).toString()
     }
 
 }

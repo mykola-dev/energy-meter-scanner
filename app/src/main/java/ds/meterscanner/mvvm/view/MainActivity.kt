@@ -57,6 +57,16 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_version).title = "v${viewModel.appVersion}"
+
+        menu.findItem(R.id.action_logout).setOnMenuItemClickListener {
+            viewModel.logout()
+            true
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null) {
@@ -76,7 +86,7 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         handleIntent()
     }
 
-    fun handleIntent() {
+    private fun handleIntent() {
         if (viewModel.isIntentConsumed) {
             L.w("intent has been already consumed")
             return

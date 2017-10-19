@@ -12,11 +12,10 @@ import java.util.*
 class AlarmsActivity : BaseActivity<ViewDataBinding, AlarmsViewModel>(), AlarmsView {
 
     override val adapter: AlarmsAdapter
-        get() = AlarmsAdapter({
-            viewModel.onEditAlarm(this, it)
-        }, {
-            viewModel.onDeleteAlarm(it)
-        })
+        get() = AlarmsAdapter(
+            { viewModel.onEditAlarm(this, it) },
+            viewModel::onDeleteAlarm
+        )
 
     override fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit) =
         DatePickers.pickTime(this, time, callback)

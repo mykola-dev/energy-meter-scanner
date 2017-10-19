@@ -25,9 +25,9 @@ import java.util.*
 
 class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware {
 
-    val debugDrawer: DebugDrawer
+    private val debugDrawer: DebugDrawer
     val db: FirebaseDb = instance()
-    val netLayer: NetLayer = instance()
+    private val netLayer: NetLayer = instance()
     val scheduler: Scheduler = instance()
 
     init {
@@ -93,12 +93,4 @@ class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware
         return sb.toString()
     }
 
-    /*
-
-     fun init() {
-
-     }
-
-
- */
 }

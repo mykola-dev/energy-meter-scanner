@@ -7,8 +7,6 @@
 
     <data>
 
-        <import type="ds.meterscanner.adapter.AlarmsAdapter" />
-
         <variable
             name="viewModel"
             type="ds.meterscanner.mvvm.viewmodel.AlarmsViewModel"

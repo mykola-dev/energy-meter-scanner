@@ -19,8 +19,8 @@ class ScannerViewModel : BaseViewModel() {
     var tries: Int = 0
     var jobId: Int = 0
 
-    val results = arrayListOf<Double>()
-    val bitmaps = arrayListOf<Bitmap>()
+    private val results = arrayListOf<Double>()
+    private val bitmaps = arrayListOf<Bitmap>()
 
     val positionCallback = ObservableField<DimensionsCallback>()
     val scaleCallback = ObservableField<DimensionsCallback>()

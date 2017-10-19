@@ -5,7 +5,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.produce
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
@@ -71,7 +70,7 @@ suspend inline fun <reified T : Any> Query.getValues() = suspendCancellableCorou
 
 }
 
-suspend inline fun <reified T : Any> Query.listenValues(ctx: CoroutineContext) = produce<List<T>>(CommonPool + ctx, Channel.UNLIMITED) {
+suspend inline fun <reified T : Any> Query.listenValues() = produce<List<T>>(coroutineContext(), Channel.UNLIMITED) {
     val channel = Channel<List<T>>(Channel.UNLIMITED)
     val listener: ValueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {

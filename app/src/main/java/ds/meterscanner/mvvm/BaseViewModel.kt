@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableBoolean
 import android.support.annotation.StringRes
-import android.view.Menu
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
@@ -80,11 +79,7 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
         }
     }
 
-    open fun onPrepareMenu(menu: Menu) {}
-
     fun async(showErrors: Boolean = true, withProgress: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
-        /* if (lifecycleJob.isCompleted) lifecycleJob = Job()*/
-
         if (withProgress)
             toggleProgress(true)
 
@@ -108,4 +103,3 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
     protected fun getString(@StringRes id: Int): String = resources.getString(id)
 
 }
-

@@ -35,12 +35,12 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
 
     val auth: Authenticator = instance()
     val database: FirebaseDatabase = instance()
-    val storage: FirebaseStorage = instance()
+    private val storage: FirebaseStorage = instance()
     val prefs: Prefs = instance()
 
-    val storageRef: StorageReference
+    private val storageRef: StorageReference
         get() = storage.getReference(IMAGES).child(auth.getUser()!!.uid)
-    val snapshotsReference: DatabaseReference
+    private val snapshotsReference: DatabaseReference
         get() = database.getReference(USERS).child(auth.getUser()!!.uid).child(SNAPSHOTS)
 
     suspend fun getAllSnapshots(startDate: Long): List<Snapshot> {
@@ -50,18 +50,13 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
             .getValues()
     }
 
-    suspend fun getSnapshotById(snapshotId: String): Snapshot {
-        return snapshotsReference.child(snapshotId).getValue()
-    }
+    suspend fun getSnapshotById(snapshotId: String): Snapshot = snapshotsReference.child(snapshotId).getValue()
 
-    fun getSnapshots(): Query {
-        return snapshotsReference.orderByChild(Snapshot::timestamp.name)
-    }
+    fun getSnapshots(): Query = snapshotsReference.orderByChild(Snapshot::timestamp.name)
 
     fun saveSnapshot(s: Snapshot) {
         if (s.id == null) {
             s.boilerTemp = prefs.boilerTemp
-            //snapshotsReference.push()
             s.id = snapshotsReference.push().key
         }
         snapshotsReference.child(s.id).setValue(s)
@@ -96,13 +91,11 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
         }
     }
 
-    fun removeImage(name: String) {
+    private fun removeImage(name: String) {
         storageRef.child(name).delete()
     }
 
-    suspend fun getLatestSnapshot(): Snapshot {
-        return snapshotsReference.orderByChild(Snapshot::timestamp.name).limitToLast(1).getChildValue()
-    }
+    suspend fun getLatestSnapshot(): Snapshot = snapshotsReference.orderByChild(Snapshot::timestamp.name).limitToLast(1).getChildValue()
 
     fun log(message: String) {
         Log.i("DBLOG", message)

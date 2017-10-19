@@ -9,29 +9,23 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.startActivity
 import ds.meterscanner.BR
 import ds.meterscanner.R
-import ds.meterscanner.data.RefreshEvent
 import ds.meterscanner.mvvm.BaseView
 import ds.meterscanner.mvvm.BaseViewModel
 import ds.meterscanner.mvvm.observe
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 @Suppress("LeakingThis")
 abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : AppCompatActivity(), BaseView {
-
-    val bus: EventBus = instance()
 
     override val viewModel: VM by lazy { provideViewModel() }
     val binding: B by lazy { DataBindingUtil.setContentView<B>(this, getLayoutId()) }
 
     protected open val bindImmediately = false
+    protected val isDisplayUpButton = true
 
     init {
         L.v("::: ${javaClass.simpleName} initialized")
@@ -43,8 +37,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bind()
-
+        bindView()
         initViewModel()
     }
 
@@ -62,27 +55,12 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        bus.register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        bus.unregister(this)
-    }
-
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         setupToolbar()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        viewModel.onPrepareMenu(menu)
-        return super.onPrepareOptionsMenu(menu)
-    }
-
-    private fun bind() {
+    private fun bindView() {
         binding.setVariable(BR.viewModel, viewModel)
         binding.setVariable(BR.view, this)
 
@@ -94,8 +72,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
         val toolbar:Toolbar? = findViewById(R.id.toolbar)
         if (toolbar != null) {
             setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton())
-            onToolbarCreated(toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton)
         }
     }
 
@@ -130,16 +107,4 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
         return super.onOptionsItemSelected(item)
     }
 
-    protected fun isDisplayUpButton() = true
-
-    protected fun onToolbarCreated(toolbar: Toolbar) {
-
-    }
-
-    @Subscribe
-    fun onRefresh(e: RefreshEvent) {
-    }
-
 }
-
-

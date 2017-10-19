@@ -25,7 +25,7 @@ class HistoryViewModel : BaseViewModel() {
     private fun listenSnapshots() = async {
         try {
             toggleProgress(true)
-            val channel = db.getSnapshots().listenValues<Snapshot>(coroutineContext)
+            val channel = db.getSnapshots().listenValues<Snapshot>()
             for (data in channel) {
                 L.d("list updated! size=${data.size}")
                 toggleProgress(false)

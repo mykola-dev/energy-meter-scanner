@@ -22,13 +22,15 @@ import at.nineyards.anyline.modules.energy.EnergyScanView
 import ds.bindingtools.arg
 import ds.bindingtools.bundle
 import ds.meterscanner.R
-import ds.meterscanner.data.InterruptEvent
+import ds.meterscanner.data.EventCallback
+import ds.meterscanner.data.INTERRUPT_EVENT
+import ds.meterscanner.data.subscribeEvent
+import ds.meterscanner.data.unsubscribeEvent
 import ds.meterscanner.databinding.ActivityScanEnergyBinding
 import ds.meterscanner.mvvm.ScannerView
 import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
-import org.greenrobot.eventbus.Subscribe
 
 
 class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
@@ -43,6 +45,10 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
 
     private lateinit var energyScanView: EnergyScanView
 
+    private val interruptReceiver = EventCallback {
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -54,6 +60,16 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         energyScanView = binding.energyScanView
 
         initView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        subscribeEvent(INTERRUPT_EVENT, interruptReceiver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unsubscribeEvent(interruptReceiver)
     }
 
     override fun initViewModel() {
@@ -149,12 +165,6 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         // (e.g. If there is no camera or the permission is denied)
         // This is useful to present an alternative way to enter the required data if no camera exists.
         throw RuntimeException(e)
-    }
-
-    @Subscribe
-    fun onInterruptEvent(e: InterruptEvent) {
-        // finish immediately
-        finish()
     }
 
     private fun finishWithResult(value: Double, bitmap: Bitmap?, corrected: Boolean) {

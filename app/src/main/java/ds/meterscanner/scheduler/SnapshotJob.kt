@@ -9,8 +9,9 @@ import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.startActivity
-import ds.meterscanner.data.InterruptEvent
+import ds.meterscanner.data.INTERRUPT_EVENT
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.data.sendEvent
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.mvvm.view.MainActivity
 import ds.meterscanner.net.NetLayer
@@ -20,7 +21,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.withTimeout
-import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 
@@ -31,7 +31,6 @@ class SnapshotJob : Job(), KodeinInjected {
 
 
     private val prefs: Prefs by instance()
-    private val bus: EventBus by instance()
     private val restService: NetLayer by instance()
     private val db: FirebaseDb by instance()
     private val scheduler: Scheduler by instance()
@@ -97,7 +96,7 @@ class SnapshotJob : Job(), KodeinInjected {
         try {
             if (!ThreadTools.lock(jobId, prefs.shotTimeout.toLong())) {
                 L.w("threads: interrupted by timeout")
-                bus.post(InterruptEvent())
+                context.sendEvent(INTERRUPT_EVENT)
                 return@runBlocking false
             }
         } catch (ignored: InterruptedException) {

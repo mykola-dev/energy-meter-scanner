@@ -20,9 +20,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
     override val adapter: HistoryAdapter
         get() = HistoryAdapter(
             viewModel.isActionMode.value ?: false,
-            { snapshot ->
-                navigateDetails(snapshot.id)
-            },
+            { snapshot -> navigateDetails(snapshot.id) },
             ::onToggleSelection
         )
 
@@ -35,9 +33,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
     override fun initViewModel() {
         super.initViewModel()
         viewModel.scrollToPositionCommand.observe(this) {
-            post {
-                binding.recyclerView.scrollToPosition(it)
-            }
+            post { binding.recyclerView.scrollToPosition(it) }
         }
 
         viewModel.isActionMode.observe(this) {

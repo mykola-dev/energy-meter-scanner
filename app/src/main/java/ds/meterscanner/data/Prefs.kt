@@ -46,21 +46,18 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
 
     suspend private fun fetchRemoteKey(key: String): String {
         var value = remoteConfig.getString(key)
-        if (!value.isEmpty())
-            return value
-        else {
+        return if (!value.isEmpty()) {
+            value
+        } else {
             fetchRemote()
             value = remoteConfig.getString(key)
-            return if (!value.isEmpty())
+            if (!value.isEmpty())
                 value
             else
                 error("$key key is empty")
         }
     }
 
-    fun clearAll() {
-        sharedPreferences.edit().clear().apply()
-    }
-
+    fun clearAll() = sharedPreferences.edit().clear().apply()
 
 }

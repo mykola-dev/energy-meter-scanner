@@ -26,7 +26,5 @@ class StartupReceiver : BroadcastReceiver(), KodeinInjected {
             scheduler.restoreFromPrefs()
             context.startActivity<MainActivity>(flags = Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-
     }
-
 }

@@ -47,6 +47,4 @@ class AlarmsViewModel : BaseViewModel() {
         scheduler.saveToPrefs()
         fillAdapter()
     }
-
 }
-
