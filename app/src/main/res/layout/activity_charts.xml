@@ -1,131 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     >
 
-    <data>
+    <include layout="@layout/toolbar" />
 
-        <variable
-            name="viewModel"
-            type="ds.meterscanner.mvvm.viewmodel.ChartsViewModel"
-            />
-
-        <variable
-            name="view"
-            type="ds.meterscanner.mvvm.ChartsView"
-            />
-    </data>
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
+    <ds.meterscanner.ui.widget.RefreshLayout
+        android:id="@+id/progressView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <include
-            layout="@layout/toolbar"
-            bind:viewModel="@{viewModel.toolbar}"
-            />
-
-        <ds.meterscanner.ui.widget.RefreshLayout
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            bind:refreshing="@{viewModel.showProgress}"
             >
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <lecho.lib.hellocharts.view.ColumnChartView
+                android:id="@+id/columnsChart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="2"
+                />
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/linesChart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <lecho.lib.hellocharts.view.PreviewColumnChartView
+                android:id="@+id/previewChart"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?colorPrimary"
+                android:orientation="horizontal"
+                android:theme="@style/ActionBarTheme"
+
                 >
 
-                <lecho.lib.hellocharts.view.ColumnChartView
-                    android:id="@+id/columns"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="2"
-                    android:visibility="invisible"
-                    bind:data="@{viewModel.columnsData}"
-                    bind:scrollEnabled="@{false}"
-                    bind:zoomEnabled="@{false}"
-                    tools:visibility="visible"
+                <RadioButton
+                    android:id="@+id/all_button"
+                    style="@style/bottom_button"
+                    android:text="@string/all"
                     />
 
-                <lecho.lib.hellocharts.view.LineChartView
-                    android:id="@+id/lines"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
-                    bind:data="@{viewModel.linesData}"
-                    bind:scrollEnabled="@{false}"
-                    bind:zoomEnabled="@{false}"
-                    tools:visibility="visible"
+                <RadioButton
+                    android:id="@+id/days_button"
+                    style="@style/bottom_button"
+                    android:text="@string/days"
                     />
 
-                <lecho.lib.hellocharts.view.PreviewColumnChartView
-                    android:id="@+id/preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:visibility="invisible"
-                    bind:columns="@{columns}"
-                    bind:data="@{viewModel.previewData}"
-                    bind:lines="@{lines}"
-                    tools:visibility="visible"
+                <RadioButton
+                    android:id="@+id/weeks_button"
+                    style="@style/bottom_button"
+                    android:text="@string/weeks"
                     />
 
-                <RadioGroup
-                    android:id="@+id/radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?colorPrimary"
-                    android:checkedButton="@={viewModel.checkedButton}"
-                    android:enabled="@{!viewModel.showProgress}"
-                    android:onCheckedChanged="@{(v,id)->viewModel.onCheckedChanged(id)}"
-                    android:orientation="horizontal"
-                    android:theme="@style/ActionBarTheme"
+                <RadioButton
+                    android:id="@+id/months_button"
+                    style="@style/bottom_button"
+                    android:text="@string/months"
+                    />
 
-                    >
+                <RadioButton
+                    android:id="@+id/years_button"
+                    style="@style/bottom_button"
+                    android:text="@string/years"
+                    />
 
-                    <RadioButton
-                        android:id="@+id/all_button"
-                        style="@style/bottom_button"
-                        android:text="@string/all"
-                        />
+            </RadioGroup>
 
-                    <RadioButton
-                        android:id="@+id/days_button"
-                        style="@style/bottom_button"
-                        android:text="@string/days"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/weeks_button"
-                        style="@style/bottom_button"
-                        android:text="@string/weeks"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/months_button"
-                        style="@style/bottom_button"
-                        android:text="@string/months"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/years_button"
-                        style="@style/bottom_button"
-                        android:text="@string/years"
-                        />
-
-                </RadioGroup>
-
-            </LinearLayout>
-        </ds.meterscanner.ui.widget.RefreshLayout>
-    </android.support.design.widget.CoordinatorLayout>
-</layout>
+        </LinearLayout>
+    </ds.meterscanner.ui.widget.RefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

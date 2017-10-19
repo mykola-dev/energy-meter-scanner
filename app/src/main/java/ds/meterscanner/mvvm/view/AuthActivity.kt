@@ -17,10 +17,12 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
     override fun bindView() {
         super.bindView()
         viewModel.bind {
-            to(this::login, loginField::setText, loginField::getText)
+            to(::login, loginField::setText, loginField::getText)
             to(::password, passwordField::setText, passwordField::getText)
-            to(::showProgress, { signinButton.isEnabled = !it })
-            to(::showProgress, { signupButton.isEnabled = !it })
+            to(::showProgress, {
+                signinButton.isEnabled = !it
+                signupButton.isEnabled = !it
+            })
             signinButton.setOnClickListener { onSignIn() }
             signupButton.setOnClickListener { onSignUp() }
         }

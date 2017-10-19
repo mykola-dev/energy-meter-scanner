@@ -2,15 +2,14 @@ package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.content.ContentResolver
-import android.databinding.ObservableField
-import android.databinding.ObservableInt
 import android.net.Uri
 import android.text.format.DateFormat
 import com.github.salomonbrys.kodein.erased.instance
+import ds.databinding.binding
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.viewmodel.StackMode.*
 import ds.meterscanner.util.FileTools
 import ds.meterscanner.util.MathTools
@@ -24,12 +23,11 @@ import lecho.lib.hellocharts.util.ChartUtils
 import java.io.Serializable
 import java.util.*
 
-class ChartsViewModel : BaseViewModel() {
+class ChartsViewModel : BindableViewModel() {
 
-    val checkedButton = ObservableInt()
-    val columnsData = ObservableField<ColumnChartData>()
-    val previewData = ObservableField<ColumnChartData>()
-    val linesData = ObservableField<LineChartData>()
+    var checkedButtonId: Int by binding()
+    var columnsData: ColumnChartData by binding()
+    var linesData: LineChartData by binding()
 
     var tempVisible = true
     var positiveCorrection = true
@@ -44,15 +42,15 @@ class ChartsViewModel : BaseViewModel() {
     private var data: List<SnapshotData> = listOf()
 
     init {
-        toolbar.title = getString(R.string.charts)
+        toolbarTitle = getString(R.string.charts)
 
-        checkedButton.set(when (currMode) {
+        checkedButtonId = when (currMode) {
             StackMode.AS_IS -> R.id.all_button
             StackMode.DAY -> R.id.days_button
             StackMode.WEEK -> R.id.weeks_button
             StackMode.MONTH -> R.id.months_button
             StackMode.YEAR -> R.id.years_button
-        })
+        }
 
         update()
     }
@@ -113,9 +111,8 @@ class ChartsViewModel : BaseViewModel() {
             return@async
         }
 
-        columnsData.set(cols)
-        linesData.set(lines)
-        previewData.set(cols)
+        linesData = lines
+        columnsData = cols
 
         //view.showSnackbar("ready")
     }

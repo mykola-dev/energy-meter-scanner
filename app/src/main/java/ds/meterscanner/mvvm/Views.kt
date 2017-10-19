@@ -15,7 +15,7 @@ interface BindableView : KodeinGlobalAware {
 }
 
 interface SettingsView : BaseView
-interface ChartsView : BaseView
+interface ChartsView : BindableView
 interface AuthView : BindableView
 interface ScannerView : BaseView
 

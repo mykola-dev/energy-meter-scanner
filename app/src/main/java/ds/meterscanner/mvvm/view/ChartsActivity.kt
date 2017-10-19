@@ -4,19 +4,63 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import ds.databinding.bind
+import ds.databinding.to
 import ds.meterscanner.R
-import ds.meterscanner.databinding.ActivityChartsBinding
+import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ChartsView
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
 import ds.meterscanner.mvvm.viewmodel.Period
 import ds.meterscanner.util.FileTools
+import kotlinx.android.synthetic.main.activity_charts.*
+import lecho.lib.hellocharts.gesture.ZoomType
+import lecho.lib.hellocharts.model.ColumnChartData
+import lecho.lib.hellocharts.model.Viewport
+import lecho.lib.hellocharts.util.ChartUtils
 
-class ChartsActivity : BaseActivity<ActivityChartsBinding, ChartsViewModel>(), ChartsView {
+class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
 
     override fun provideViewModel(): ChartsViewModel = viewModelOf()
 
     override fun getLayoutId(): Int = R.layout.activity_charts
+
+    override fun bindView() {
+        super.bindView()
+        columnsChart.isScrollEnabled = false
+        columnsChart.isZoomEnabled = false
+        linesChart.isScrollEnabled = false
+        linesChart.isZoomEnabled = false
+        previewChart.setViewportChangeListener(ViewportListener(columnsChart, linesChart))
+
+        viewModel.bind {
+            to(::linesData, {
+                linesChart.lineChartData = it
+                val v = Viewport(linesChart.maximumViewport.left, 30f, linesChart.maximumViewport.right, -30f)
+                linesChart.maximumViewport = v
+            })
+            to(::columnsData, columnsChart::setColumnChartData)
+            to(::columnsData, {
+                val previewData = ColumnChartData(it)
+                previewData
+                    .columns
+                    .flatMap { it.values }
+                    .forEach { it.color = ChartUtils.DEFAULT_DARKEN_COLOR }
+                previewData.axisYLeft = null
+                previewData.axisXBottom = null
+                previewChart.columnChartData = previewData
+                val tempViewport = Viewport(columnsChart.maximumViewport)
+                val visibleItems = 20
+                tempViewport.left = tempViewport.right - visibleItems
+                previewChart.currentViewport = tempViewport
+                previewChart.zoomType = ZoomType.HORIZONTAL
+            })
+            to(this::checkedButtonId, radioGroup::check, radioGroup::getCheckedRadioButtonId)
+            to(::showProgress, { radioGroup.isEnabled = !it })
+            radioGroup.setOnCheckedChangeListener { _, checkedId -> viewModel.onCheckedChanged(checkedId) }
+
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.charts, menu)
