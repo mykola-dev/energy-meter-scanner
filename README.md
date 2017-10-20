@@ -6,7 +6,7 @@ Powered by Anyline OCR SDK
 ### Quick Start
 - Setup your Firebase account (DB, Storage, Email Authentication and Remote Config are required). Fortunately Android Studio is able to do it for you.
 - Register Anyline API token here https://www.anyline.io/
-- Save token in the Firebase Remote Config under ```anyline_api_key``` key
+- Save token in the Firebase Remote Config under `anyline_api_key` key
 
 That's it!
 
@@ -24,6 +24,7 @@ That's it!
 - Firebase
 - MVVM (sort of)
 - Architecture Components
+- Databindings (from [bindingtools](https://github.com/deviant-studio/bindingtools))
 - Kodein DI
 - OpenWeatherMap API
-- RxJava 2 (abandoned in favor of Kotlin coroutines)
+- Kotlin Coroutines
