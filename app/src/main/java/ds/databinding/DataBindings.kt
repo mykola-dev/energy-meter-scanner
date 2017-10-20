@@ -10,16 +10,16 @@ import android.widget.TextView
 import java.util.*
 import kotlin.jvm.internal.CallableReference
 import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
 private val bindings = WeakHashMap<Bindable, MutableMap<String, BindingData<*, *>>>()
 
-inline fun <reified T : Any> binding(initialValue: T? = null): ReadWriteProperty<Bindable, T> = BindingProperty(initialValue, T::class)
+inline fun <reified T : Any?> binding(initialValue: T): ReadWriteProperty<Bindable, T> = BindingNullableProperty(initialValue, T::class.java)
+inline fun <reified T : Any?> binding(): ReadWriteProperty<Bindable, T> = BindingNullableProperty(null, T::class.java)
 
-class BindingProperty<T : Any>(private var value: T?, private val type: KClass<T>) : ReadWriteProperty<Bindable, T> {
+class BindingNullableProperty<T : Any?>(private var value: T?, private val type: Class<T>) : ReadWriteProperty<Bindable, T> {
 
     override fun getValue(thisRef: Bindable, property: KProperty<*>): T {
         val b = getBinding<T>(thisRef, property)?.getter
@@ -35,23 +35,27 @@ class BindingProperty<T : Any>(private var value: T?, private val type: KClass<T
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun default(cls: KClass<T>): T = when (cls) {
-        String::class -> "" as T
-        CharSequence::class -> "" as T
-        java.lang.Integer::class -> 0 as T
-        java.lang.Boolean::class -> false as T
-        java.lang.Float::class -> 0f as T
-        java.lang.Double::class -> 0.0 as T
-        else -> cls.java.newInstance()
+    private fun default(cls: Class<T>): T = when (cls) {
+        String::class.java -> "" as T
+        CharSequence::class.java -> "" as T
+        java.lang.Integer::class.java -> 0 as T
+        java.lang.Boolean::class.java -> false as T
+        java.lang.Float::class.java -> 0f as T
+        java.lang.Double::class.java -> 0.0 as T
+        else -> cls.newInstance()
     }
+
 }
 
 @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
 private inline fun <T> getBinding(vm: Bindable, prop: KProperty<*>): BindingData<T, T>? =
     bindings.getOrPut(vm, { mutableMapOf() })[prop.name] as BindingData<T, T>?
 
-fun <T : Any?> Bindable.bind(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>, getter: (() -> T)? = null) =
-    bind(prop, { mutableProp.set(it) }, getter)
+/**
+ * Binds any [KProperty0] to any [KMutableProperty0]
+ */
+fun <T : Any> Bindable.bind(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>) =
+    bind(prop, { mutableProp.set(it) }, { mutableProp.get() })
 
 /**
  * Binds [TextView] to the  [CharSequence] field

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 class AlarmsViewModel : BindableViewModel() {
 
-    var listItems: List<JobRequest> by binding()
+    var listItems: List<JobRequest> by binding(emptyList())
 
     init {
         toolbarTitle = getString(R.string.alarms)

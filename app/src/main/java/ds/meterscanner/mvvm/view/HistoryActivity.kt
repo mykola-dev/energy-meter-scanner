@@ -2,27 +2,24 @@ package ds.meterscanner.mvvm.view
 
 import L
 import android.support.v7.view.ActionMode
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutCompat
 import android.view.Menu
 import android.view.MenuItem
 import ds.bindingtools.startActivity
+import ds.databinding.bind
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
-import ds.meterscanner.databinding.ActivityHistoryBinding
+import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
+import kotlinx.android.synthetic.main.activity_history.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-
-class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>(), ListsView, ActionMode.Callback {
-
-    override val adapter: HistoryAdapter
-        get() = HistoryAdapter(
-            viewModel.isActionMode.value ?: false,
-            { snapshot -> navigateDetails(snapshot.id) },
-            ::onToggleSelection
-        )
+class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionMode.Callback {
 
     private var actionMode: ActionMode? = null
     private var selectedItems = 0
@@ -30,15 +27,29 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
     override fun provideViewModel(): HistoryViewModel = viewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_history
 
+    override fun bindView() {
+        super.bindView()
+        toolbar.title = getString(R.string.history)
+
+        val adapter = HistoryAdapter(
+            { snapshot -> navigateDetails(snapshot.id) },
+            ::onToggleSelection
+        )
+
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutCompat.VERTICAL))
+        fab.setOnClickListener { viewModel.onNewSnapshot(this) }
+
+        viewModel.apply {
+            bind(::isActionMode, adapter::isActionMode)
+            bind(::listItems, adapter::data)
+        }
+    }
+
     override fun initViewModel() {
         super.initViewModel()
         viewModel.scrollToPositionCommand.observe(this) {
-            post { binding.recyclerView.scrollToPosition(it) }
-        }
-
-        viewModel.isActionMode.observe(this) {
-            (binding.recyclerView.adapter as? HistoryAdapter)
-                ?.isActionMode = it
+            post { recyclerView.scrollToPosition(it) }
         }
 
         onToggleSelection()
@@ -76,7 +87,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.history_actions, menu)
-        viewModel.isActionMode.value = true
+        viewModel.isActionMode = true
         return true
     }
 
@@ -87,6 +98,6 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding, HistoryViewModel>()
 
     override fun onDestroyActionMode(mode: ActionMode) {
         this.actionMode = null
-        viewModel.isActionMode.value = false
+        viewModel.isActionMode = false
     }
 }

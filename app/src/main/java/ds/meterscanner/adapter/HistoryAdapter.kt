@@ -13,12 +13,11 @@ import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
 
 class HistoryAdapter(
-    isActionMode: Boolean,
     private val onItemClick: (Snapshot) -> Unit,
     private val onToggleSelection: () -> Unit
 ) : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), KodeinGlobalAware {
 
-    var isActionMode = isActionMode
+    var isActionMode = false
         set(value) {
             if (!value)
                 clearSelections()

@@ -1,24 +1,21 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.arch.lifecycle.MutableLiveData
-import android.databinding.ObservableField
-import ds.meterscanner.R
+import ds.databinding.binding
 import ds.meterscanner.coroutines.listenValues
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.ListsView
 
-class HistoryViewModel : BaseViewModel() {
+class HistoryViewModel : BindableViewModel() {
 
-    val listItems = ObservableField<List<Snapshot>>()
+    var listItems: List<Snapshot> by binding(emptyList())
+    var isActionMode: Boolean by binding()
 
-    val isActionMode = MutableLiveData<Boolean>()
     val scrollToPositionCommand = Command<Int>()
 
     init {
-        toolbar.title = getString(R.string.history)
         listenSnapshots()
     }
 
@@ -29,7 +26,7 @@ class HistoryViewModel : BaseViewModel() {
             for (data in channel) {
                 L.d("list updated! size=${data.size}")
                 toggleProgress(false)
-                listItems.set(data)
+                listItems = data
                 scrollToPositionCommand(data.size - 1)
             }
         } catch (e: Exception) {
@@ -40,8 +37,8 @@ class HistoryViewModel : BaseViewModel() {
 
     fun onNewSnapshot(view: ListsView) = view.navigateDetails(null)
 
-    fun deleteSelectedItems() = db.deleteSnapshots(listItems.get().filter { it.selected })
+    fun deleteSelectedItems() = db.deleteSnapshots(listItems.filter { it.selected })
 
-    fun getSeledtedItemsCount() = listItems.get()?.filter { it.selected }?.size ?: 0
+    fun getSeledtedItemsCount() = listItems.filter { it.selected }.size
 
 }

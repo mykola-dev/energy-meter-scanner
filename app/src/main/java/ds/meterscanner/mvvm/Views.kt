@@ -1,7 +1,6 @@
 package ds.meterscanner.mvvm
 
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import ds.meterscanner.adapter.HistoryAdapter
 import java.util.*
 
 interface BaseView : KodeinGlobalAware {
@@ -26,9 +25,8 @@ interface MainView : BaseView {
     fun navigateSettingsScreen()
 }
 
-interface ListsView : BaseView {
+interface ListsView : BindableView {
     fun navigateDetails(snapshotId: String?)
-    val adapter: HistoryAdapter
 }
 
 interface AlarmsView : BindableView {
