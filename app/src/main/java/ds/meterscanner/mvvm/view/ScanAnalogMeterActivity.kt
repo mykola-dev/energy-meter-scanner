@@ -26,28 +26,27 @@ import ds.meterscanner.data.EventCallback
 import ds.meterscanner.data.INTERRUPT_EVENT
 import ds.meterscanner.data.subscribeEvent
 import ds.meterscanner.data.unsubscribeEvent
-import ds.meterscanner.databinding.ActivityScanEnergyBinding
+import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ScannerView
 import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ScannerViewModel
+import kotlinx.android.synthetic.main.activity_scan_energy.*
 
 
-class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerViewModel>(), CameraOpenListener, ScannerView {
+class ScanAnalogMeterActivity : BindableActivity<ScannerViewModel>(), CameraOpenListener, ScannerView {
 
     val tries by arg<Int>()
     val jobId by arg<Int>()
     val apiKey by arg<String>()
 
-    override fun provideViewModel() = viewModelOf<ScannerViewModel>().also { it.tries = tries!!; it.jobId = jobId!! }
-
-    override fun getLayoutId(): Int = R.layout.activity_scan_energy
-
-    private lateinit var energyScanView: EnergyScanView
-
     private val interruptReceiver = EventCallback {
         finish()
     }
+
+    override fun provideViewModel() = viewModelOf<ScannerViewModel>().also { it.tries = tries!!; it.jobId = jobId!! }
+
+    override fun getLayoutId(): Int = R.layout.activity_scan_energy
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +55,6 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
             or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
             or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         )
-
-        energyScanView = binding.energyScanView
 
         initView()
     }
@@ -80,12 +77,18 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         viewModel.finishWithResultCommand.observe(this) {
             finishWithResult(it.value, it.bitmap, it.corrected)
         }
-        viewModel.updateViewPortCommand.observe(this) {
-            updateViewport()
-        }
     }
 
     private fun initView() {
+        energyScanView.positionCallback = { x, y ->
+            viewModel.saveViewportPosition(x,y)
+            updateViewport()
+        }
+        energyScanView.scaleCallback = { width, height ->
+            viewModel.saveViewportSize(width,height)
+            updateViewport()
+        }
+
         energyScanView.scanMode = EnergyScanView.ScanMode.ANALOG_METER
 
         // set individual camera settings for this example by getting the current preferred settings and adapting them
@@ -111,7 +114,6 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         energyScanView.initAnyline(apiKey, { result ->
             viewModel.onScanResult(result.result, result.cutoutImage!!.bitmap)
         })
-
 
         updateViewport()
 

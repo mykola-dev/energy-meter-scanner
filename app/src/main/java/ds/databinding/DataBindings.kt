@@ -54,7 +54,7 @@ private inline fun <T> getBinding(vm: Bindable, prop: KProperty<*>): BindingData
 /**
  * Binds any [KProperty0] to any [KMutableProperty0]
  */
-fun <T : Any> Bindable.bind(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>) =
+fun <T> Bindable.bind(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>) =
     bind(prop, { mutableProp.set(it) }, { mutableProp.get() })
 
 /**

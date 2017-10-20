@@ -15,6 +15,7 @@ import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.ResourceProvider
 import ds.meterscanner.db.FirebaseDb
+import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 import ds.meterscanner.ui.Progressable
 import kotlinx.coroutines.experimental.CoroutineScope
@@ -25,6 +26,7 @@ import kotlinx.coroutines.experimental.launch
 @SuppressLint("StaticFieldLeak")
 abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable, Bindable {
 
+    val restService: NetLayer = instance()
     val prefs: Prefs = instance()
     val authenticator: Authenticator = instance()
     val db: FirebaseDb = instance()

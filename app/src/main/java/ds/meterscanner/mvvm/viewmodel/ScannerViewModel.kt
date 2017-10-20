@@ -1,18 +1,15 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.databinding.ObservableField
 import android.graphics.Bitmap
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.FinishWithResultCommand
 import ds.meterscanner.mvvm.invoke
-import ds.meterscanner.ui.widget.DimensionsCallback
 import ds.meterscanner.util.ThreadTools
 
-class ScannerViewModel : BaseViewModel() {
+class ScannerViewModel : BindableViewModel() {
 
-    val updateViewPortCommand = Command<Unit>()
     val startScanningCommand = Command<Unit>()
     val finishWithResultCommand = FinishWithResultCommand()
 
@@ -22,21 +19,7 @@ class ScannerViewModel : BaseViewModel() {
     private val results = arrayListOf<Double>()
     private val bitmaps = arrayListOf<Bitmap>()
 
-    val positionCallback = ObservableField<DimensionsCallback>()
-    val scaleCallback = ObservableField<DimensionsCallback>()
-
     init {
-        positionCallback.set({ x, y ->
-            prefs.viewportX = x
-            prefs.viewportY = y
-            updateViewPortCommand()
-        })
-        scaleCallback.set { width, height ->
-            prefs.viewportWidth = width
-            prefs.viewportHeight = height
-            updateViewPortCommand()
-        }
-
         if (jobId == 0 && prefs.saveTemperature) {
             updateWeather()
         }
@@ -81,6 +64,16 @@ class ScannerViewModel : BaseViewModel() {
             startScanningCommand()
         } else
             saveAndClose()
+    }
+
+    fun saveViewportSize(width: Int, height: Int) {
+        prefs.viewportWidth = width
+        prefs.viewportHeight = height
+    }
+
+    fun saveViewportPosition(x: Int, y: Int) {
+        prefs.viewportX = x
+        prefs.viewportY = y
     }
 
 }

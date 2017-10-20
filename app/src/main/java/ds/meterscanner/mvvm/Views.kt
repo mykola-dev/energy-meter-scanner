@@ -16,7 +16,7 @@ interface BindableView : KodeinGlobalAware {
 interface SettingsView : BaseView
 interface ChartsView : BindableView
 interface AuthView : BindableView
-interface ScannerView : BaseView
+interface ScannerView : BindableView
 
 interface MainView : BindableView {
     fun navigateCameraScreen()
