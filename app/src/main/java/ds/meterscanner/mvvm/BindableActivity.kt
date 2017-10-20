@@ -77,8 +77,11 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
         if (toolbar != null) {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton)
+            onToolbarCreated()
         }
     }
+
+    protected open fun onToolbarCreated() {}
 
     protected fun showSnackbar(
         text: String,

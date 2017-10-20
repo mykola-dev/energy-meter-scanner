@@ -34,6 +34,10 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
         L.v("current job id=$jobId")
     }
 
+    override fun onToolbarCreated() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
     override fun bindView() {
         super.bindView()
         gridLayout.columnCount = resources.getInteger(R.integer.columns)
@@ -59,7 +63,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
 
     override fun initViewModel() {
         super.initViewModel()
-        viewModel.jobId = jobId ?: -1
+        viewModel.jobId = jobId
         viewModel.runAlarmsCommand.observe(this) {
             startActivity<AlarmsActivity>()
         }
@@ -107,7 +111,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        viewModel.jobId = jobId ?: -1
+        viewModel.jobId = jobId
         viewModel.isIntentConsumed = false
         handleIntent()
     }
@@ -119,7 +123,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
         }
         viewModel.isIntentConsumed = true
 
-        if (jobId!! >= 0) {
+        if (jobId >= 0) {
             L.v("going bind make a snapshot!")
             startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
                 ScanAnalogMeterActivity::tries to viewModel.prefs.scanTries
