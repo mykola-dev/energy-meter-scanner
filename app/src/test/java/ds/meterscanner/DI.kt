@@ -1,5 +1,6 @@
 package ds.meterscanner
 
+import com.bumptech.glide.RequestManager
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.conf.global
@@ -23,4 +24,5 @@ private val mockModule = Kodein.Module {
     bind() from instance(mock<Authenticator>())
     bind() from instance(mock<Scheduler>())
     bind() from instance(mock<ResourceProvider>())
+    bind() from instance(mock<RequestManager>())
 }
