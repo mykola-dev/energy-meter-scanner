@@ -7,6 +7,7 @@ import ds.meterscanner.mvvm.invoke
 
 class AuthViewModel : BindableViewModel() {
 
+    // todo validation
     val login: String by binding("")
     val password: String by binding("")
     /*val loginError = ValidatorField(login) {
@@ -26,13 +27,13 @@ class AuthViewModel : BindableViewModel() {
 
     fun onSignIn() = async {
         //loginError.validate() && passwordError.validate() || return@async
-        authenticator.signIn(login.toString(), password.toString())
+        authenticator.signIn(login, password)
         finishCommand()
     }
 
     fun onSignUp() = async {
         //loginError.validate() && passwordError.validate() || return@async
-        authenticator.signUp(login.toString(), password.toString())
+        authenticator.signUp(login, password)
         showSnackbarCommand(getString(R.string.user_created))
         onSignIn()
     }

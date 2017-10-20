@@ -2,7 +2,6 @@ package ds.meterscanner.mvvm.view
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.preference.EditTextPreference
@@ -14,21 +13,25 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.startActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
+import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.SettingsView
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.SettingsViewModel
 import ds.meterscanner.scheduler.Scheduler
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 @SuppressLint("CommitTransaction")
-class SettingsActivity : BaseActivity<ViewDataBinding, SettingsViewModel>(), SettingsView {
+class SettingsActivity : BindableActivity<SettingsViewModel>(), SettingsView {
 
     override fun provideViewModel(): SettingsViewModel = viewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        toolbar.title = getString(R.string.settings)
 
         if (savedInstanceState == null) {
             supportFragmentManager

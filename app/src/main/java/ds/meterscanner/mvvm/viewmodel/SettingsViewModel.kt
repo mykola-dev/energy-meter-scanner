@@ -1,11 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import ds.meterscanner.R
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 
-class SettingsViewModel : BaseViewModel() {
+class SettingsViewModel : BindableViewModel() {
 
-    init {
-        toolbar.title = getString(R.string.settings)
-    }
 }

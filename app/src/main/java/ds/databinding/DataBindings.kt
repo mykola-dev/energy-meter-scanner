@@ -1,8 +1,6 @@
 /**
  * Experimental databinding tool © 2017 Deviant Studio
  */
-@file:Suppress("FINAL_UPPER_BOUND")
-
 package ds.databinding
 
 import android.widget.CompoundButton
@@ -66,12 +64,14 @@ inline fun <reified T : CharSequence> Bindable.bindCharSequence(prop: KProperty0
 /**
  * Binds [TextView] to the  [String] field
  */
+@Suppress("FINAL_UPPER_BOUND")
 inline fun <reified T : String> Bindable.bind(prop: KProperty0<T>, view: TextView) =
     bind(prop, view::setText, { view.text.toString() as T })
 
 /**
  * Binds [CompoundButton] to the  [Boolean] field
  */
+@Suppress("FINAL_UPPER_BOUND")
 inline fun <reified T : Boolean> Bindable.bind(prop: KProperty0<T>, view: CompoundButton) =
     bind(prop, view::setChecked, view::isChecked)
 

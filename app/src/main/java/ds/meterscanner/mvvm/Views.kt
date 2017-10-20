@@ -3,17 +3,12 @@ package ds.meterscanner.mvvm
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import java.util.*
 
-interface BaseView : KodeinGlobalAware {
-    val viewModel: BaseViewModel
-    fun finish()
-}
-
 interface BindableView : KodeinGlobalAware {
     val viewModel: BindableViewModel
     fun finish()
 }
 
-interface SettingsView : BaseView
+interface SettingsView : BindableView
 interface ChartsView : BindableView
 interface AuthView : BindableView
 interface ScannerView : BindableView
@@ -36,4 +31,3 @@ interface AlarmsView : BindableView {
 interface DetailsView : BindableView {
     fun pickDate()
 }
-
