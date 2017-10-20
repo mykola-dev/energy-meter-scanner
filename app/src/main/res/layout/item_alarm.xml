@@ -1,66 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
     >
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="ds.meterscanner.mvvm.viewmodel.AlarmItemViewModel"
-            />
-    </data>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/titleLabel"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:background="?selectableItemBackground"
-        android:enabled="@{!viewModel.rescheduled}"
-        android:gravity="center_vertical"
-        android:onClick="@{v->viewModel.onClick()}"
-        android:orientation="horizontal"
-        >
+        android:layout_weight="1"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="?android:textColorPrimary"
+        tools:text="12:00"
+        />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="@{!viewModel.rescheduled}"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:text="@{viewModel.time}"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="?android:textColorPrimary"
-            tools:text="12:00"
-            />
+    <TextView
+        android:id="@+id/rescheduledLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:includeFontPadding="false"
+        android:text="R"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/md_red_500"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:includeFontPadding="false"
-            android:text="R"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="@color/md_red_500"
-            bind:visible="@{viewModel.rescheduled}"
-            />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="@{v->viewModel.onDeleteClick()}"
-            android:padding="8dp"
-            app:srcCompat="@drawable/ic_action_clear"
-            />
+    <ImageView
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        app:srcCompat="@drawable/ic_action_clear"
+        />
 
 
-    </LinearLayout>
-</layout>
+</LinearLayout>

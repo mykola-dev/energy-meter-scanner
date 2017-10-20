@@ -1,3 +1,4 @@
+/*
 package ds.meterscanner.mvvm.viewmodel
 
 import android.databinding.ObservableField
@@ -14,4 +15,4 @@ class ValidatorField(
     }
 
     fun validate(): Boolean = validate(field.get())
-}
+}*/

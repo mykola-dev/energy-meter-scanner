@@ -1,21 +1,27 @@
 package ds.meterscanner.adapter
 
-import android.databinding.ViewDataBinding
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
+import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BindingHolder
-import ds.meterscanner.mvvm.ViewModelAdapter
-import ds.meterscanner.mvvm.viewmodel.HistoryItemViewModel
+import ds.meterscanner.mvvm.SimpleAdapter
 import ds.meterscanner.util.formatTimeDate
 import ds.meterscanner.util.getColorTemp
+import ds.meterscanner.util.visible
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_history.*
 
 class HistoryAdapter(
     private val onItemClick: (Snapshot) -> Unit,
     private val onToggleSelection: () -> Unit
-) : ViewModelAdapter<HistoryItemViewModel, Snapshot>(), KodeinGlobalAware {
+) : SimpleAdapter<HistoryViewHolder, Snapshot>(), KodeinGlobalAware {
+
+    val glide: RequestManager = instance()
 
     var isActionMode = false
         set(value) {
@@ -27,25 +33,28 @@ class HistoryAdapter(
 
     override val layoutId: Int = R.layout.item_history
 
-    override fun onFillViewModel(holder: BindingHolder<ViewDataBinding, HistoryItemViewModel>, viewModel: HistoryItemViewModel, item: Snapshot, position: Int) {
-        viewModel.value = item.value.toString()
-        viewModel.date = formatTimeDate(item.timestamp)
-        viewModel.temp = item.outsideTemp?.toString() ?: ""
-        viewModel.tempColor = ContextCompat.getColor(context, getColorTemp(item.outsideTemp ?: 0))
-        viewModel.onClick = View.OnClickListener {
+    override fun onFillView(holder: HistoryViewHolder, item: Snapshot, position: Int) = with(holder) {
+        value.text = item.value.toString()
+        date.text = formatTimeDate(item.timestamp)
+        temperature.text = item.outsideTemp?.toString() ?: ""
+        temperature.setTextColor(ContextCompat.getColor(context, getColorTemp(item.outsideTemp ?: 0)))
+        containerView.setOnClickListener {
             if (!isActionMode)
                 onItemClick(getItem(holder.adapterPosition))
             else {
                 toggleSelection(holder.adapterPosition)
             }
         }
-        viewModel.onLongClick = View.OnLongClickListener {
+        containerView.setOnLongClickListener {
             toggleSelection(holder.adapterPosition)
             true
         }
-        viewModel.selectMode = isActionMode
-        viewModel.checked = item.selected
-        viewModel.imageUrl = if (!isActionMode) item.image else ""
+        checkBox.visible = isActionMode
+        checkBox.isChecked = item.selected
+        glide
+            .load(if (!isActionMode) item.image else "")
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(imageView)
     }
 
     private fun toggleSelection(position: Int) {
@@ -59,4 +68,12 @@ class HistoryAdapter(
         data.forEach { it.selected = false }
     }
 
+}
+
+class HistoryViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    val value = titleLabel
+    val date = dateLabel
+    val image = imageView
+    val temperature = temperatureLabel
+    val checkBox = selectedCheck
 }
