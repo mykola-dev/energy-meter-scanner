@@ -1,18 +1,19 @@
-/*
 package ds.meterscanner.mvvm.viewmodel
 
-import android.databinding.ObservableField
+import ds.databinding.Bindable
+import ds.databinding.binding
+import kotlin.reflect.KProperty0
 
-class ValidatorField(
-    private val field: ObservableField<String>,
+class Validator(
+    private val prop: KProperty0<String>,
     private val validator: (String) -> String
-) : ObservableField<String>() {
+) : Bindable {
+    var error: String by binding("")
+
+    fun validate() = validate(prop.get())
 
     private fun validate(text: String): Boolean {
-        val message = validator(text)
-        set(message)
-        return message.isEmpty()
+        error = validator(text)
+        return error.isEmpty()
     }
-
-    fun validate(): Boolean = validate(field.get())
-}*/
+}

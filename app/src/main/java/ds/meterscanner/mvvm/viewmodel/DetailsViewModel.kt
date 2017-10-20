@@ -16,21 +16,20 @@ class DetailsViewModel(
     private val snapshotId: String? = null
 ) : BindableViewModel() {
 
-    // todo validation
-    /*val valueErrorField = ValidatorField(value) { value ->
+    val valueError = Validator(::value) { value ->
         try {
             snapshot.value = value.toDouble()
             ""
         } catch (e: Exception) {
             getString(R.string.invalid_data)
         }
-    }*/
+    }
     var value: String by binding("0")
     var date: String by binding()
     var outsideTemp: String by binding()
     var boilerTemp: String by binding()
     var imageUrl: String by binding()
-    var toolbarTitle:String by binding()
+    var toolbarTitle: String by binding()
 
     lateinit var snapshot: Snapshot
     private val calendar: Calendar = instance()
@@ -61,7 +60,7 @@ class DetailsViewModel(
     }
 
     fun onSave(view: DetailsView) {
-        //if (valueErrorField.validate()) {
+        valueError.validate() || return
         snapshot.value = value.toDouble()
         if (boilerTemp.isNotEmpty())
             snapshot.boilerTemp = boilerTemp.toInt()
@@ -74,7 +73,6 @@ class DetailsViewModel(
         db.saveSnapshot(snapshot)
 
         view.finish()
-        //}
     }
 
     fun onDatePicked(date: Date) {

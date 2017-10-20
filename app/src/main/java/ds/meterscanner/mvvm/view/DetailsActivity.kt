@@ -40,6 +40,7 @@ class DetailsActivity : BindableActivity<DetailsViewModel>(), DetailsView {
                     .into(imageView)
             })
             bind(::value, valueField)
+            bind(valueError::error, valueLayout::setError)
             bind(::date, dateField)
             bind(::outsideTemp, outsideTempField)
             bind(::boilerTemp, boilerTempField)

@@ -41,7 +41,6 @@ object DatePickers {
         )
         dpd.firstDayOfWeek = Calendar.MONDAY
         dpd.show(activity.fragmentManager, activity.getString(R.string.date))
-        //  dpd.setSelectableDays(days);    // todo for charts
     }
 
     fun pickTime(activity: Activity, initialDate: Date = Date(), callback: (hour: Int, minute: Int) -> Unit) {

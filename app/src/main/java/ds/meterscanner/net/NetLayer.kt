@@ -15,4 +15,3 @@ class NetLayer(override val kodein: Kodein) : KodeinAware {
     suspend fun getWeather(): CurrWeatherData = api.getWeather(prefs.city).await()
 
 }
-
