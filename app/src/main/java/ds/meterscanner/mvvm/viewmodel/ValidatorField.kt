@@ -1,7 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import ds.databinding.Bindable
-import ds.databinding.binding
+import ds.bindingtools.Bindable
+import ds.bindingtools.binding
 import kotlin.reflect.KProperty0
 
 class Validator(

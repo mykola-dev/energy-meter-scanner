@@ -8,8 +8,8 @@ import com.bumptech.glide.RequestManager
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
-import ds.databinding.Bindable
-import ds.databinding.binding
+import ds.bindingtools.Bindable
+import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs

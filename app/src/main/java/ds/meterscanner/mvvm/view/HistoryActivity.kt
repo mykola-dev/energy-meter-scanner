@@ -6,8 +6,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutCompat
 import android.view.Menu
 import android.view.MenuItem
+import ds.bindingtools.bind
 import ds.bindingtools.startActivity
-import ds.databinding.bind
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.mvvm.BindableActivity

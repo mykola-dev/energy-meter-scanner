@@ -3,7 +3,7 @@ package ds.meterscanner.mvvm.viewmodel
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.github.salomonbrys.kodein.erased.instance
-import ds.databinding.binding
+import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BindableViewModel

@@ -7,9 +7,9 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import ds.bindingtools.arg
+import ds.bindingtools.bind
 import ds.bindingtools.startActivity
 import ds.bindingtools.startActivityForResult
-import ds.databinding.bind
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.MainView

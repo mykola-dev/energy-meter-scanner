@@ -1,7 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import android.util.Patterns
-import ds.databinding.binding
+import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.invoke

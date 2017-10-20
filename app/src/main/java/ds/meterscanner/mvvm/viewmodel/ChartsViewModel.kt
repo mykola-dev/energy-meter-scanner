@@ -5,7 +5,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.text.format.DateFormat
 import com.github.salomonbrys.kodein.erased.instance
-import ds.databinding.binding
+import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
 import ds.meterscanner.db.model.Snapshot

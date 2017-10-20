@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import ds.bindingtools.bind
 import ds.bindingtools.startActivity
-import ds.databinding.bind
-import ds.databinding.unbindAll
+import ds.bindingtools.unbindAll
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.view.AuthActivity
 import kotlinx.android.synthetic.main.activity_auth.*

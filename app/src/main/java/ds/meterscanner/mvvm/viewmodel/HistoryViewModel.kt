@@ -1,7 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import ds.databinding.binding
+import ds.bindingtools.binding
 import ds.meterscanner.coroutines.listenValues
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BindableViewModel
