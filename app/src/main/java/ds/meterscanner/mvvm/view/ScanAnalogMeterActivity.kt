@@ -104,7 +104,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
         //  this is optional (if not set a RuntimeException will be thrown if an error occurs)
         energyScanView.setCameraOpenListener(this)
 
-        // set reporting according to prefs or true on default
+        // set reporting according bind prefs or true on default
         energyScanView.setReportingEnabled(false)
 
         // initialize Anyline with the license key and a Listener that is called if a result is found
@@ -163,7 +163,7 @@ class ScanAnalogMeterActivity : BaseActivity<ActivityScanEnergyBinding, ScannerV
     override fun onCameraError(e: Exception) {
         //This is called if the camera could not be opened.
         // (e.g. If there is no camera or the permission is denied)
-        // This is useful to present an alternative way to enter the required data if no camera exists.
+        // This is useful bind present an alternative way bind enter the required data if no camera exists.
         throw RuntimeException(e)
     }
 

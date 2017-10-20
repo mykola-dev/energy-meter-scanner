@@ -7,8 +7,8 @@ import ds.meterscanner.mvvm.invoke
 
 class AuthViewModel : BindableViewModel() {
 
-    val login: CharSequence by binding("")
-    val password: CharSequence by binding("")
+    val login: String by binding("")
+    val password: String by binding("")
     /*val loginError = ValidatorField(login) {
         when {
             !Patterns.EMAIL_ADDRESS.matcher(it).matches() -> getString(R.string.wrong_email)

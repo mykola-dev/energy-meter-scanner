@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import ds.databinding.bind
-import ds.databinding.to
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ChartsView
@@ -33,14 +32,14 @@ class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
         linesChart.isZoomEnabled = false
         previewChart.setViewportChangeListener(ViewportListener(columnsChart, linesChart))
 
-        viewModel.bind {
-            to(::linesData, {
+        viewModel.apply {
+            bind(::linesData, {
                 linesChart.lineChartData = it
                 val v = Viewport(linesChart.maximumViewport.left, 30f, linesChart.maximumViewport.right, -30f)
                 linesChart.maximumViewport = v
             })
-            to(::columnsData, columnsChart::setColumnChartData)
-            to(::columnsData, {
+            bind(::columnsData, columnsChart::setColumnChartData)
+            bind(::columnsData, {
                 val previewData = ColumnChartData(it)
                 previewData
                     .columns
@@ -55,8 +54,8 @@ class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
                 previewChart.currentViewport = tempViewport
                 previewChart.zoomType = ZoomType.HORIZONTAL
             })
-            to(this::checkedButtonId, radioGroup::check, radioGroup::getCheckedRadioButtonId)
-            to(::showProgress, { radioGroup.isEnabled = !it })
+            bind(this::checkedButtonId, radioGroup::check, radioGroup::getCheckedRadioButtonId)
+            bind(::showProgress, { radioGroup.isEnabled = !it })
             radioGroup.setOnCheckedChangeListener { _, checkedId -> viewModel.onCheckedChanged(checkedId) }
 
         }

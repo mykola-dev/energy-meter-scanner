@@ -1,8 +1,12 @@
 /**
  * Experimental databinding tool © 2017 Deviant Studio
  */
+@file:Suppress("FINAL_UPPER_BOUND")
+
 package ds.databinding
 
+import android.widget.CompoundButton
+import android.widget.TextView
 import java.util.*
 import kotlin.jvm.internal.CallableReference
 import kotlin.properties.ReadWriteProperty
@@ -40,26 +44,38 @@ class BindingProperty<T : Any>(private var value: T?, private val type: KClass<T
         java.lang.Double::class -> 0.0 as T
         else -> cls.java.newInstance()
     }
-
 }
 
 @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
 private inline fun <T> getBinding(vm: Bindable, prop: KProperty<*>): BindingData<T, T>? =
     bindings.getOrPut(vm, { mutableMapOf() })[prop.name] as BindingData<T, T>?
 
-fun <T : Any?> bindTo(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) = bindInternal(prop, setter, getter)
+fun <T : Any?> Bindable.bind(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>, getter: (() -> T)? = null) =
+    bind(prop, { mutableProp.set(it) }, getter)
 
-fun <T : Any?> Bindable.to(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) = bindInternal(prop, setter, getter)
-fun <T : Any?> Bindable.to(prop: KProperty0<T>, mutableProp: KMutableProperty0<T>, getter: (() -> T)? = null) = bindInternal(prop, { mutableProp.set(it) }, getter)
+/**
+ * Binds [TextView] to the  [CharSequence] field
+ */
+inline fun <reified T : CharSequence> Bindable.bindCharSequence(prop: KProperty0<T>, view: TextView) =
+    bind(prop, view::setText, view::getText)
 
-fun <T : Bindable> T.bind(builder: T.() -> Unit) = builder(this)
+/**
+ * Binds [TextView] to the  [String] field
+ */
+inline fun <reified T : String> Bindable.bind(prop: KProperty0<T>, view: TextView) =
+    bind(prop, view::setText, { view.text.toString() as T })
 
-private fun <T : Any?> bindInternal(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) {
-    val owner: Bindable = (prop as CallableReference).boundReceiver as Bindable
+/**
+ * Binds [CompoundButton] to the  [Boolean] field
+ */
+inline fun <reified T : Boolean> Bindable.bind(prop: KProperty0<T>, view: CompoundButton) =
+    bind(prop, view::setChecked, view::isChecked)
+
+fun <T : Any?> Bindable.bind(prop: KProperty0<T>, setter: (T) -> Unit, getter: (() -> T)? = null) {
+    val owner: Bindable = prop.parent as Bindable
     println("bind ${prop.name}")
-    val binding = getBinding<T>(owner, prop) ?: BindingData()
+    val binding = getBinding<T>(owner, prop) ?: BindingData(prop.name)
     binding.setters += setter
-    binding.field = prop.name
     if (getter != null)
         if (binding.getter == null)
             binding.getter = getter
@@ -70,7 +86,6 @@ private fun <T : Any?> bindInternal(prop: KProperty0<T>, setter: (T) -> Unit, ge
     bindings[owner]!!.put(prop.name, binding)
 }
 
-operator fun <T : Bindable, P> T.invoke(block: (T) -> KProperty0<P>): Pair<T, KProperty0<P>> = Pair(this, block(this))
 
 fun <T : Any?> Bindable.unbind(prop: KProperty<T>) {
     bindings[this]?.remove(prop.name)
@@ -86,9 +101,9 @@ fun Bindable.debugBindings() {
     }
 }
 
+private val <T> KProperty0<T>.parent get() = (this as CallableReference).boundReceiver
 
-private class BindingData<T : Any?, R : Any?> {
-    var field: String = ""
+private class BindingData<T : Any?, R : Any?>(val field: String) {
     var getter: (() -> R)? = null
     val setters = mutableListOf<(T) -> Unit>()
 }

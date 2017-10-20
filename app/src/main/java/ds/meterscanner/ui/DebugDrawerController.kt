@@ -88,7 +88,7 @@ class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware
         val sb = StringBuilder()
         sb.append("Active tasks: ${jobs.size}\n")
         for (job in jobs) {
-            sb.append("id=${job.jobId} interval=${job.startMs / 1000 / 60} scheduled to=${formatTimeDate(job.scheduledTo())}\n")
+            sb.append("id=${job.jobId} interval=${job.startMs / 1000 / 60} scheduled bind=${formatTimeDate(job.scheduledTo())}\n")
         }
         return sb.toString()
     }

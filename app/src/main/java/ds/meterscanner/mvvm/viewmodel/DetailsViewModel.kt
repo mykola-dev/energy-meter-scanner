@@ -1,87 +1,84 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import L
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.databinding.ObservableField
 import com.github.salomonbrys.kodein.erased.instance
+import ds.databinding.binding
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.DetailsView
 import ds.meterscanner.util.formatTimeDate
+import kotlinx.coroutines.experimental.delay
 import java.util.*
 
 class DetailsViewModel(
     private val snapshotId: String? = null
-) : BaseViewModel() {
+) : BindableViewModel() {
 
-    val valueField = ObservableField<String>()
-    val valueErrorField = ValidatorField(valueField) { value ->
+    // todo validation
+    /*val valueErrorField = ValidatorField(value) { value ->
         try {
             snapshot.value = value.toDouble()
             ""
         } catch (e: Exception) {
             getString(R.string.invalid_data)
         }
-    }
-    val dateField = ObservableField<String>()
-    val imageUrl = ObservableField<String>()
-    val outsideTemp = ObservableField<String>()
-    val boilerTemp = ObservableField<String>()
+    }*/
+    var value: String by binding("0")
+    var date: String by binding()
+    var outsideTemp: String by binding()
+    var boilerTemp: String by binding()
+    var imageUrl: String by binding()
 
     lateinit var snapshot: Snapshot
     private val calendar: Calendar = instance()
 
     init {
-        if (snapshotId != null) {
-            toolbar.title = getString(R.string.edit_snapshot)
+        toolbarTitle = if (snapshotId != null) {
+            getString(R.string.edit_snapshot)
         } else {
-            toolbar.title = getString(R.string.new_snapshot)
+            getString(R.string.new_snapshot)
         }
 
         fetchSnapshot()
     }
 
     private fun fetchSnapshot() = async {
+        delay(100)
         snapshot = if (snapshotId != null)
             db.getSnapshotById(snapshotId)
         else
             Snapshot(boilerTemp = prefs.boilerTemp, outsideTemp = prefs.currentTemperature.toInt())
 
         if (snapshot.value != 0.0)
-            valueField.set(snapshot.value.toString())
-        imageUrl.set(snapshot.image)
-        dateField.set(formatTimeDate(snapshot.timestamp))
-        outsideTemp.set(if (snapshot.outsideTemp != null) snapshot.outsideTemp.toString() else "")
-        boilerTemp.set(snapshot.boilerTemp.toString())
-    }
-
-    fun onValueChanged(text: CharSequence) {
-        L.v("$text")
-        valueErrorField.set(null)
+            value = snapshot.value.toString()
+        imageUrl = snapshot.image ?: ""
+        date = formatTimeDate(snapshot.timestamp)
+        outsideTemp = if (snapshot.outsideTemp != null) snapshot.outsideTemp.toString() else ""
+        boilerTemp = snapshot.boilerTemp.toString()
     }
 
     fun onSave(view: DetailsView) {
-        if (valueErrorField.validate()) {
-            snapshot.value = valueField.get().toDouble()
-            if (boilerTemp.get().isNotEmpty())
-                snapshot.boilerTemp = boilerTemp.get().toInt()
+        //if (valueErrorField.validate()) {
+        snapshot.value = value.toDouble()
+        if (boilerTemp.isNotEmpty())
+            snapshot.boilerTemp = boilerTemp.toInt()
 
-            if (outsideTemp.get().isNotEmpty())
-                snapshot.outsideTemp = outsideTemp.get().toInt()
-            else
-                snapshot.outsideTemp = null
+        if (outsideTemp.isNotEmpty())
+            snapshot.outsideTemp = outsideTemp.toInt()
+        else
+            snapshot.outsideTemp = null
 
-            db.saveSnapshot(snapshot)
+        db.saveSnapshot(snapshot)
 
-            view.finish()
-        }
+        view.finish()
+        //}
     }
 
     fun onDatePicked(date: Date) {
         snapshot.timestamp = date.time
-        dateField.set(formatTimeDate(date.time))
+        this.date = formatTimeDate(date.time)
     }
 
     fun truncDate(): Date {

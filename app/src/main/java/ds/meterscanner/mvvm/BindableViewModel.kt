@@ -4,6 +4,7 @@ import L
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.StringRes
+import com.bumptech.glide.RequestManager
 import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
@@ -29,6 +30,7 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
     val db: FirebaseDb = instance()
     val scheduler: Scheduler = instance()
     val resources: ResourceProvider = instance()
+    val glide: RequestManager = instance()
 
     var toolbarTitle by binding("")
     var toolbarSubtitle by binding("")
@@ -39,7 +41,7 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
     val finishCommand = Command<Unit>()
     val showSnackbarCommand = SnackBarCommand()
 
-    var lifecycleJob = Job() // create a job object to manage lifecycle
+    var lifecycleJob = Job() // create a job object bind manage lifecycle
 
     init {
         authenticator.startListen(this, { logged ->

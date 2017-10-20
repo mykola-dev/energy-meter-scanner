@@ -42,7 +42,7 @@ abstract class BaseViewModel : ViewModel(), KodeinGlobalAware, Progressable {
     val showSnackbarCommand = SnackBarCommand()
 
     private var progressStopSignal = Job()
-    var lifecycleJob = Job() // create a job object to manage lifecycle
+    var lifecycleJob = Job() // create a job object bind manage lifecycle
 
     init {
         authenticator.startListen(this, { logged ->

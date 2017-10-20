@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import ds.bindingtools.startActivity
 import ds.databinding.bind
-import ds.databinding.to
 import ds.databinding.unbindAll
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.view.AuthActivity
@@ -66,10 +65,10 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     }
 
     @CallSuper
-    protected open fun bindView() = viewModel.bind {
-        to(::toolbarTitle, toolbar::setTitle, toolbar::getTitle)
-        to(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
-        to(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
+    protected open fun bindView() = with(viewModel) {
+        bind(::toolbarTitle, toolbar::setTitle, toolbar::getTitle)
+        bind(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
+        bind(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
     }
 
     protected fun unbindView() {

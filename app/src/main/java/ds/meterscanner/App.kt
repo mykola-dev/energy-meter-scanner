@@ -39,7 +39,7 @@ class App : MultiDexApplication(), KodeinGlobalAware {
 
     private fun initLeakCanary(): Boolean {
         if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
+            // This process is dedicated bind LeakCanary for heap analysis.
             // You should not init your app in this process.
             return false
         }

@@ -35,7 +35,7 @@ interface AlarmsView : BindableView {
     fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit)
 }
 
-interface DetailsView : BaseView {
+interface DetailsView : BindableView {
     fun pickDate()
 }
 

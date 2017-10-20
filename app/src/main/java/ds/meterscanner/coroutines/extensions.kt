@@ -76,7 +76,7 @@ suspend inline fun <reified T : Any> Query.listenValues() = produce<List<T>>(cor
         override fun onDataChange(snapshot: DataSnapshot) {
             L.i("count ${snapshot.childrenCount}")
             val values = snapshot.children.map { it.getValue(T::class.java)!! }
-            L.v("sent to channel? ${channel.offer(values)}")
+            L.v("sent bind channel? ${channel.offer(values)}")
         }
 
         override fun onCancelled(error: DatabaseError) {

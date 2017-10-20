@@ -94,7 +94,7 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         viewModel.isIntentConsumed = true
 
         if (jobId!! >= 0) {
-            L.v("going to make a snapshot!")
+            L.v("going bind make a snapshot!")
             startActivityForResult<ScanAnalogMeterActivity>(requestCode = Requests.SCAN) {
                 ScanAnalogMeterActivity::tries to viewModel.prefs.scanTries
                 ScanAnalogMeterActivity::jobId to jobId
