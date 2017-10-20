@@ -18,7 +18,7 @@ interface ChartsView : BindableView
 interface AuthView : BindableView
 interface ScannerView : BaseView
 
-interface MainView : BaseView {
+interface MainView : BindableView {
     fun navigateCameraScreen()
     fun navigateListsScreen()
     fun navigateChartsScreen()

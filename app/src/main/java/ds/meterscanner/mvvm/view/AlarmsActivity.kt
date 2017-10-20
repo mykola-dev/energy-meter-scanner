@@ -11,6 +11,7 @@ import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.AlarmsViewModel
 import ds.meterscanner.ui.DatePickers
 import kotlinx.android.synthetic.main.activity_alarms.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 class AlarmsActivity : BindableActivity<AlarmsViewModel>(), AlarmsView {
@@ -23,6 +24,7 @@ class AlarmsActivity : BindableActivity<AlarmsViewModel>(), AlarmsView {
 
     override fun bindView() {
         super.bindView()
+        toolbar.title = getString(R.string.alarms)
         val adapter = AlarmsAdapter(
             { viewModel.onEditAlarm(this, it) },
             viewModel::onDeleteAlarm

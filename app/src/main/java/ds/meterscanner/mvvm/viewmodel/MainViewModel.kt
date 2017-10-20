@@ -1,30 +1,30 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
-import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.text.format.DateUtils
 import com.github.salomonbrys.kodein.erased.instance
 import com.google.firebase.auth.FirebaseUser
+import ds.databinding.binding
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
-import ds.meterscanner.mvvm.BaseViewModel
+import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.MainView
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
-class MainViewModel : BaseViewModel() {
+class MainViewModel : BindableViewModel() {
 
-    var buttonsEnabled = ObservableField<Boolean>()
-    var apiKeyReady = ObservableField<Boolean>()
-    var lastUpdated = ObservableField("")
+    var buttonsEnabled: Boolean by binding()
+    var lastUpdated: String by binding()
+    var apiKey: String by binding()
+    var toolbarSubtitle: String by binding()
 
     val onLoggedInCommand = Command<Unit>()
     val runAlarmsCommand = Command<Unit>()
 
     private var jobsChecked = false
-    var apiKey: String? = null
     var jobId: Int = -1
     var isIntentConsumed = false
 
@@ -46,7 +46,7 @@ class MainViewModel : BaseViewModel() {
 
         updateLastSnapshot()
 
-        toolbar.subtitle = user.email
+        toolbarSubtitle = user.email ?: ""
 
         checkTasks()
         onLoggedInCommand()
@@ -55,9 +55,8 @@ class MainViewModel : BaseViewModel() {
     private fun prepareApiKey() = async {
         try {
             apiKey = prefs.apiKey()
-            apiKeyReady.set(true)
             L.v("anyline key=$apiKey")
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             showSnackbarCommand(getString(R.string.api_key_not_found))
 
         }
@@ -65,7 +64,7 @@ class MainViewModel : BaseViewModel() {
 
     private fun updateLastSnapshot() = async {
         val snapshot: Snapshot = db.getLatestSnapshot()
-        lastUpdated.set("${getString(R.string.latest_shot)} ${DateUtils.getRelativeTimeSpanString(snapshot.timestamp)}")
+        lastUpdated = "${getString(R.string.latest_shot)} ${DateUtils.getRelativeTimeSpanString(snapshot.timestamp)}"
     }
 
     private fun checkTasks() {
@@ -87,7 +86,7 @@ class MainViewModel : BaseViewModel() {
 
     override fun toggleProgress(enabled: Boolean) {
         super.toggleProgress(enabled)
-        buttonsEnabled.set(!enabled)
+        buttonsEnabled = !enabled
     }
 
     fun onNewData(value: Double, bitmap: Bitmap, corrected: Boolean) = async {
@@ -105,8 +104,8 @@ class MainViewModel : BaseViewModel() {
         updateLastSnapshot()
     }
 
-    fun onCameraButton(view:MainView) = view.navigateCameraScreen()
-    fun onListsButton(view:MainView) = view.navigateListsScreen()
-    fun onChartsButton(view:MainView) = view.navigateChartsScreen()
-    fun onSettingsButton(view:MainView) = view.navigateSettingsScreen()
+    fun onCameraButton(view: MainView) = view.navigateCameraScreen()
+    fun onListsButton(view: MainView) = view.navigateListsScreen()
+    fun onChartsButton(view: MainView) = view.navigateChartsScreen()
+    fun onSettingsButton(view: MainView) = view.navigateSettingsScreen()
 }

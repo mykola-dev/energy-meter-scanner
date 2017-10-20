@@ -10,6 +10,7 @@ import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.DetailsViewModel
 import ds.meterscanner.ui.DatePickers
 import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class DetailsActivity : BindableActivity<DetailsViewModel>(), DetailsView {
 
@@ -42,6 +43,7 @@ class DetailsActivity : BindableActivity<DetailsViewModel>(), DetailsView {
             bind(::date, dateField)
             bind(::outsideTemp, outsideTempField)
             bind(::boilerTemp, boilerTempField)
+            bind(::toolbarTitle, toolbar::setTitle, toolbar::getTitle)
         }
     }
 }

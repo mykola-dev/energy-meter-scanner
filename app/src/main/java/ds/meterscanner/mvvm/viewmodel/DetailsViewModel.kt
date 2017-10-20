@@ -30,6 +30,7 @@ class DetailsViewModel(
     var outsideTemp: String by binding()
     var boilerTemp: String by binding()
     var imageUrl: String by binding()
+    var toolbarTitle:String by binding()
 
     lateinit var snapshot: Snapshot
     private val calendar: Calendar = instance()

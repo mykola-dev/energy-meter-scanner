@@ -42,8 +42,6 @@ class ChartsViewModel : BindableViewModel() {
     private var data: List<SnapshotData> = listOf()
 
     init {
-        toolbarTitle = getString(R.string.charts)
-
         checkedButtonId = when (currMode) {
             StackMode.AS_IS -> R.id.all_button
             StackMode.DAY -> R.id.days_button

@@ -9,15 +9,18 @@ import android.view.Menu
 import ds.bindingtools.arg
 import ds.bindingtools.startActivity
 import ds.bindingtools.startActivityForResult
+import ds.databinding.bind
 import ds.meterscanner.R
-import ds.meterscanner.databinding.MainBinding
+import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.MainView
 import ds.meterscanner.mvvm.observe
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
+class MainActivity : BindableActivity<MainViewModel>(), MainView {
 
     val jobId by arg(-1)
 
@@ -29,6 +32,29 @@ class MainActivity : BaseActivity<MainBinding, MainViewModel>(), MainView {
         super.onCreate(savedInstanceState)
         DebugDrawerController(this)
         L.v("current job id=$jobId")
+    }
+
+    override fun bindView() {
+        super.bindView()
+        gridLayout.columnCount = resources.getInteger(R.integer.columns)
+
+        cameraButton.setOnClickListener { viewModel.onCameraButton(this) }
+        chartsButton.setOnClickListener { viewModel.onChartsButton(this) }
+        historyButton.setOnClickListener { viewModel.onListsButton(this) }
+        settingsButton.setOnClickListener { viewModel.onSettingsButton(this) }
+
+        viewModel.apply {
+            bind(::lastUpdated, lastUpdatedLabel)
+            bind(::buttonsEnabled, {
+                cameraButton.isEnabled = it && apiKey.isNotEmpty()
+                chartsButton.isEnabled = it
+                historyButton.isEnabled = it
+                settingsButton.isEnabled = it
+            })
+            bind(::apiKey, { cameraButton.isEnabled = it.isNotEmpty() && buttonsEnabled })
+            bind(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
+
+        }
     }
 
     override fun initViewModel() {

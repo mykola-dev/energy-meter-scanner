@@ -24,10 +24,6 @@ class AuthViewModel : BindableViewModel() {
 
     override val runAuthScreenCommand = null
 
-    init {
-        toolbarTitle = getString(R.string.log_in)
-    }
-
     fun onSignIn() = async {
         //loginError.validate() && passwordError.validate() || return@async
         authenticator.signIn(login.toString(), password.toString())

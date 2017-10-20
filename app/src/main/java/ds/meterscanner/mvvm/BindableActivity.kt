@@ -15,7 +15,6 @@ import ds.databinding.unbindAll
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.view.AuthActivity
 import kotlinx.android.synthetic.main.activity_auth.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 @Suppress("LeakingThis")
 abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(), BindableView {
@@ -41,6 +40,11 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     }
 
     @CallSuper
+    protected open fun bindView() = with(viewModel) {
+        bind(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
+    }
+
+    @CallSuper
     open protected fun initViewModel() {
         viewModel.showSnackbarCommand.observe(this) {
             showSnackbar(it.text)
@@ -62,13 +66,6 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     override fun onDestroy() {
         unbindView()
         super.onDestroy()
-    }
-
-    @CallSuper
-    protected open fun bindView() = with(viewModel) {
-        bind(::toolbarTitle, toolbar::setTitle, toolbar::getTitle)
-        bind(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
-        bind(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
     }
 
     protected fun unbindView() {

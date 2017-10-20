@@ -32,8 +32,6 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
     val resources: ResourceProvider = instance()
     val glide: RequestManager = instance()
 
-    var toolbarTitle by binding("")
-    var toolbarSubtitle by binding("")
     var showProgress by binding(false)
 
     // commands

@@ -3,7 +3,6 @@ package ds.meterscanner.mvvm.viewmodel
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.scheduledTo
 import ds.databinding.binding
-import ds.meterscanner.R
 import ds.meterscanner.mvvm.AlarmsView
 import ds.meterscanner.mvvm.BindableViewModel
 import java.util.*
@@ -14,7 +13,6 @@ class AlarmsViewModel : BindableViewModel() {
     var listItems: List<JobRequest> by binding(emptyList())
 
     init {
-        toolbarTitle = getString(R.string.alarms)
         fillList()
     }
 

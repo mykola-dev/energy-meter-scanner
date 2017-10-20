@@ -13,6 +13,7 @@ import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
 import ds.meterscanner.mvvm.viewmodel.Period
 import ds.meterscanner.util.FileTools
 import kotlinx.android.synthetic.main.activity_charts.*
+import kotlinx.android.synthetic.main.toolbar.*
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.model.ColumnChartData
 import lecho.lib.hellocharts.model.Viewport
@@ -26,6 +27,7 @@ class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
 
     override fun bindView() {
         super.bindView()
+        toolbar.title = getString(R.string.charts)
         columnsChart.isScrollEnabled = false
         columnsChart.isZoomEnabled = false
         linesChart.isScrollEnabled = false

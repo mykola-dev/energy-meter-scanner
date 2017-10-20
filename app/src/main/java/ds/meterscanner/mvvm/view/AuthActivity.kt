@@ -7,6 +7,7 @@ import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.AuthViewModel
 import kotlinx.android.synthetic.main.activity_auth.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
 
@@ -15,6 +16,8 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
 
     override fun bindView() {
         super.bindView()
+        toolbar.title = getString(R.string.log_in)
+
         viewModel.apply {
             bind(::login, loginField)
             bind(::password, passwordField)

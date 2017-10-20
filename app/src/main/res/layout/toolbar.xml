@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/activity_main"
     >
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="ds.meterscanner.mvvm.viewmodel.ToolbarViewModel"
-            />
-    </data>
-
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:showIn="@layout/activity_main"
-        >
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            bind:title="@{viewModel.title ?? @string/app_name}"
-            bind:subtitle="@{viewModel.subtitle}"
-            android:theme="@style/ActionBarTheme"
-            />
-    </android.support.design.widget.AppBarLayout>
-</layout>
+        android:theme="@style/ActionBarTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
+</android.support.design.widget.AppBarLayout>

@@ -62,7 +62,7 @@ abstract class BaseActivity<out B : ViewDataBinding, out VM : BaseViewModel> : A
 
     private fun bindView() {
         binding.setVariable(BR.viewModel, viewModel)
-        binding.setVariable(BR.view, this)
+        //binding.setVariable(BR.view, this)
 
         if (bindImmediately)
             binding.executePendingBindings()
