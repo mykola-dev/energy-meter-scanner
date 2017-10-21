@@ -63,10 +63,14 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
     }
 
     fun deleteSnapshots(data: List<Snapshot>) {
+        val childs: MutableMap<String, Any?> = mutableMapOf()
         for (snapshot in data) {
-            snapshotsReference.child(snapshot.id).removeValue()
+            val key = snapshot.id!!
+            L.v("deleting $key")
+            childs.put(key, null)
             removeImage(snapshot.timestamp.toString())
         }
+        snapshotsReference.updateChildren(childs, null)
     }
 
     fun keepSynced(keep: Boolean) {

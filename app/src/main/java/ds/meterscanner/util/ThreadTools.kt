@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit
 
 object ThreadTools {
 
+    // todo coroutines
     private val countDowns = mutableMapOf<Int, CountDownLatch>()
 
     val isUiThread: Boolean

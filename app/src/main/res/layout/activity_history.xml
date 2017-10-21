@@ -21,6 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
+            app:fastScrollEnabled="true"
+            app:fastScrollVerticalThumbDrawable="@drawable/thumb"
+            app:fastScrollVerticalTrackDrawable="@drawable/line"
+            app:fastScrollHorizontalThumbDrawable="@drawable/thumb"
+            app:fastScrollHorizontalTrackDrawable="@drawable/line"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/item_history"
             />

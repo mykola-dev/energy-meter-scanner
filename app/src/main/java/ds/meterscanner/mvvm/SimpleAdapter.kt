@@ -45,7 +45,7 @@ abstract class SimpleAdapter<H : RecyclerView.ViewHolder, D : Any>(
 
     protected abstract val layoutId: Int
 
-    protected abstract fun onFillView(holder: H, item: D, position: Int) : Any
+    protected abstract fun onFillView(holder: H, item: D, position: Int): Any
 
     open protected fun instantiateHolder(view: View): H = getHolderType().getConstructor(View::class.java).newInstance(view)
 

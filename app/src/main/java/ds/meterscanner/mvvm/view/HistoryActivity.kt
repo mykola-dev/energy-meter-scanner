@@ -32,8 +32,8 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
         toolbar.title = getString(R.string.history)
 
         val adapter = HistoryAdapter(
-            { snapshot -> navigateDetails(snapshot.id) },
-            ::onToggleSelection
+            onItemClick = { snapshot -> navigateDetails(snapshot.id) },
+            onToggleSelection = ::onToggleSelection
         )
 
         recyclerView.adapter = adapter
@@ -43,6 +43,7 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
         viewModel.apply {
             bind(::isActionMode, adapter::isActionMode)
             bind(::listItems, adapter::data)
+            bind(::subTitle,toolbar::setSubtitle)
         }
     }
 

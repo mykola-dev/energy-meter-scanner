@@ -5,8 +5,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.produce
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.coroutines.experimental.intrinsics.suspendCoroutineOrReturn
@@ -74,9 +76,12 @@ suspend inline fun <reified T : Any> Query.listenValues() = produce<List<T>>(cor
     val channel = Channel<List<T>>(Channel.UNLIMITED)
     val listener: ValueEventListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            L.i("count ${snapshot.childrenCount}")
-            val values = snapshot.children.map { it.getValue(T::class.java)!! }
-            L.v("sent bind channel? ${channel.offer(values)}")
+            launch(CommonPool) {
+                L.i("count ${snapshot.childrenCount}")
+                // heavy thing. should be done in background
+                val values = snapshot.children.map { it.getValue(T::class.java)!! }
+                channel.offer(values)
+            }
         }
 
         override fun onCancelled(error: DatabaseError) {

@@ -68,5 +68,6 @@
     <string name="wrong_email">Wrong Email</string>
     <string name="shouldnt_be_empty">Shouldn\'t be empty</string>
     <string name="error_unknown">Unknown Error</string>
+    <string name="items">%s items</string>
 
 </resources>

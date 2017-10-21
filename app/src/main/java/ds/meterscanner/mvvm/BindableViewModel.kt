@@ -65,7 +65,7 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
         showProgress = enabled
     }
 
-    fun async(showErrors: Boolean = true, withProgress: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
+    fun async(withProgress: Boolean = true, block: suspend CoroutineScope.() -> Unit) {
         if (withProgress)
             toggleProgress(true)
 
@@ -74,9 +74,7 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
                 block()
             } catch (e: Exception) {
                 L.w(e)
-                if (showErrors) {
-                    onErrorSnack(e)
-                } else throw e
+                onErrorSnack(e)
             } finally {
                 if (withProgress)
                     toggleProgress(false)
@@ -86,6 +84,6 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
 
     protected fun onErrorSnack(t: Throwable) = showSnackbarCommand(t.message ?: getString(R.string.error_unknown))
 
-    protected fun getString(@StringRes id: Int): String = resources.getString(id)
+    protected fun getString(@StringRes id: Int, vararg args: Any): String = resources.getString(id, *args)
 
 }

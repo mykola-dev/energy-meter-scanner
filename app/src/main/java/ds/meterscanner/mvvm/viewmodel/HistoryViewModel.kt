@@ -2,6 +2,7 @@ package ds.meterscanner.mvvm.viewmodel
 
 import L
 import ds.bindingtools.binding
+import ds.meterscanner.R
 import ds.meterscanner.coroutines.listenValues
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.BindableViewModel
@@ -12,6 +13,7 @@ class HistoryViewModel : BindableViewModel() {
 
     var listItems: List<Snapshot> by binding(emptyList())
     var isActionMode: Boolean by binding()
+    var subTitle: String by binding()
 
     val scrollToPositionCommand = Command<Int>()
 
@@ -19,19 +21,15 @@ class HistoryViewModel : BindableViewModel() {
         listenSnapshots()
     }
 
-    private fun listenSnapshots() = async {
-        try {
-            toggleProgress(true)
-            val channel = db.getSnapshots().listenValues<Snapshot>()
-            for (data in channel) {
-                L.d("list updated! size=${data.size}")
-                toggleProgress(false)
-                listItems = data
-                scrollToPositionCommand(data.size - 1)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            onErrorSnack(e)
+    private fun listenSnapshots() = async(false) {
+        toggleProgress(true)
+        val channel = db.getSnapshots().listenValues<Snapshot>()
+        for (data in channel) {
+            L.d("list updated! size=${data.size}")
+            toggleProgress(false)
+            listItems = data
+            subTitle = getString(R.string.items, listItems.size)
+            scrollToPositionCommand(data.size - 1)
         }
     }
 

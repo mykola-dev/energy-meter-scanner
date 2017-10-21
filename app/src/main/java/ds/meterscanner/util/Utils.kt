@@ -32,7 +32,7 @@ fun <T> profile(name: String = "", f: () -> T): T {
     return try {
         f()
     } finally {
-        L.i("profile method [$name] ===> ${System.currentTimeMillis() - start}ms")
+        L.i("profile [$name] ===> ${System.currentTimeMillis() - start}ms")
     }
 }
 
