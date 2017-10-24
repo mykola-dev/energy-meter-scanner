@@ -6,10 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
-import ds.bindingtools.arg
-import ds.bindingtools.bind
-import ds.bindingtools.startActivity
-import ds.bindingtools.startActivityForResult
+import ds.bindingtools.*
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.MainView
@@ -47,7 +44,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
         historyButton.setOnClickListener { viewModel.onListsButton(this) }
         settingsButton.setOnClickListener { viewModel.onSettingsButton(this) }
 
-        viewModel.apply {
+        withBindable(viewModel) {
             bind(::lastUpdated, lastUpdatedLabel)
             bind(::buttonsEnabled, {
                 cameraButton.isEnabled = it && apiKey.isNotEmpty()

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import ds.bindingtools.bind
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ChartsView
@@ -33,8 +34,9 @@ class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
         linesChart.isScrollEnabled = false
         linesChart.isZoomEnabled = false
         previewChart.setViewportChangeListener(ViewportListener(columnsChart, linesChart))
+        radioGroup.setOnCheckedChangeListener { _, checkedId -> viewModel.onCheckedChanged(checkedId) }
 
-        viewModel.apply {
+        withBindable(viewModel) {
             bind(::linesData, {
                 linesChart.lineChartData = it
                 val v = Viewport(linesChart.maximumViewport.left, 30f, linesChart.maximumViewport.right, -30f)
@@ -58,8 +60,6 @@ class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
             })
             bind(this::checkedButtonId, radioGroup::check, radioGroup::getCheckedRadioButtonId)
             bind(::showProgress, { radioGroup.isEnabled = !it })
-            radioGroup.setOnCheckedChangeListener { _, checkedId -> viewModel.onCheckedChanged(checkedId) }
-
         }
     }
 

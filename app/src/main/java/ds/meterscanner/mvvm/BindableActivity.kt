@@ -11,7 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import ds.bindingtools.bind
 import ds.bindingtools.startActivity
-import ds.bindingtools.unbindAll
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.view.AuthActivity
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -40,7 +40,7 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     }
 
     @CallSuper
-    protected open fun bindView() = with(viewModel) {
+    protected open fun bindView() = withBindable(viewModel) {
         bind(::showProgress, { progressView?.isRefreshing = it }, { progressView?.isRefreshing ?: false })
     }
 
@@ -61,15 +61,6 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         setupToolbar()
-    }
-
-    override fun onDestroy() {
-        unbindView()
-        super.onDestroy()
-    }
-
-    protected fun unbindView() {
-        viewModel.unbindAll()
     }
 
     private fun setupToolbar() {

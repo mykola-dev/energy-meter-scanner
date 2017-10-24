@@ -1,6 +1,7 @@
 package ds.meterscanner.mvvm.view
 
 import ds.bindingtools.bind
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.AuthView
 import ds.meterscanner.mvvm.BindableActivity
@@ -17,8 +18,10 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
     override fun bindView() {
         super.bindView()
         toolbar.title = getString(R.string.log_in)
+        signinButton.setOnClickListener { viewModel.onSignIn() }
+        signupButton.setOnClickListener { viewModel.onSignUp() }
 
-        viewModel.apply {
+        withBindable(viewModel) {
             bind(::login, loginField)
             bind(::password, passwordField)
             bind(loginError::error, loginLayout::setError)
@@ -27,8 +30,6 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
                 signinButton.isEnabled = !it
                 signupButton.isEnabled = !it
             })
-            signinButton.setOnClickListener { onSignIn() }
-            signupButton.setOnClickListener { onSignUp() }
         }
     }
 }

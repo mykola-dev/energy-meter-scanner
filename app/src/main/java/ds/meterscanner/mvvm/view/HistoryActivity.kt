@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import ds.bindingtools.bind
 import ds.bindingtools.startActivity
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.mvvm.BindableActivity
@@ -40,7 +41,7 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutCompat.VERTICAL))
         fab.setOnClickListener { viewModel.onNewSnapshot(this) }
 
-        viewModel.apply {
+        withBindable(viewModel) {
             bind(::isActionMode, adapter::isActionMode)
             bind(::listItems, adapter::data)
             bind(::subTitle,toolbar::setSubtitle)

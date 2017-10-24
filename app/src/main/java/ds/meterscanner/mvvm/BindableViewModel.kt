@@ -62,6 +62,7 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
     protected open fun onLoggedIn(user: FirebaseUser) {}
 
     override fun toggleProgress(enabled: Boolean) {
+        L.i("toggle progress: $enabled")
         showProgress = enabled
     }
 
