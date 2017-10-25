@@ -6,7 +6,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
-import ds.bindingtools.*
+import ds.bindingtools.arg
+import ds.bindingtools.startActivity
+import ds.bindingtools.startActivityForResult
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.MainView
@@ -54,7 +57,6 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
             })
             bind(::apiKey, { cameraButton.isEnabled = it.isNotEmpty() && buttonsEnabled })
             bind(::toolbarSubtitle, toolbar::setSubtitle, toolbar::getSubtitle)
-
         }
     }
 

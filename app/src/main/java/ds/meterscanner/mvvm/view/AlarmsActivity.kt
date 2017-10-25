@@ -2,7 +2,7 @@ package ds.meterscanner.mvvm.view
 
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutCompat.VERTICAL
-import ds.bindingtools.bind
+import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.adapter.AlarmsAdapter
 import ds.meterscanner.mvvm.AlarmsView
@@ -33,7 +33,9 @@ class AlarmsActivity : BindableActivity<AlarmsViewModel>(), AlarmsView {
         recyclerView.addItemDecoration(DividerItemDecoration(this, VERTICAL))
         fab.setOnClickListener { viewModel.onNewAlarm(this) }
 
-        viewModel.bind(viewModel::listItems, adapter::data)
+        withBindable(viewModel) {
+            bind(::listItems, adapter::data)
+        }
     }
 
 }

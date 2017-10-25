@@ -1,6 +1,5 @@
 package ds.meterscanner.mvvm.view
 
-import ds.bindingtools.bind
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.AuthView

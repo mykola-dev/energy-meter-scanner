@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import ds.bindingtools.bind
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity

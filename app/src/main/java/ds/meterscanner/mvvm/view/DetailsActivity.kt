@@ -2,7 +2,6 @@ package ds.meterscanner.mvvm.view
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ds.bindingtools.arg
-import ds.bindingtools.bind
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity

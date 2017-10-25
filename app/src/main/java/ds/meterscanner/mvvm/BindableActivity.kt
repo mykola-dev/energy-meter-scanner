@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import ds.bindingtools.bind
 import ds.bindingtools.startActivity
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
