@@ -16,6 +16,7 @@ import ds.meterscanner.util.visible
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_history.*
 
+// todo add pagination
 class HistoryAdapter(
     private val onItemClick: (Snapshot) -> Unit,
     private val onToggleSelection: () -> Unit

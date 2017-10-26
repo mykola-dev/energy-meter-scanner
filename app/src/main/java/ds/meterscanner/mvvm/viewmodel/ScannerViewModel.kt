@@ -2,11 +2,11 @@ package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.graphics.Bitmap
+import ds.meterscanner.coroutines.Locker
 import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.FinishWithResultCommand
 import ds.meterscanner.mvvm.invoke
-import ds.meterscanner.util.ThreadTools
 
 class ScannerViewModel : BindableViewModel() {
 
@@ -36,7 +36,7 @@ class ScannerViewModel : BindableViewModel() {
     }
 
     private fun saveAndClose() {
-        ThreadTools.release(jobId)
+        Locker.release(jobId)
         if (validateResults()) {
             var resultString = results.average().toString()
             if (prefs.fixFirstFive && resultString.startsWith("6")) {

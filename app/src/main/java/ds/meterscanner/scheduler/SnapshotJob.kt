@@ -9,6 +9,7 @@ import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.erased.instance
 import ds.bindingtools.startActivity
+import ds.meterscanner.coroutines.Locker
 import ds.meterscanner.data.INTERRUPT_EVENT
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.data.sendEvent
@@ -93,13 +94,10 @@ class SnapshotJob : Job(), KodeinInjected {
             }
         }
 
-        try {
-            if (!ThreadTools.lock(jobId, prefs.shotTimeout.toLong())) {
-                L.w("threads: interrupted by timeout")
-                context.sendEvent(INTERRUPT_EVENT)
-                return@runBlocking false
-            }
-        } catch (ignored: InterruptedException) {
+        if (!Locker.lock(jobId, prefs.shotTimeout.toLong())) {
+            L.w("threads: interrupted by timeout")
+            context.sendEvent(INTERRUPT_EVENT)
+            return@runBlocking false
         }
 
         L.v("scheduler: task was successful")
