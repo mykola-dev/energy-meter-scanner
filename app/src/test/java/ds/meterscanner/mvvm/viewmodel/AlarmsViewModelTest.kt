@@ -15,12 +15,11 @@ import org.mockito.junit.MockitoJUnitRunner
 class AlarmsViewModelTest {
 
     @Mock lateinit var view: AlarmsView
-    lateinit var viewModel: AlarmsViewModel
+    private lateinit var viewModel: AlarmsViewModel
 
     @Before
     fun setUp() {
-        viewModelKodein()
-        viewModel = AlarmsViewModel()
+        viewModel = AlarmsViewModel(viewModelKodein())
     }
 
     @Test

@@ -3,8 +3,7 @@ package ds.meterscanner
 import com.bumptech.glide.RequestManager
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.bind
-import com.github.salomonbrys.kodein.conf.global
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.instance
 import com.nhaarman.mockito_kotlin.mock
 import ds.meterscanner.auth.Authenticator
 import ds.meterscanner.data.Prefs
@@ -13,8 +12,8 @@ import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.net.NetLayer
 import ds.meterscanner.scheduler.Scheduler
 
-fun viewModelKodein() = with(Kodein.global) {
-    addImport(mockModule)
+fun viewModelKodein() = Kodein {
+    import(mockModule)
 }
 
 private val mockModule = Kodein.Module {
