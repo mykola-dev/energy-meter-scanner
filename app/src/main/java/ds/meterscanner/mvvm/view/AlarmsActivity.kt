@@ -7,7 +7,6 @@ import ds.meterscanner.R
 import ds.meterscanner.adapter.AlarmsAdapter
 import ds.meterscanner.mvvm.AlarmsView
 import ds.meterscanner.mvvm.BindableActivity
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.AlarmsViewModel
 import ds.meterscanner.ui.DatePickers
 import kotlinx.android.synthetic.main.activity_alarms.*
@@ -19,7 +18,7 @@ class AlarmsActivity : BindableActivity<AlarmsViewModel>(), AlarmsView {
     override fun pickTime(time: Date, callback: (hour: Int, minute: Int) -> Unit) =
         DatePickers.pickTime(this, time, callback)
 
-    override fun provideViewModel(): AlarmsViewModel = viewModelOf()
+    override fun provideViewModel(): AlarmsViewModel = defaultViewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_alarms
 
     override fun bindView() {

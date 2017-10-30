@@ -14,6 +14,13 @@ inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(factory: ViewMod
         ViewModelProviders.of(this)[T::class.java]
 }
 
+inline fun <reified T : ViewModel> FragmentActivity.viewModelOf(crossinline factory: () -> T): T {
+    return viewModelOf(object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = factory() as T
+    })
+}
+
 inline fun <reified T : ViewModel> Fragment.viewModelOf(): T = ViewModelProviders.of(this)[T::class.java]
 
 fun <T> LiveData<T>.observe(owner: LifecycleOwner, block: (T) -> Unit) = observe(owner, Observer { block(it!!) })

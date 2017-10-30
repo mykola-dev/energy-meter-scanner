@@ -1,6 +1,7 @@
 package ds.meterscanner.mvvm.view
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.github.salomonbrys.kodein.kodein
 import ds.bindingtools.arg
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
@@ -20,7 +21,7 @@ class DetailsActivity : BindableActivity<DetailsViewModel>(), DetailsView {
 
     val snapshotId by arg<String>()
 
-    override fun provideViewModel(): DetailsViewModel = viewModelOf(DetailsViewModel.Factory(snapshotId))
+    override fun provideViewModel(): DetailsViewModel = viewModelOf { DetailsViewModel(kodein().value, snapshotId) }
 
     override fun getLayoutId(): Int = R.layout.activity_details
 

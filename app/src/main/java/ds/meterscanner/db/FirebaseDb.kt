@@ -4,9 +4,6 @@ import L
 import android.graphics.Bitmap
 import android.text.format.DateFormat
 import android.util.Log
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.erased.instance
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -24,7 +21,12 @@ import kotlinx.coroutines.experimental.run
 import java.io.ByteArrayOutputStream
 
 
-class FirebaseDb(override val kodein: Kodein) : KodeinAware {
+class FirebaseDb(
+    private val auth: Authenticator,
+    private val database: FirebaseDatabase,
+    private val storage: FirebaseStorage,
+    val prefs: Prefs
+) {
 
     companion object {
         val USERS = "users"
@@ -32,11 +34,6 @@ class FirebaseDb(override val kodein: Kodein) : KodeinAware {
         val LOG = "log"
         val IMAGES = "images"
     }
-
-    val auth: Authenticator = instance()
-    val database: FirebaseDatabase = instance()
-    private val storage: FirebaseStorage = instance()
-    val prefs: Prefs = instance()
 
     private val storageRef: StorageReference
         get() = storage.getReference(IMAGES).child(auth.getUser()!!.uid)

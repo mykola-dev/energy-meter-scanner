@@ -2,19 +2,21 @@ package ds.meterscanner.mvvm.viewmodel
 
 import L
 import android.graphics.Bitmap
+import com.github.salomonbrys.kodein.Kodein
 import ds.meterscanner.coroutines.Locker
 import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.FinishWithResultCommand
 import ds.meterscanner.mvvm.invoke
 
-class ScannerViewModel : BindableViewModel() {
+class ScannerViewModel(
+    kodein: Kodein,
+    private val tries: Int,
+    private val jobId: Int
+) : BindableViewModel(kodein) {
 
     val startScanningCommand = Command<Unit>()
     val finishWithResultCommand = FinishWithResultCommand()
-
-    var tries: Int = 0
-    var jobId: Int = 0
 
     private val results = arrayListOf<Double>()
     private val bitmaps = arrayListOf<Bitmap>()

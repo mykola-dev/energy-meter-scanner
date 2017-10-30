@@ -1,6 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import L
+import com.github.salomonbrys.kodein.Kodein
 import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.coroutines.listenValues
@@ -9,7 +10,7 @@ import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.Command
 import ds.meterscanner.mvvm.ListsView
 
-class HistoryViewModel : BindableViewModel() {
+class HistoryViewModel(kodein: Kodein) : BindableViewModel(kodein) {
 
     var listItems: List<Snapshot> by binding(emptyList())
     var isActionMode: Boolean by binding()
@@ -27,9 +28,8 @@ class HistoryViewModel : BindableViewModel() {
         for (data in channel) {
             L.d("list updated! size=${data.size}")
             toggleProgress(false)
-            listItems = data
+            listItems = data.reversed()
             subTitle = getString(R.string.items, listItems.size)
-            scrollToPositionCommand(data.size - 1)
         }
     }
 

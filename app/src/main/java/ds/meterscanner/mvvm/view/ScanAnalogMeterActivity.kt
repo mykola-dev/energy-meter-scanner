@@ -19,6 +19,7 @@ import at.nineyards.anyline.camera.CameraController
 import at.nineyards.anyline.camera.CameraFeatures
 import at.nineyards.anyline.camera.CameraOpenListener
 import at.nineyards.anyline.modules.energy.EnergyScanView
+import com.github.salomonbrys.kodein.kodein
 import ds.bindingtools.arg
 import ds.bindingtools.bundle
 import ds.meterscanner.R
@@ -44,7 +45,7 @@ class ScanAnalogMeterActivity : BindableActivity<ScannerViewModel>(), CameraOpen
         finish()
     }
 
-    override fun provideViewModel() = viewModelOf<ScannerViewModel>().also { it.tries = tries!!; it.jobId = jobId!! }
+    override fun provideViewModel() = viewModelOf { ScannerViewModel(kodein().value, tries!!, jobId!!) }
 
     override fun getLayoutId(): Int = R.layout.activity_scan_energy
 
@@ -81,11 +82,11 @@ class ScanAnalogMeterActivity : BindableActivity<ScannerViewModel>(), CameraOpen
 
     private fun initView() {
         energyScanView.positionCallback = { x, y ->
-            viewModel.saveViewportPosition(x,y)
+            viewModel.saveViewportPosition(x, y)
             updateViewport()
         }
         energyScanView.scaleCallback = { width, height ->
-            viewModel.saveViewportSize(width,height)
+            viewModel.saveViewportSize(width, height)
             updateViewport()
         }
 

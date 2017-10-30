@@ -1,9 +1,8 @@
 package ds.meterscanner.mvvm
 
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
 import java.util.*
 
-interface BindableView : KodeinGlobalAware {
+interface BindableView {
     val viewModel: BindableViewModel
     fun finish()
 }

@@ -5,18 +5,17 @@ import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.rescheduled
 import com.evernote.android.job.scheduledTo
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinAware
-import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.util.formatTimeDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Scheduler(override val kodein: Kodein) : KodeinAware {
+class Scheduler(
+    private val jobManager: JobManager,
+    private val prefs: Prefs,
+    private val calendarProvider: () -> Calendar
+) {
 
-    private val jobManager: JobManager = instance()
-    private val prefs: Prefs = instance()
 
     fun getScheduledJobs(): MutableSet<JobRequest> = jobManager.allJobRequests
 
@@ -45,8 +44,8 @@ class Scheduler(override val kodein: Kodein) : KodeinAware {
         alarmsSet
             .map(String::toLong)
             .forEach {
-                val curr: Calendar = instance()
-                val cal: Calendar = instance()
+                val curr: Calendar = calendarProvider()
+                val cal: Calendar = calendarProvider()
                 cal.timeInMillis = it
                 while (cal.before(curr)) {
                     cal.add(Calendar.DAY_OF_YEAR, 1)
@@ -56,7 +55,7 @@ class Scheduler(override val kodein: Kodein) : KodeinAware {
     }
 
     fun scheduleSnapshotJob(hours: Int, minutes: Int) {
-        val cal: Calendar = instance()
+        val cal: Calendar = calendarProvider()
         cal.set(Calendar.HOUR_OF_DAY, hours)
         cal.set(Calendar.MINUTE, minutes)
         val curr = Calendar.getInstance()

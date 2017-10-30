@@ -2,39 +2,28 @@ package ds.meterscanner
 
 import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
-import com.evernote.android.job.JobManager
 import com.facebook.stetho.Stetho
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
-import com.github.salomonbrys.kodein.lazy
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.KodeinInjected
+import com.github.salomonbrys.kodein.KodeinInjector
 import com.squareup.leakcanary.LeakCanary
-import ds.meterscanner.data.Prefs
-import ds.meterscanner.di.setupGlobalKodein
-import ds.meterscanner.scheduler.SnapshotJobCreator
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import ds.meterscanner.di.mainComponent
 import timber.log.Timber
 
-class App : MultiDexApplication(), KodeinGlobalAware {
-
-    private val jobManager: JobManager by kodein.lazy.instance()
-    val prefs: Prefs by kodein.lazy.instance()
+class App : MultiDexApplication(), KodeinAware, KodeinInjected {
+    override val injector: KodeinInjector = KodeinInjector()
+    override val kodein: Kodein by injector.kodein()
 
     override fun onCreate() {
         super.onCreate()
+        inject(mainComponent(this))
         //initLeakCanary() || return
-        setupGlobalKodein(this)
         initTimber()
         initStetho()
-        initJobManager()
 
         // enable vector drawables in the resources
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-
-        // refresh remote prefs
-        launch(UI) {
-            prefs.fetchRemote()
-        }
     }
 
     private fun initLeakCanary(): Boolean {
@@ -45,10 +34,6 @@ class App : MultiDexApplication(), KodeinGlobalAware {
         }
         LeakCanary.install(this)
         return true
-    }
-
-    private fun initJobManager() {
-        jobManager.addJobCreator(SnapshotJobCreator())
     }
 
     private fun initTimber() {

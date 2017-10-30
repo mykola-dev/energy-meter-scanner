@@ -3,10 +3,11 @@ package ds.meterscanner.adapter
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
 import ds.meterscanner.mvvm.SimpleAdapter
@@ -18,11 +19,10 @@ import kotlinx.android.synthetic.main.item_history.*
 
 // todo add pagination
 class HistoryAdapter(
+    private val glide: RequestManager,
     private val onItemClick: (Snapshot) -> Unit,
     private val onToggleSelection: () -> Unit
-) : SimpleAdapter<HistoryViewHolder, Snapshot>(), KodeinGlobalAware {
-
-    val glide: RequestManager = instance()
+) : SimpleAdapter<HistoryViewHolder, Snapshot>() {
 
     var isActionMode = false
         set(value) {
@@ -72,9 +72,9 @@ class HistoryAdapter(
 }
 
 class HistoryViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    val value = titleLabel
-    val date = dateLabel
-    val image = imageView
-    val temperature = temperatureLabel
-    val checkBox = selectedCheck
+    val value: TextView = titleLabel
+    val date: TextView = dateLabel
+    val image: ImageView = imageView
+    val temperature: TextView = temperatureLabel
+    val checkBox: CheckBox = selectedCheck
 }

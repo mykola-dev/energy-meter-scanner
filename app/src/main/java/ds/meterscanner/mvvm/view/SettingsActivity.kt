@@ -7,15 +7,16 @@ import android.support.v4.app.Fragment
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
 import com.evernote.android.job.rescheduled
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.KodeinInjected
+import com.github.salomonbrys.kodein.KodeinInjector
+import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.instance
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import ds.bindingtools.startActivity
 import ds.meterscanner.R
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.SettingsView
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.SettingsViewModel
 import ds.meterscanner.scheduler.Scheduler
 import kotlinx.android.synthetic.main.toolbar.*
@@ -25,7 +26,7 @@ import kotlin.reflect.KProperty
 @SuppressLint("CommitTransaction")
 class SettingsActivity : BindableActivity<SettingsViewModel>(), SettingsView {
 
-    override fun provideViewModel(): SettingsViewModel = viewModelOf()
+    override fun provideViewModel(): SettingsViewModel = defaultViewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +42,11 @@ class SettingsActivity : BindableActivity<SettingsViewModel>(), SettingsView {
         }
     }
 
-    class SettingsFragment : PreferenceFragmentCompat(), KodeinGlobalAware, SharedPreferences.OnSharedPreferenceChangeListener {
+    class SettingsFragment : PreferenceFragmentCompat(), KodeinInjected, SharedPreferences.OnSharedPreferenceChangeListener {
+        override val injector: KodeinInjector = KodeinInjector()
 
-        val prefs: Prefs = instance()
-        val scheduler: Scheduler = instance()
+        val prefs: Prefs by instance()
+        val scheduler: Scheduler by instance()
 
         private val scanTries: EditTextPreference by PreferenceDelegate()
         private val city: EditTextPreference by PreferenceDelegate()
@@ -55,6 +57,7 @@ class SettingsActivity : BindableActivity<SettingsViewModel>(), SettingsView {
         private val shotTimeout: EditTextPreference by PreferenceDelegate()
 
         override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+            inject(appKodein())
             preferenceManager.sharedPreferencesName = "main_prefs"
             addPreferencesFromResource(R.xml.prefs)
 

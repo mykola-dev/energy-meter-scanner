@@ -3,7 +3,8 @@ package ds.meterscanner.mvvm.viewmodel
 import L
 import android.graphics.Bitmap
 import android.text.format.DateUtils
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.bindingtools.binding
 import ds.meterscanner.R
@@ -14,7 +15,7 @@ import ds.meterscanner.mvvm.MainView
 import ds.meterscanner.mvvm.invoke
 import ds.meterscanner.util.post
 
-class MainViewModel : BindableViewModel() {
+class MainViewModel(kodein: Kodein) : BindableViewModel(kodein) {
 
     var buttonsEnabled: Boolean by binding()
     var lastUpdated: String by binding()
@@ -36,10 +37,9 @@ class MainViewModel : BindableViewModel() {
 
     override fun onLoggedIn(user: FirebaseUser) {
         L.v("signed in")
-        post {
-            // workaround
-            toggleProgress(false)
-        }
+        // workaround
+        post { toggleProgress(false) }
+
         db.keepSynced(true)
 
         prepareApiKey()

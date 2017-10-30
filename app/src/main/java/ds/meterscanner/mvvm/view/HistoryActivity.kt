@@ -6,6 +6,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutCompat
 import android.view.Menu
 import android.view.MenuItem
+import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.kodein
 import ds.bindingtools.startActivity
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
@@ -13,7 +15,6 @@ import ds.meterscanner.adapter.HistoryAdapter
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ListsView
 import ds.meterscanner.mvvm.observe
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.HistoryViewModel
 import ds.meterscanner.util.post
 import kotlinx.android.synthetic.main.activity_history.*
@@ -24,7 +25,7 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
     private var actionMode: ActionMode? = null
     private var selectedItems = 0
 
-    override fun provideViewModel(): HistoryViewModel = viewModelOf()
+    override fun provideViewModel(): HistoryViewModel = defaultViewModelOf()
     override fun getLayoutId(): Int = R.layout.activity_history
 
     override fun bindView() {
@@ -32,6 +33,7 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
         toolbar.title = getString(R.string.history)
 
         val adapter = HistoryAdapter(
+            kodein().value.instance(),
             onItemClick = { snapshot -> navigateDetails(snapshot.id) },
             onToggleSelection = ::onToggleSelection
         )

@@ -14,7 +14,6 @@ import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.MainView
 import ds.meterscanner.mvvm.observe
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.MainViewModel
 import ds.meterscanner.ui.DebugDrawerController
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +23,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
 
     val jobId by arg(-1)
 
-    override fun provideViewModel(): MainViewModel = viewModelOf()
+    override fun provideViewModel(): MainViewModel = defaultViewModelOf()
 
     override fun getLayoutId() = R.layout.activity_main
 
@@ -34,9 +33,7 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
         L.v("current job id=$jobId")
     }
 
-    override fun onToolbarCreated() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-    }
+    override val isDisplayUpButton: Boolean get() = false
 
     override fun bindView() {
         super.bindView()

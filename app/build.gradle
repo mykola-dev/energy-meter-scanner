@@ -71,6 +71,7 @@ dependencies {
     def firebaseVersion = '11.4.2'
     def retrofitVersion = '2.3.0'
     def acVersion = '1.0.0-rc1'
+    def kodeinVersion = '4.1.0'
 
     // supportlib stuff
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -81,7 +82,7 @@ dependencies {
     implementation "com.android.support:gridlayout-v7:$supportVersion"
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
-    implementation 'com.takisoft.fix:preference-v7:26.1.0.3'                                        // https://github.com/Gericop/Android-Support-Preference-V7-Fix
+    implementation "com.takisoft.fix:preference-v7:26.1.0.3"                                        // https://github.com/Gericop/Android-Support-Preference-V7-Fix
     implementation "com.android.support:multidex:1.0.2"
 
     implementation "com.google.firebase:firebase-auth:$firebaseVersion"
@@ -95,28 +96,28 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.1"
     //noinspection GradleDependency
-    implementation 'com.github.bumptech.glide:glide:3.8.0'                                          // https://github.com/bumptech/glide
-    implementation 'com.evernote:android-job:1.2.0'                                                 // https://github.com/evernote/android-job
+    implementation "com.github.bumptech.glide:glide:3.8.0"                                          // https://github.com/bumptech/glide
+    implementation "com.evernote:android-job:1.2.0"                                                 // https://github.com/evernote/android-job
 
     // injectors
-    implementation 'com.github.salomonbrys.kodein:kodein-erased:4.1.0'                              // https://salomonbrys.github.io/Kodein/
-    implementation 'com.github.salomonbrys.kodein:kodein-conf:4.1.0'
-    implementation 'com.github.salomonbrys.kodein:kodein-android:4.1.0'
-    //implementation 'com.evernote:android-state:1.1.1'                                             // https://github.com/evernote/android-state
-    //kapt 'com.evernote:android-state-processor:1.1.1'
+    implementation "com.github.salomonbrys.kodein:kodein:$kodeinVersion"                            // https://salomonbrys.github.io/Kodein/
+    implementation "com.github.salomonbrys.kodein:kodein-conf:$kodeinVersion"
+    implementation "com.github.salomonbrys.kodein:kodein-android:$kodeinVersion"
+    //implementation "com.evernote:android-state:1.1.1"                                             // https://github.com/evernote/android-state
+    //kapt "com.evernote:android-state-processor:1.1.1"
 
     // ui
-    implementation ('com.wdullaer:materialdatetimepicker:3.3.1') {                                  // https://github.com/wdullaer/MaterialDateTimePicker
-        exclude group: 'com.android.support', module: 'support-v13'
+    implementation ("com.wdullaer:materialdatetimepicker:3.3.1") {                                  // https://github.com/wdullaer/MaterialDateTimePicker
+        exclude group: "com.android.support", module: "support-v13"
     }
-    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'                                 // https://github.com/lecho/hellocharts-android
+    implementation "com.github.lecho:hellocharts-library:1.5.8@aar"                                 // https://github.com/lecho/hellocharts-android
 
     // etc
-    implementation 'io.anyline:anylinesdk:3.11.0@aar'                                               // https://www.anyline.io/download/
+    implementation "io.anyline:anylinesdk:3.11.0@aar"                                               // https://www.anyline.io/download/
     //implementation "org.greenrobot:eventbus:3.0.0"                                                // https://github.com/greenrobot/EventBus
     //kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"                                     // see kapt params
     implementation "com.jakewharton.timber:timber:4.5.1"                                            // https://github.com/JakeWharton/timber
-    implementation 'com.github.deviant-studio:bindingtools:0.12'                                    // https://github.com/deviant-studio/bindingtools
+    implementation "com.github.deviant-studio:bindingtools:0.12"                                    // https://github.com/deviant-studio/bindingtools
 
     // development
     implementation "android.arch.lifecycle:extensions:$acVersion"
@@ -124,7 +125,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"              // https://github.com/Kotlin/kotlinx.coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2'                          // https://github.com/gildor/kotlin-coroutines-retrofit
+    implementation "ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2"                          // https://github.com/gildor/kotlin-coroutines-retrofit
     debugImplementation "com.facebook.stetho:stetho:1.5.0"                                          // https://github.com/facebook/stetho
     debugImplementation "com.facebook.stetho:stetho-okhttp3:1.5.0"
     provided "com.facebook.stetho:stetho:1.5.0"
@@ -132,8 +133,8 @@ dependencies {
     debugImplementation "io.palaima.debugdrawer:debugdrawer:0.7.0"
     releaseImplementation "io.palaima.debugdrawer:debugdrawer-no-op:0.7.0"
     implementation "io.palaima.debugdrawer:debugdrawer-actions:0.7.0"
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'                          // https://github.com/square/leakcanary
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:1.5.4"                          // https://github.com/square/leakcanary
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:1.5.4"
 
     // tests
     implementation fileTree(dir: "libs", include: ["*.jar"])

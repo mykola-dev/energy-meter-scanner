@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import com.github.salomonbrys.kodein.*
+import com.github.salomonbrys.kodein.android.appKodein
 import ds.bindingtools.startActivity
 import ds.bindingtools.withBindable
 import ds.meterscanner.R
@@ -16,12 +18,18 @@ import ds.meterscanner.mvvm.view.AuthActivity
 import kotlinx.android.synthetic.main.activity_auth.*
 
 @Suppress("LeakingThis")
-abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(), BindableView {
+abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(), BindableView, KodeinInjected {
+    override val injector: KodeinInjector = KodeinInjector()
 
     override val viewModel: VM by lazy { provideViewModel() }
 
-    protected open val bindImmediately = false
-    protected val isDisplayUpButton = true
+    /**
+     * Default ViewModel factory
+     */
+    protected inline fun <reified T : BindableViewModel> defaultViewModelOf(): T =
+        viewModelOf { T::class.java.getConstructor(Kodein::class.java).newInstance(kodein().value) }
+
+    protected open val isDisplayUpButton = true
 
     init {
         L.v("::: ${javaClass.simpleName} initialized")
@@ -33,9 +41,13 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        inject(appKodein())
         setContentView(getLayoutId())
         bindView()
         initViewModel()
+
+        println(kodein().value.container.bindings.description)
+        L.v("tag=${instance<String>("tag")}")
     }
 
     @CallSuper
@@ -67,11 +79,8 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
         if (toolbar != null) {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(isDisplayUpButton)
-            onToolbarCreated()
         }
     }
-
-    protected open fun onToolbarCreated() {}
 
     protected fun showSnackbar(
         text: String,

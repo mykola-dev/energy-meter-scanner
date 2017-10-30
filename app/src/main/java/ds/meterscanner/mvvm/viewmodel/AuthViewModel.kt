@@ -1,12 +1,13 @@
 package ds.meterscanner.mvvm.viewmodel
 
 import android.util.Patterns
+import com.github.salomonbrys.kodein.Kodein
 import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableViewModel
 import ds.meterscanner.mvvm.invoke
 
-class AuthViewModel : BindableViewModel() {
+class AuthViewModel(kodein: Kodein) : BindableViewModel(kodein) {
 
     val login: String by binding("")
     val password: String by binding("")

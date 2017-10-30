@@ -4,7 +4,8 @@ import L
 import android.content.ContentResolver
 import android.net.Uri
 import android.text.format.DateFormat
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.data.CsvCreator
@@ -23,7 +24,7 @@ import lecho.lib.hellocharts.util.ChartUtils
 import java.io.Serializable
 import java.util.*
 
-class ChartsViewModel : BindableViewModel() {
+class ChartsViewModel(kodein: Kodein) : BindableViewModel(kodein) {
 
     var checkedButtonId: Int by binding()
     var columnsData: ColumnChartData by binding()

@@ -7,7 +7,7 @@ import android.content.Intent
 import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.startActivity
 import ds.meterscanner.data.Prefs
 import ds.meterscanner.mvvm.view.MainActivity

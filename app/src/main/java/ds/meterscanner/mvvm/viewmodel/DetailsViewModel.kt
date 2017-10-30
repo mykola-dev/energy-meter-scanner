@@ -1,8 +1,7 @@
 package ds.meterscanner.mvvm.viewmodel
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.binding
 import ds.meterscanner.R
 import ds.meterscanner.db.model.Snapshot
@@ -13,8 +12,9 @@ import kotlinx.coroutines.experimental.delay
 import java.util.*
 
 class DetailsViewModel(
+    kodein: Kodein,
     private val snapshotId: String? = null
-) : BindableViewModel() {
+) : BindableViewModel(kodein) {
 
     val valueError = Validator(::value) { value ->
         try {
@@ -88,10 +88,5 @@ class DetailsViewModel(
     }
 
     fun onDatePick(view: DetailsView) = view.pickDate()
-
-    class Factory(private val snapshotId: String? = null) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = DetailsViewModel(snapshotId) as T
-    }
 
 }

@@ -1,12 +1,12 @@
 package ds.meterscanner.mvvm
 
 import L
-import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.StringRes
 import com.bumptech.glide.RequestManager
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.instance
 import com.google.firebase.auth.FirebaseUser
 import ds.bindingtools.Bindable
 import ds.bindingtools.binding
@@ -23,8 +23,7 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-@SuppressLint("StaticFieldLeak")
-abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable, Bindable {
+abstract class BindableViewModel(override val kodein: Kodein) : ViewModel(), KodeinAware, Progressable, Bindable {
 
     val restService: NetLayer = instance()
     val prefs: Prefs = instance()
@@ -44,13 +43,16 @@ abstract class BindableViewModel : ViewModel(), KodeinGlobalAware, Progressable,
     var lifecycleJob = Job() // create a job object bind manage lifecycle
 
     init {
+        initAuthenticator()
+    }
+
+    private fun initAuthenticator() {
         authenticator.startListen(this, { logged ->
             if (logged)
                 onLoggedIn(authenticator.getUser()!!)
             else
                 runAuthScreenCommand?.invoke()
         })
-
     }
 
     override fun onCleared() {

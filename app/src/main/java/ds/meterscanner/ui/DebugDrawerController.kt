@@ -4,8 +4,10 @@ import L
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.evernote.android.job.scheduledTo
-import com.github.salomonbrys.kodein.conf.KodeinGlobalAware
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.startActivity
 import ds.meterscanner.db.FirebaseDb
 import ds.meterscanner.db.model.Snapshot
@@ -23,7 +25,8 @@ import kotlinx.coroutines.experimental.launch
 import java.util.*
 
 
-class DebugDrawerController(val activity: AppCompatActivity) : KodeinGlobalAware {
+class DebugDrawerController(private val activity: AppCompatActivity) : KodeinAware {
+    override val kodein: Kodein = activity.appKodein()
 
     private val debugDrawer: DebugDrawer
     val db: FirebaseDb = instance()

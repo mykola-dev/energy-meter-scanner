@@ -7,7 +7,7 @@ import com.evernote.android.job.Job
 import com.github.salomonbrys.kodein.KodeinInjected
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.erased.instance
+import com.github.salomonbrys.kodein.instance
 import ds.bindingtools.startActivity
 import ds.meterscanner.coroutines.Locker
 import ds.meterscanner.data.INTERRUPT_EVENT
@@ -29,7 +29,6 @@ private const val JOB_RETRIES = 3
 
 class SnapshotJob : Job(), KodeinInjected {
     override val injector: KodeinInjector = KodeinInjector()
-
 
     private val prefs: Prefs by instance()
     private val restService: NetLayer by instance()

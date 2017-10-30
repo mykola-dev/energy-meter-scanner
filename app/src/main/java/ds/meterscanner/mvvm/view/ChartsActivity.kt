@@ -8,7 +8,6 @@ import ds.bindingtools.withBindable
 import ds.meterscanner.R
 import ds.meterscanner.mvvm.BindableActivity
 import ds.meterscanner.mvvm.ChartsView
-import ds.meterscanner.mvvm.viewModelOf
 import ds.meterscanner.mvvm.viewmodel.ChartsViewModel
 import ds.meterscanner.mvvm.viewmodel.Period
 import ds.meterscanner.util.FileTools
@@ -21,7 +20,7 @@ import lecho.lib.hellocharts.util.ChartUtils
 
 class ChartsActivity : BindableActivity<ChartsViewModel>(), ChartsView {
 
-    override fun provideViewModel(): ChartsViewModel = viewModelOf()
+    override fun provideViewModel(): ChartsViewModel = defaultViewModelOf()
 
     override fun getLayoutId(): Int = R.layout.activity_charts
 

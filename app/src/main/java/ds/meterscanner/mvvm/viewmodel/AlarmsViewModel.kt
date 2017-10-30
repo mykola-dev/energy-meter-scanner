@@ -2,13 +2,14 @@ package ds.meterscanner.mvvm.viewmodel
 
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.scheduledTo
+import com.github.salomonbrys.kodein.Kodein
 import ds.bindingtools.binding
 import ds.meterscanner.mvvm.AlarmsView
 import ds.meterscanner.mvvm.BindableViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AlarmsViewModel : BindableViewModel() {
+class AlarmsViewModel(kodein: Kodein) : BindableViewModel(kodein) {
 
     var listItems: List<JobRequest> by binding(emptyList())
 
