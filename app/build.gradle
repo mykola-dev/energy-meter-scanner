@@ -70,7 +70,7 @@ dependencies {
     def supportVersion = '26.1.0'
     def firebaseVersion = '11.4.2'
     def retrofitVersion = '2.3.0'
-    def acVersion = '1.0.0-rc1'
+    def acVersion = '1.0.0'
     def kodeinVersion = '4.1.0'
 
     // supportlib stuff
@@ -117,7 +117,7 @@ dependencies {
     //implementation "org.greenrobot:eventbus:3.0.0"                                                // https://github.com/greenrobot/EventBus
     //kapt "org.greenrobot:eventbus-annotation-processor:3.0.1"                                     // see kapt params
     implementation "com.jakewharton.timber:timber:4.5.1"                                            // https://github.com/JakeWharton/timber
-    implementation "com.github.deviant-studio:bindingtools:0.13"                                    // https://github.com/deviant-studio/bindingtools
+    implementation "com.github.deviant-studio:bindingtools:0.14"                                    // https://github.com/deviant-studio/bindingtools
 
     // development
     implementation "android.arch.lifecycle:extensions:$acVersion"

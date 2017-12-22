@@ -22,12 +22,15 @@ class AuthActivity : BindableActivity<AuthViewModel>(), AuthView {
         withBindable(viewModel) {
             bind(::login, loginField)
             bind(::password, passwordField)
-            bind(loginError::error, loginLayout::setError)
-            bind(passwordError::error, passwordLayout::setError)
+
             bind(::showProgress, {
                 signinButton.isEnabled = !it
                 signupButton.isEnabled = !it
             })
+
+            withBindable(loginError) { bind(::error, loginLayout::setError) }
+            withBindable(passwordError) { bind(::error, passwordLayout::setError) }
         }
+
     }
 }

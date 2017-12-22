@@ -1,12 +1,12 @@
 buildscript {
-    ext.kotlin_version = '1.2.0-beta-88'
-    ext.coroutines_version = '0.19.2'
-    ext.gradle_plugin_version = '3.0.0'
+    ext.kotlin_version = '1.2.20-eap-11'
+    ext.coroutines_version = '0.20'
+    ext.gradle_plugin_version = '3.0.1'
 
     repositories {
         jcenter()
         google()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url "https://jitpack.io" }
     }
     dependencies {
@@ -23,7 +23,7 @@ allprojects {
     repositories {
         jcenter()
         google()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'https://anylinesdk.blob.core.windows.net/maven/'}
         maven { url "https://jitpack.io" }
@@ -35,5 +35,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4'
 }
