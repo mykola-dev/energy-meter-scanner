@@ -7,8 +7,8 @@ apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.archinamon.aspectj'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "ds.meterscanner"
@@ -67,10 +67,10 @@ androidExtensions {
 }
 
 dependencies {
-    def supportVersion = '26.1.0'
-    def firebaseVersion = '11.4.2'
+    def supportVersion = '27.0.2'
+    def firebaseVersion = '11.8.0'
     def retrofitVersion = '2.3.0'
-    def acVersion = '1.0.0'
+    def acVersion = '1.1.0'
     def kodeinVersion = '4.1.0'
 
     // supportlib stuff
