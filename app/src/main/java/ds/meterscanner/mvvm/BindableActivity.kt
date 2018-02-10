@@ -44,7 +44,7 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
         inject(appKodein())
         setContentView(getLayoutId())
         bindView()
-        initViewModel()
+        observeViewModel()
 
         println(kodein().value.container.bindings.description)
         L.v("tag=${instance<String>("tag")}")
@@ -56,7 +56,7 @@ abstract class BindableActivity<out VM : BindableViewModel> : AppCompatActivity(
     }
 
     @CallSuper
-    open protected fun initViewModel() {
+    protected open fun observeViewModel() {
         viewModel.showSnackbarCommand.observe(this) {
             showSnackbar(it.text)
         }

@@ -57,8 +57,8 @@ class MainActivity : BindableActivity<MainViewModel>(), MainView {
         }
     }
 
-    override fun initViewModel() {
-        super.initViewModel()
+    override fun observeViewModel() {
+        super.observeViewModel()
         viewModel.jobId = jobId
         viewModel.runAlarmsCommand.observe(this) {
             startActivity<AlarmsActivity>()

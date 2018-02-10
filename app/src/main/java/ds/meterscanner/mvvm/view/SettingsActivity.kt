@@ -62,7 +62,7 @@ class SettingsActivity : BindableActivity<SettingsViewModel>(), SettingsView {
             addPreferencesFromResource(R.xml.prefs)
 
             alarms.setOnPreferenceClickListener {
-                activity.startActivity<AlarmsActivity>()
+                activity?.startActivity<AlarmsActivity>()
                 true
             }
         }

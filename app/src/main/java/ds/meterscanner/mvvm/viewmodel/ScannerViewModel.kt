@@ -22,7 +22,7 @@ class ScannerViewModel(
     private val bitmaps = arrayListOf<Bitmap>()
 
     init {
-        if (jobId == 0 && prefs.saveTemperature) {
+        if (prefs.saveTemperature) {
             updateWeather()
         }
     }

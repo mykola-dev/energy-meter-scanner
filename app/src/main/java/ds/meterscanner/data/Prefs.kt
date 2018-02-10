@@ -44,7 +44,7 @@ class Prefs(ctx: Context, private val remoteConfig: FirebaseRemoteConfig) : Pref
 
     suspend fun apiKey(): String = fetchRemoteKey("anyline_api_key")
 
-    suspend private fun fetchRemoteKey(key: String): String {
+    private suspend fun fetchRemoteKey(key: String): String {
         var value = remoteConfig.getString(key)
         return if (!value.isEmpty()) {
             value

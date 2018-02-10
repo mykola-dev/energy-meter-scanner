@@ -76,7 +76,7 @@ abstract class BindableViewModel(override val kodein: Kodein) : ViewModel(), Kod
             try {
                 block()
             } catch (e: Exception) {
-                L.w(e)
+                L.w(e.message)
                 onErrorSnack(e)
             } finally {
                 if (withProgress)

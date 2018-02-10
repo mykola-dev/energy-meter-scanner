@@ -70,8 +70,8 @@ class ScanAnalogMeterActivity : BindableActivity<ScannerViewModel>(), CameraOpen
         unsubscribeEvent(interruptReceiver)
     }
 
-    override fun initViewModel() {
-        super.initViewModel()
+    override fun observeViewModel() {
+        super.observeViewModel()
         viewModel.startScanningCommand.observe(this) {
             startScanning()
         }

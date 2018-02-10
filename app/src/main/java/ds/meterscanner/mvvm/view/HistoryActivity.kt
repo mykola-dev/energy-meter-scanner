@@ -49,8 +49,8 @@ class HistoryActivity : BindableActivity<HistoryViewModel>(), ListsView, ActionM
         }
     }
 
-    override fun initViewModel() {
-        super.initViewModel()
+    override fun observeViewModel() {
+        super.observeViewModel()
         viewModel.scrollToPositionCommand.observe(this) {
             post { recyclerView.scrollToPosition(it) }
         }
